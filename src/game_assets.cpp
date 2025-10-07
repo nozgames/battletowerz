@@ -13,6 +13,10 @@ Shader* SHADER_UI_VIGNETTE = nullptr;
 Shader* SHADER_UI = nullptr;
 Shader* SHADER_TEXT = nullptr;
 Shader* SHADER_LIT = nullptr;
+Shader* SHADER_VIGNETTE = nullptr;
+
+// @Texture
+Texture* TEXTURE_PALETTE = nullptr;
 
 // @name
 
@@ -22,6 +26,8 @@ const Name* PATH_SHADER_UI_VIGNETTE = nullptr;
 const Name* PATH_SHADER_UI = nullptr;
 const Name* PATH_SHADER_TEXT = nullptr;
 const Name* PATH_SHADER_LIT = nullptr;
+const Name* PATH_TEXTURE_PALETTE = nullptr;
+const Name* PATH_SHADER_VIGNETTE = nullptr;
 
 // @load
 bool LoadAssets(Allocator* allocator)
@@ -34,6 +40,8 @@ bool LoadAssets(Allocator* allocator)
     PATH_SHADER_UI = GetName("ui");
     PATH_SHADER_TEXT = GetName("text");
     PATH_SHADER_LIT = GetName("lit");
+    PATH_TEXTURE_PALETTE = GetName("palette");
+    PATH_SHADER_VIGNETTE = GetName("vignette");
 
     // @Shader
     NOZ_LOAD_SHADER(allocator, PATH_SHADER_VFX, SHADER_VFX);
@@ -41,6 +49,7 @@ bool LoadAssets(Allocator* allocator)
     NOZ_LOAD_SHADER(allocator, PATH_SHADER_UI, SHADER_UI);
     NOZ_LOAD_SHADER(allocator, PATH_SHADER_TEXT, SHADER_TEXT);
     NOZ_LOAD_SHADER(allocator, PATH_SHADER_LIT, SHADER_LIT);
+    NOZ_LOAD_SHADER(allocator, PATH_SHADER_VIGNETTE, SHADER_VIGNETTE);
 
     static Shader* _SHADER[] = {
         SHADER_VFX,
@@ -48,10 +57,21 @@ bool LoadAssets(Allocator* allocator)
         SHADER_UI,
         SHADER_TEXT,
         SHADER_LIT,
+        SHADER_VIGNETTE,
         nullptr
     };
 
     SHADER = _SHADER;
+
+    // @Texture
+    NOZ_LOAD_TEXTURE(allocator, PATH_TEXTURE_PALETTE, TEXTURE_PALETTE);
+
+    static Texture* _TEXTURE[] = {
+        TEXTURE_PALETTE,
+        nullptr
+    };
+
+    TEXTURE = _TEXTURE;
 
     return true;
 }
@@ -65,6 +85,10 @@ void UnloadAssets()
     Free(SHADER_UI);
     Free(SHADER_TEXT);
     Free(SHADER_LIT);
+    Free(SHADER_VIGNETTE);
+
+    // @Texture
+    Free(TEXTURE_PALETTE);
 }
 
 #ifdef NOZ_EDITOR
@@ -77,6 +101,10 @@ void HotloadAsset(const Name* incoming_name, AssetSignature incoming_signature)
     NOZ_RELOAD_SHADER(PATH_SHADER_UI, SHADER_UI);
     NOZ_RELOAD_SHADER(PATH_SHADER_TEXT, SHADER_TEXT);
     NOZ_RELOAD_SHADER(PATH_SHADER_LIT, SHADER_LIT);
+    NOZ_RELOAD_SHADER(PATH_SHADER_VIGNETTE, SHADER_VIGNETTE);
+
+    // @Texture
+    NOZ_RELOAD_TEXTURE(PATH_TEXTURE_PALETTE, TEXTURE_PALETTE);
 }
 
 #endif // NOZ_EDITOR
