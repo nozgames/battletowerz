@@ -7,6 +7,11 @@
 #include "game_assets.h"
 
 
+// @Mesh
+Mesh* MESH_UNIT_ARCHER = nullptr;
+Mesh* MESH_TOWER_ENEMY_TEMP = nullptr;
+Mesh* MESH_TOWER_PLAYER_TEMP = nullptr;
+
 // @Shader
 Shader* SHADER_VFX = nullptr;
 Shader* SHADER_UI_VIGNETTE = nullptr;
@@ -21,6 +26,9 @@ Texture* TEXTURE_PALETTE = nullptr;
 // @name
 
 // @path
+const Name* PATH_MESH_UNIT_ARCHER = nullptr;
+const Name* PATH_MESH_TOWER_ENEMY_TEMP = nullptr;
+const Name* PATH_MESH_TOWER_PLAYER_TEMP = nullptr;
 const Name* PATH_SHADER_VFX = nullptr;
 const Name* PATH_SHADER_UI_VIGNETTE = nullptr;
 const Name* PATH_SHADER_UI = nullptr;
@@ -35,6 +43,9 @@ bool LoadAssets(Allocator* allocator)
     // @name
 
     // @path
+    PATH_MESH_UNIT_ARCHER = GetName("unit_archer");
+    PATH_MESH_TOWER_ENEMY_TEMP = GetName("tower_enemy_temp");
+    PATH_MESH_TOWER_PLAYER_TEMP = GetName("tower_player_temp");
     PATH_SHADER_VFX = GetName("vfx");
     PATH_SHADER_UI_VIGNETTE = GetName("ui_vignette");
     PATH_SHADER_UI = GetName("ui");
@@ -42,6 +53,20 @@ bool LoadAssets(Allocator* allocator)
     PATH_SHADER_LIT = GetName("lit");
     PATH_TEXTURE_PALETTE = GetName("palette");
     PATH_SHADER_VIGNETTE = GetName("vignette");
+
+    // @Mesh
+    NOZ_LOAD_MESH(allocator, PATH_MESH_UNIT_ARCHER, MESH_UNIT_ARCHER);
+    NOZ_LOAD_MESH(allocator, PATH_MESH_TOWER_ENEMY_TEMP, MESH_TOWER_ENEMY_TEMP);
+    NOZ_LOAD_MESH(allocator, PATH_MESH_TOWER_PLAYER_TEMP, MESH_TOWER_PLAYER_TEMP);
+
+    static Mesh* _MESH[] = {
+        MESH_UNIT_ARCHER,
+        MESH_TOWER_ENEMY_TEMP,
+        MESH_TOWER_PLAYER_TEMP,
+        nullptr
+    };
+
+    MESH = _MESH;
 
     // @Shader
     NOZ_LOAD_SHADER(allocator, PATH_SHADER_VFX, SHADER_VFX);
@@ -79,6 +104,11 @@ bool LoadAssets(Allocator* allocator)
 // @unload
 void UnloadAssets()
 {
+    // @Mesh
+    Free(MESH_UNIT_ARCHER);
+    Free(MESH_TOWER_ENEMY_TEMP);
+    Free(MESH_TOWER_PLAYER_TEMP);
+
     // @Shader
     Free(SHADER_VFX);
     Free(SHADER_UI_VIGNETTE);
@@ -95,6 +125,11 @@ void UnloadAssets()
 
 void HotloadAsset(const Name* incoming_name, AssetSignature incoming_signature)
 {
+    // @Mesh
+    NOZ_RELOAD_MESH(PATH_MESH_UNIT_ARCHER, MESH_UNIT_ARCHER);
+    NOZ_RELOAD_MESH(PATH_MESH_TOWER_ENEMY_TEMP, MESH_TOWER_ENEMY_TEMP);
+    NOZ_RELOAD_MESH(PATH_MESH_TOWER_PLAYER_TEMP, MESH_TOWER_PLAYER_TEMP);
+
     // @Shader
     NOZ_RELOAD_SHADER(PATH_SHADER_VFX, SHADER_VFX);
     NOZ_RELOAD_SHADER(PATH_SHADER_UI_VIGNETTE, SHADER_UI_VIGNETTE);

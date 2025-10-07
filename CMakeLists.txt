@@ -13,6 +13,9 @@ add_subdirectory(noz noz)
 set(SOURCE_FILES
     src/game.cpp
     src/main.cpp
+    src/entity.cpp
+    src/units/archer.cpp
+    src/units/knight.cpp
     src/game_assets.cpp
 )
 

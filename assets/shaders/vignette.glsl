@@ -87,23 +87,13 @@ void main()
     float inner_radius = 0.2;
     float outer_radius = 0.7;
     float vignette_strength = 1;
-    float dither_strength = 0.2;
+    float dither_strength = 0.05;
 
     float dist = distance(f_uv0, vec2(0.5));
     float vig = smoothstep(inner_radius, outer_radius, dist) * vignette_strength;
     float dither = fract(sin(dot(f_uv0, vec2(12.9898, 78.233))) * 43758.5453123) * dither_strength;
 
     FragColor = mix(colorData.color, vignette.color, vig + dither);
-
-//    float intensity = 0.9; // 1000.01f; // vignette.intensity;
-//    float smoothness = 0.08; // vignette.smoothness;
-//    float alpha = 0.8; // vignette.color.a;
-//    float vig = uv.x * uv.y;
-//    vig = pow(vig, intensity);
-//    vig = smoothstep(0.0, smoothness, vig);
-//    vig = 1.0 - vig;
-//
-//    FragColor = mix(colorData.color, vignette.color, vig * alpha);
 }
 
 

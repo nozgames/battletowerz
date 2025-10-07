@@ -7,6 +7,11 @@
 
 #include <noz/core_assets.h>
 
+// @Mesh
+extern Mesh* MESH_UNIT_ARCHER;
+extern Mesh* MESH_TOWER_ENEMY_TEMP;
+extern Mesh* MESH_TOWER_PLAYER_TEMP;
+
 // @Shader
 extern Shader* SHADER_VFX;
 extern Shader* SHADER_UI_VIGNETTE;
