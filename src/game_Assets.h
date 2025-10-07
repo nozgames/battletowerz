@@ -7,24 +7,12 @@
 
 #include <noz/core_assets.h>
 
-// @Mesh
-extern Mesh* MESH_PLAYER_CANNON_BARREL;
-extern Mesh* MESH_PLAYER_CANNON;
-extern Mesh* MESH_PLAYER;
-extern Mesh* MESH_ENEMY_B;
-extern Mesh* MESH_ENEMY_A;
-extern Mesh* MESH_BACKGROUND;
-
 // @Shader
 extern Shader* SHADER_VFX;
 extern Shader* SHADER_UI_VIGNETTE;
 extern Shader* SHADER_UI;
 extern Shader* SHADER_TEXT;
 extern Shader* SHADER_LIT;
-extern Shader* SHADER_VIGNETTE;
-
-// @Texture
-extern Texture* TEXTURE_PALETTE;
 
 // @name
 
