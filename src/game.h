@@ -1,5 +1,5 @@
 //
-//  Breakout - Copyright(c) 2025 NoZ Games, LLC
+//  Battle TowerZ - Copyright(c) 2025 NoZ Games, LLC
 //
 
 #pragma once
@@ -39,16 +39,11 @@ enum GameState
     GAME_STATE_COUNT
 };
 
-enum Team {
-    TEAM_RED,
-    TEAM_BLUE,
-    TEAM_COUNT
-};
 
 enum EntityType
 {
     ENTITY_TYPE_NONE,
-    ENTITY_TYPE_ARCHER,
+    ENTITY_TYPE_UNIT,
     ENTITY_TYPE_COUNT
 };
 
@@ -70,14 +65,12 @@ struct Entity {
     Animator animator;
 };
 
-struct ArcherEntity : Entity {
-    Team team;
-};
+#include "unit.h"
 
 union FatEntity
 {
     Entity entity;
-    ArcherEntity archer;
+    FatUnitEntity unit;
 };
 
 struct Game
@@ -106,22 +99,3 @@ extern Game g_game;
 // @entity
 extern Entity* CreateEntity(EntityType type, const EntityVtable& vtable, const Vec2& position = VEC2_ZERO, float rotation=0.0f, const Vec2& scale=VEC2_ONE);
 extern void UpdateAnimator(Entity* entity);
-
-// @team
-inline Vec2 GetTeamDirection(Team team) {
-    static Vec2 directions[TEAM_COUNT] = {
-        Vec2{-1,0},
-        Vec2{1,0}
-    };
-    return directions[team];
-}
-
-inline Color GetTeamColor(Team team) {
-    static Color colors[TEAM_COUNT] = {
-        Color32ToColor(228, 92, 95, 255),
-        Color32ToColor(85, 177, 241, 255)
-    };
-    return colors[team];
-}
-
-extern ArcherEntity* CreateArcher(Team team, const Vec2& position);

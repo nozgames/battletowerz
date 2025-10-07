@@ -14,7 +14,9 @@ set(SOURCE_FILES
     src/game.cpp
     src/main.cpp
     src/entity.cpp
+    src/unit.cpp
     src/units/archer.cpp
+    src/units/tower.cpp
     src/units/knight.cpp
     src/game_assets.cpp
 )

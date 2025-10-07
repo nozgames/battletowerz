@@ -7,10 +7,20 @@
 #include "game_assets.h"
 
 
+// @Animation
+Animation* ANIMATION_UNIT_KNIGHT_RUN = nullptr;
+Animation* ANIMATION_UNIT_KNIGHT_IDLE = nullptr;
+Animation* ANIMATION_UNIT_KNIGHT_ATTACK = nullptr;
+
+// @Vfx
+Vfx* VFX_ARROW_HIT = nullptr;
+
 // @Mesh
+Mesh* MESH_WEAPON_SWORD = nullptr;
+Mesh* MESH_UNIT_KNIGHT = nullptr;
 Mesh* MESH_UNIT_ARCHER = nullptr;
-Mesh* MESH_TOWER_ENEMY_TEMP = nullptr;
 Mesh* MESH_TOWER_PLAYER_TEMP = nullptr;
+Mesh* MESH_TOWER_ENEMY_TEMP = nullptr;
 
 // @Shader
 Shader* SHADER_VFX = nullptr;
@@ -20,49 +30,100 @@ Shader* SHADER_TEXT = nullptr;
 Shader* SHADER_LIT = nullptr;
 Shader* SHADER_VIGNETTE = nullptr;
 
+// @Skeleton
+Skeleton* SKELETON_UNIT_KNIGHT = nullptr;
+
 // @Texture
 Texture* TEXTURE_PALETTE = nullptr;
 
 // @name
+const Name* NAME_ROOT = nullptr;
+const Name* NAME_BODY = nullptr;
+const Name* NAME_WEAPON = nullptr;
 
 // @path
-const Name* PATH_MESH_UNIT_ARCHER = nullptr;
-const Name* PATH_MESH_TOWER_ENEMY_TEMP = nullptr;
-const Name* PATH_MESH_TOWER_PLAYER_TEMP = nullptr;
 const Name* PATH_SHADER_VFX = nullptr;
 const Name* PATH_SHADER_UI_VIGNETTE = nullptr;
 const Name* PATH_SHADER_UI = nullptr;
 const Name* PATH_SHADER_TEXT = nullptr;
 const Name* PATH_SHADER_LIT = nullptr;
+const Name* PATH_VFX_ARROW_HIT = nullptr;
 const Name* PATH_TEXTURE_PALETTE = nullptr;
 const Name* PATH_SHADER_VIGNETTE = nullptr;
+const Name* PATH_MESH_WEAPON_SWORD = nullptr;
+const Name* PATH_MESH_UNIT_KNIGHT = nullptr;
+const Name* PATH_SKELETON_UNIT_KNIGHT = nullptr;
+const Name* PATH_MESH_UNIT_ARCHER = nullptr;
+const Name* PATH_MESH_TOWER_PLAYER_TEMP = nullptr;
+const Name* PATH_MESH_TOWER_ENEMY_TEMP = nullptr;
+const Name* PATH_ANIMATION_UNIT_KNIGHT_RUN = nullptr;
+const Name* PATH_ANIMATION_UNIT_KNIGHT_IDLE = nullptr;
+const Name* PATH_ANIMATION_UNIT_KNIGHT_ATTACK = nullptr;
 
 // @load
 bool LoadAssets(Allocator* allocator)
 {
     // @name
+    NAME_ROOT = GetName("root");
+    NAME_BODY = GetName("body");
+    NAME_WEAPON = GetName("weapon");
 
     // @path
-    PATH_MESH_UNIT_ARCHER = GetName("unit_archer");
-    PATH_MESH_TOWER_ENEMY_TEMP = GetName("tower_enemy_temp");
-    PATH_MESH_TOWER_PLAYER_TEMP = GetName("tower_player_temp");
     PATH_SHADER_VFX = GetName("vfx");
     PATH_SHADER_UI_VIGNETTE = GetName("ui_vignette");
     PATH_SHADER_UI = GetName("ui");
     PATH_SHADER_TEXT = GetName("text");
     PATH_SHADER_LIT = GetName("lit");
+    PATH_VFX_ARROW_HIT = GetName("arrow_hit");
     PATH_TEXTURE_PALETTE = GetName("palette");
     PATH_SHADER_VIGNETTE = GetName("vignette");
+    PATH_MESH_WEAPON_SWORD = GetName("weapon_sword");
+    PATH_MESH_UNIT_KNIGHT = GetName("unit_knight");
+    PATH_SKELETON_UNIT_KNIGHT = GetName("unit_knight");
+    PATH_MESH_UNIT_ARCHER = GetName("unit_archer");
+    PATH_MESH_TOWER_PLAYER_TEMP = GetName("tower_player_temp");
+    PATH_MESH_TOWER_ENEMY_TEMP = GetName("tower_enemy_temp");
+    PATH_ANIMATION_UNIT_KNIGHT_RUN = GetName("unit_knight_run");
+    PATH_ANIMATION_UNIT_KNIGHT_IDLE = GetName("unit_knight_idle");
+    PATH_ANIMATION_UNIT_KNIGHT_ATTACK = GetName("unit_knight_attack");
+
+    // @Animation
+    NOZ_LOAD_ANIMATION(allocator, PATH_ANIMATION_UNIT_KNIGHT_RUN, ANIMATION_UNIT_KNIGHT_RUN);
+    NOZ_LOAD_ANIMATION(allocator, PATH_ANIMATION_UNIT_KNIGHT_IDLE, ANIMATION_UNIT_KNIGHT_IDLE);
+    NOZ_LOAD_ANIMATION(allocator, PATH_ANIMATION_UNIT_KNIGHT_ATTACK, ANIMATION_UNIT_KNIGHT_ATTACK);
+
+    static Animation* _ANIMATION[] = {
+        ANIMATION_UNIT_KNIGHT_RUN,
+        ANIMATION_UNIT_KNIGHT_IDLE,
+        ANIMATION_UNIT_KNIGHT_ATTACK,
+        nullptr
+    };
+
+    ANIMATION = _ANIMATION;
+
+    // @Vfx
+    NOZ_LOAD_VFX(allocator, PATH_VFX_ARROW_HIT, VFX_ARROW_HIT);
+
+    static Vfx* _VFX[] = {
+        VFX_ARROW_HIT,
+        nullptr
+    };
+
+    VFX = _VFX;
 
     // @Mesh
+    NOZ_LOAD_MESH(allocator, PATH_MESH_WEAPON_SWORD, MESH_WEAPON_SWORD);
+    NOZ_LOAD_MESH(allocator, PATH_MESH_UNIT_KNIGHT, MESH_UNIT_KNIGHT);
     NOZ_LOAD_MESH(allocator, PATH_MESH_UNIT_ARCHER, MESH_UNIT_ARCHER);
-    NOZ_LOAD_MESH(allocator, PATH_MESH_TOWER_ENEMY_TEMP, MESH_TOWER_ENEMY_TEMP);
     NOZ_LOAD_MESH(allocator, PATH_MESH_TOWER_PLAYER_TEMP, MESH_TOWER_PLAYER_TEMP);
+    NOZ_LOAD_MESH(allocator, PATH_MESH_TOWER_ENEMY_TEMP, MESH_TOWER_ENEMY_TEMP);
 
     static Mesh* _MESH[] = {
+        MESH_WEAPON_SWORD,
+        MESH_UNIT_KNIGHT,
         MESH_UNIT_ARCHER,
-        MESH_TOWER_ENEMY_TEMP,
         MESH_TOWER_PLAYER_TEMP,
+        MESH_TOWER_ENEMY_TEMP,
         nullptr
     };
 
@@ -88,6 +149,16 @@ bool LoadAssets(Allocator* allocator)
 
     SHADER = _SHADER;
 
+    // @Skeleton
+    NOZ_LOAD_SKELETON(allocator, PATH_SKELETON_UNIT_KNIGHT, SKELETON_UNIT_KNIGHT);
+
+    static Skeleton* _SKELETON[] = {
+        SKELETON_UNIT_KNIGHT,
+        nullptr
+    };
+
+    SKELETON = _SKELETON;
+
     // @Texture
     NOZ_LOAD_TEXTURE(allocator, PATH_TEXTURE_PALETTE, TEXTURE_PALETTE);
 
@@ -104,10 +175,20 @@ bool LoadAssets(Allocator* allocator)
 // @unload
 void UnloadAssets()
 {
+    // @Animation
+    Free(ANIMATION_UNIT_KNIGHT_RUN);
+    Free(ANIMATION_UNIT_KNIGHT_IDLE);
+    Free(ANIMATION_UNIT_KNIGHT_ATTACK);
+
+    // @Vfx
+    Free(VFX_ARROW_HIT);
+
     // @Mesh
+    Free(MESH_WEAPON_SWORD);
+    Free(MESH_UNIT_KNIGHT);
     Free(MESH_UNIT_ARCHER);
-    Free(MESH_TOWER_ENEMY_TEMP);
     Free(MESH_TOWER_PLAYER_TEMP);
+    Free(MESH_TOWER_ENEMY_TEMP);
 
     // @Shader
     Free(SHADER_VFX);
@@ -117,6 +198,9 @@ void UnloadAssets()
     Free(SHADER_LIT);
     Free(SHADER_VIGNETTE);
 
+    // @Skeleton
+    Free(SKELETON_UNIT_KNIGHT);
+
     // @Texture
     Free(TEXTURE_PALETTE);
 }
@@ -125,10 +209,20 @@ void UnloadAssets()
 
 void HotloadAsset(const Name* incoming_name, AssetSignature incoming_signature)
 {
+    // @Animation
+    NOZ_RELOAD_ANIMATION(PATH_ANIMATION_UNIT_KNIGHT_RUN, ANIMATION_UNIT_KNIGHT_RUN);
+    NOZ_RELOAD_ANIMATION(PATH_ANIMATION_UNIT_KNIGHT_IDLE, ANIMATION_UNIT_KNIGHT_IDLE);
+    NOZ_RELOAD_ANIMATION(PATH_ANIMATION_UNIT_KNIGHT_ATTACK, ANIMATION_UNIT_KNIGHT_ATTACK);
+
+    // @Vfx
+    NOZ_RELOAD_VFX(PATH_VFX_ARROW_HIT, VFX_ARROW_HIT);
+
     // @Mesh
+    NOZ_RELOAD_MESH(PATH_MESH_WEAPON_SWORD, MESH_WEAPON_SWORD);
+    NOZ_RELOAD_MESH(PATH_MESH_UNIT_KNIGHT, MESH_UNIT_KNIGHT);
     NOZ_RELOAD_MESH(PATH_MESH_UNIT_ARCHER, MESH_UNIT_ARCHER);
-    NOZ_RELOAD_MESH(PATH_MESH_TOWER_ENEMY_TEMP, MESH_TOWER_ENEMY_TEMP);
     NOZ_RELOAD_MESH(PATH_MESH_TOWER_PLAYER_TEMP, MESH_TOWER_PLAYER_TEMP);
+    NOZ_RELOAD_MESH(PATH_MESH_TOWER_ENEMY_TEMP, MESH_TOWER_ENEMY_TEMP);
 
     // @Shader
     NOZ_RELOAD_SHADER(PATH_SHADER_VFX, SHADER_VFX);
@@ -137,6 +231,9 @@ void HotloadAsset(const Name* incoming_name, AssetSignature incoming_signature)
     NOZ_RELOAD_SHADER(PATH_SHADER_TEXT, SHADER_TEXT);
     NOZ_RELOAD_SHADER(PATH_SHADER_LIT, SHADER_LIT);
     NOZ_RELOAD_SHADER(PATH_SHADER_VIGNETTE, SHADER_VIGNETTE);
+
+    // @Skeleton
+    NOZ_RELOAD_SKELETON(PATH_SKELETON_UNIT_KNIGHT, SKELETON_UNIT_KNIGHT);
 
     // @Texture
     NOZ_RELOAD_TEXTURE(PATH_TEXTURE_PALETTE, TEXTURE_PALETTE);

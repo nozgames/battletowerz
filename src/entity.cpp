@@ -1,5 +1,5 @@
 //
-//  NockerZ - Copyright(c) 2025 NoZ Games, LLC
+//  Battle TowerZ - Copyright(c) 2025 NoZ Games, LLC
 //
 
 #include "game.h"

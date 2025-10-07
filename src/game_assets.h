@@ -7,10 +7,20 @@
 
 #include <noz/core_assets.h>
 
+// @Animation
+extern Animation* ANIMATION_UNIT_KNIGHT_RUN;
+extern Animation* ANIMATION_UNIT_KNIGHT_IDLE;
+extern Animation* ANIMATION_UNIT_KNIGHT_ATTACK;
+
+// @Vfx
+extern Vfx* VFX_ARROW_HIT;
+
 // @Mesh
+extern Mesh* MESH_WEAPON_SWORD;
+extern Mesh* MESH_UNIT_KNIGHT;
 extern Mesh* MESH_UNIT_ARCHER;
-extern Mesh* MESH_TOWER_ENEMY_TEMP;
 extern Mesh* MESH_TOWER_PLAYER_TEMP;
+extern Mesh* MESH_TOWER_ENEMY_TEMP;
 
 // @Shader
 extern Shader* SHADER_VFX;
@@ -20,10 +30,22 @@ extern Shader* SHADER_TEXT;
 extern Shader* SHADER_LIT;
 extern Shader* SHADER_VIGNETTE;
 
+// @Skeleton
+extern Skeleton* SKELETON_UNIT_KNIGHT;
+
 // @Texture
 extern Texture* TEXTURE_PALETTE;
 
 // @name
+extern const Name* NAME_ROOT;
+extern const Name* NAME_BODY;
+extern const Name* NAME_WEAPON;
+
+
+// @BONE_UNIT_KNIGHT
+constexpr int BONE_UNIT_KNIGHT_ROOT = 0;
+constexpr int BONE_UNIT_KNIGHT_BODY = 1;
+constexpr int BONE_UNIT_KNIGHT_WEAPON = 2;
 
 
 extern bool LoadAssets(Allocator* allocator);
