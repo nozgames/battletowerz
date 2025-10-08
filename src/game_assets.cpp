@@ -12,6 +12,9 @@ Animation* ANIMATION_UNIT_KNIGHT_RUN = nullptr;
 Animation* ANIMATION_UNIT_KNIGHT_IDLE = nullptr;
 Animation* ANIMATION_UNIT_KNIGHT_ATTACK = nullptr;
 
+// @Font
+Font* FONT_SEGUISB = nullptr;
+
 // @Vfx
 Vfx* VFX_ARROW_HIT = nullptr;
 
@@ -59,6 +62,7 @@ const Name* PATH_SKELETON_UNIT_KNIGHT = nullptr;
 const Name* PATH_MESH_UNIT_ARCHER = nullptr;
 const Name* PATH_MESH_TOWER_PLAYER_TEMP = nullptr;
 const Name* PATH_MESH_TOWER_ENEMY_TEMP = nullptr;
+const Name* PATH_FONT_SEGUISB = nullptr;
 const Name* PATH_ANIMATION_UNIT_KNIGHT_RUN = nullptr;
 const Name* PATH_ANIMATION_UNIT_KNIGHT_IDLE = nullptr;
 const Name* PATH_ANIMATION_UNIT_KNIGHT_ATTACK = nullptr;
@@ -88,6 +92,7 @@ bool LoadAssets(Allocator* allocator)
     PATH_MESH_UNIT_ARCHER = GetName("unit_archer");
     PATH_MESH_TOWER_PLAYER_TEMP = GetName("tower_player_temp");
     PATH_MESH_TOWER_ENEMY_TEMP = GetName("tower_enemy_temp");
+    PATH_FONT_SEGUISB = GetName("seguisb");
     PATH_ANIMATION_UNIT_KNIGHT_RUN = GetName("unit_knight_run");
     PATH_ANIMATION_UNIT_KNIGHT_IDLE = GetName("unit_knight_idle");
     PATH_ANIMATION_UNIT_KNIGHT_ATTACK = GetName("unit_knight_attack");
@@ -105,6 +110,16 @@ bool LoadAssets(Allocator* allocator)
     };
 
     ANIMATION = _ANIMATION;
+
+    // @Font
+    NOZ_LOAD_FONT(allocator, PATH_FONT_SEGUISB, FONT_SEGUISB);
+
+    static Font* _FONT[] = {
+        FONT_SEGUISB,
+        nullptr
+    };
+
+    FONT = _FONT;
 
     // @Vfx
     NOZ_LOAD_VFX(allocator, PATH_VFX_ARROW_HIT, VFX_ARROW_HIT);
@@ -187,6 +202,9 @@ void UnloadAssets()
     Free(ANIMATION_UNIT_KNIGHT_IDLE);
     Free(ANIMATION_UNIT_KNIGHT_ATTACK);
 
+    // @Font
+    Free(FONT_SEGUISB);
+
     // @Vfx
     Free(VFX_ARROW_HIT);
 
@@ -221,6 +239,9 @@ void HotloadAsset(const Name* incoming_name, AssetSignature incoming_signature)
     NOZ_RELOAD_ANIMATION(PATH_ANIMATION_UNIT_KNIGHT_RUN, ANIMATION_UNIT_KNIGHT_RUN);
     NOZ_RELOAD_ANIMATION(PATH_ANIMATION_UNIT_KNIGHT_IDLE, ANIMATION_UNIT_KNIGHT_IDLE);
     NOZ_RELOAD_ANIMATION(PATH_ANIMATION_UNIT_KNIGHT_ATTACK, ANIMATION_UNIT_KNIGHT_ATTACK);
+
+    // @Font
+    NOZ_RELOAD_FONT(PATH_FONT_SEGUISB, FONT_SEGUISB);
 
     // @Vfx
     NOZ_RELOAD_VFX(PATH_VFX_ARROW_HIT, VFX_ARROW_HIT);

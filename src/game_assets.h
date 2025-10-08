@@ -12,6 +12,9 @@ extern Animation* ANIMATION_UNIT_KNIGHT_RUN;
 extern Animation* ANIMATION_UNIT_KNIGHT_IDLE;
 extern Animation* ANIMATION_UNIT_KNIGHT_ATTACK;
 
+// @Font
+extern Font* FONT_SEGUISB;
+
 // @Vfx
 extern Vfx* VFX_ARROW_HIT;
 
