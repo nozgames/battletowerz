@@ -17,6 +17,7 @@ Vfx* VFX_ARROW_HIT = nullptr;
 
 // @Mesh
 Mesh* MESH_WEAPON_SWORD = nullptr;
+Mesh* MESH_UNIT_KNIGHT_VISOR = nullptr;
 Mesh* MESH_UNIT_KNIGHT = nullptr;
 Mesh* MESH_UNIT_ARCHER = nullptr;
 Mesh* MESH_TOWER_PLAYER_TEMP = nullptr;
@@ -40,6 +41,7 @@ Texture* TEXTURE_PALETTE = nullptr;
 const Name* NAME_ROOT = nullptr;
 const Name* NAME_BODY = nullptr;
 const Name* NAME_WEAPON = nullptr;
+const Name* NAME_VISOR = nullptr;
 
 // @path
 const Name* PATH_SHADER_VFX = nullptr;
@@ -51,6 +53,7 @@ const Name* PATH_VFX_ARROW_HIT = nullptr;
 const Name* PATH_TEXTURE_PALETTE = nullptr;
 const Name* PATH_SHADER_VIGNETTE = nullptr;
 const Name* PATH_MESH_WEAPON_SWORD = nullptr;
+const Name* PATH_MESH_UNIT_KNIGHT_VISOR = nullptr;
 const Name* PATH_MESH_UNIT_KNIGHT = nullptr;
 const Name* PATH_SKELETON_UNIT_KNIGHT = nullptr;
 const Name* PATH_MESH_UNIT_ARCHER = nullptr;
@@ -67,6 +70,7 @@ bool LoadAssets(Allocator* allocator)
     NAME_ROOT = GetName("root");
     NAME_BODY = GetName("body");
     NAME_WEAPON = GetName("weapon");
+    NAME_VISOR = GetName("visor");
 
     // @path
     PATH_SHADER_VFX = GetName("vfx");
@@ -78,6 +82,7 @@ bool LoadAssets(Allocator* allocator)
     PATH_TEXTURE_PALETTE = GetName("palette");
     PATH_SHADER_VIGNETTE = GetName("vignette");
     PATH_MESH_WEAPON_SWORD = GetName("weapon_sword");
+    PATH_MESH_UNIT_KNIGHT_VISOR = GetName("unit_knight_visor");
     PATH_MESH_UNIT_KNIGHT = GetName("unit_knight");
     PATH_SKELETON_UNIT_KNIGHT = GetName("unit_knight");
     PATH_MESH_UNIT_ARCHER = GetName("unit_archer");
@@ -113,6 +118,7 @@ bool LoadAssets(Allocator* allocator)
 
     // @Mesh
     NOZ_LOAD_MESH(allocator, PATH_MESH_WEAPON_SWORD, MESH_WEAPON_SWORD);
+    NOZ_LOAD_MESH(allocator, PATH_MESH_UNIT_KNIGHT_VISOR, MESH_UNIT_KNIGHT_VISOR);
     NOZ_LOAD_MESH(allocator, PATH_MESH_UNIT_KNIGHT, MESH_UNIT_KNIGHT);
     NOZ_LOAD_MESH(allocator, PATH_MESH_UNIT_ARCHER, MESH_UNIT_ARCHER);
     NOZ_LOAD_MESH(allocator, PATH_MESH_TOWER_PLAYER_TEMP, MESH_TOWER_PLAYER_TEMP);
@@ -120,6 +126,7 @@ bool LoadAssets(Allocator* allocator)
 
     static Mesh* _MESH[] = {
         MESH_WEAPON_SWORD,
+        MESH_UNIT_KNIGHT_VISOR,
         MESH_UNIT_KNIGHT,
         MESH_UNIT_ARCHER,
         MESH_TOWER_PLAYER_TEMP,
@@ -185,6 +192,7 @@ void UnloadAssets()
 
     // @Mesh
     Free(MESH_WEAPON_SWORD);
+    Free(MESH_UNIT_KNIGHT_VISOR);
     Free(MESH_UNIT_KNIGHT);
     Free(MESH_UNIT_ARCHER);
     Free(MESH_TOWER_PLAYER_TEMP);
@@ -219,6 +227,7 @@ void HotloadAsset(const Name* incoming_name, AssetSignature incoming_signature)
 
     // @Mesh
     NOZ_RELOAD_MESH(PATH_MESH_WEAPON_SWORD, MESH_WEAPON_SWORD);
+    NOZ_RELOAD_MESH(PATH_MESH_UNIT_KNIGHT_VISOR, MESH_UNIT_KNIGHT_VISOR);
     NOZ_RELOAD_MESH(PATH_MESH_UNIT_KNIGHT, MESH_UNIT_KNIGHT);
     NOZ_RELOAD_MESH(PATH_MESH_UNIT_ARCHER, MESH_UNIT_ARCHER);
     NOZ_RELOAD_MESH(PATH_MESH_TOWER_PLAYER_TEMP, MESH_TOWER_PLAYER_TEMP);

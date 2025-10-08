@@ -17,6 +17,7 @@ extern Vfx* VFX_ARROW_HIT;
 
 // @Mesh
 extern Mesh* MESH_WEAPON_SWORD;
+extern Mesh* MESH_UNIT_KNIGHT_VISOR;
 extern Mesh* MESH_UNIT_KNIGHT;
 extern Mesh* MESH_UNIT_ARCHER;
 extern Mesh* MESH_TOWER_PLAYER_TEMP;
@@ -40,12 +41,14 @@ extern Texture* TEXTURE_PALETTE;
 extern const Name* NAME_ROOT;
 extern const Name* NAME_BODY;
 extern const Name* NAME_WEAPON;
+extern const Name* NAME_VISOR;
 
 
 // @BONE_UNIT_KNIGHT
 constexpr int BONE_UNIT_KNIGHT_ROOT = 0;
 constexpr int BONE_UNIT_KNIGHT_BODY = 1;
 constexpr int BONE_UNIT_KNIGHT_WEAPON = 2;
+constexpr int BONE_UNIT_KNIGHT_VISOR = 3;
 
 
 extern bool LoadAssets(Allocator* allocator);

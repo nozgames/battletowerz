@@ -24,6 +24,7 @@ static void RenderKnight(Entity* e, const Mat3& transform)
     BindMaterial(g_game.material);
     DrawMesh(MESH_WEAPON_SWORD, transform, a->animator, BONE_UNIT_KNIGHT_WEAPON);
     DrawMesh(MESH_UNIT_KNIGHT, transform, a->animator, BONE_UNIT_KNIGHT_BODY);
+    DrawMesh(MESH_UNIT_KNIGHT_VISOR, transform, a->animator, BONE_UNIT_KNIGHT_VISOR);
 }
 
 struct FindKnightTargetArgs {

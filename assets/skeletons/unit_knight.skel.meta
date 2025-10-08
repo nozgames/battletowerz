@@ -1,8 +1,9 @@
 [editor]
-position = (2.057611,-3.077743)
-sort_order = 90
+position = (15.047330,3.930435)
+sort_order = 100
 
 [skin]
+unit_knight_visor = 3
 unit_knight = 1
 weapon_sword = 2
 
