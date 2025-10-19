@@ -19,14 +19,14 @@ extern Font* FONT_SEGUISB;
 extern Vfx* VFX_ARROW_HIT;
 
 // @Mesh
-extern Mesh* MESH_ICON_FIGHT;
-extern Mesh* MESH_ARCHER_BODY;
 extern Mesh* MESH_WEAPON_SWORD;
 extern Mesh* MESH_UNIT_KNIGHT_VISOR;
 extern Mesh* MESH_UNIT_KNIGHT;
 extern Mesh* MESH_UNIT_ARCHER;
 extern Mesh* MESH_TOWER_PLAYER_TEMP;
 extern Mesh* MESH_TOWER_ENEMY_TEMP;
+extern Mesh* MESH_ICON_FIGHT;
+extern Mesh* MESH_ARCHER_BODY;
 
 // @Shader
 extern Shader* SHADER_VFX;
@@ -35,6 +35,7 @@ extern Shader* SHADER_UI;
 extern Shader* SHADER_TEXT;
 extern Shader* SHADER_LIT;
 extern Shader* SHADER_VIGNETTE;
+extern Shader* SHADER_SHADOW;
 
 // @Skeleton
 extern Skeleton* SKELETON_UNIT_KNIGHT;

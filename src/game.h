@@ -64,6 +64,7 @@ struct Game {
     Camera* camera;
 
     Material* background_material;
+    Material* shadow_material;
     Mesh* background_mesh;
     Mesh* quad_mesh;
     Mesh* line_mesh;

@@ -46,8 +46,7 @@ static bool FindArcherTarget(UnitEntity* u, void* user_data)
     return true;
 }
 
-void UpdateArcher(Entity* e)
-{
+void UpdateArcher(Entity* e) {
     ArcherEntity* a = CastArcher(e);
     FindArcherTargetArgs args {
         .a = a,
@@ -59,7 +58,7 @@ void UpdateArcher(Entity* e)
         return;
 
     if (args.target_distance > ARCHER_RANGE) {
-        e->position += GetTeamDirection(a->team) * GetFrameTime() * ARCHER_SPEED;
+        MoveTowards(a, args.target->position, ARCHER_SPEED);
         a->cooldown = ARCHER_COOLDOWN;
     } else {
         a->cooldown -= GetGameFrameTime();

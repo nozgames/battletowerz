@@ -79,6 +79,11 @@ UnitEntity* FindClosestUnit(const Vec2& position) {
     return args.target;
 }
 
+void MoveTowards(UnitEntity* unit, const Vec2& target_position, float speed) {
+    Vec2 direction = Normalize(target_position - unit->position);
+    unit->position += direction * speed * GetGameFrameTime();
+}
+
 UnitEntity* CreateUnit(UnitType type, Team team, const EntityVtable& vtable, const Vec2& position, float rotation, const Vec2& scale) {
     UnitEntity* u = static_cast<UnitEntity*>(CreateEntity(ENTITY_TYPE_UNIT, vtable, position, rotation, scale));
     u->state = UNIT_STATE_IDLE;

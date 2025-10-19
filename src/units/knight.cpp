@@ -25,6 +25,15 @@ static void RenderKnight(Entity* e, const Mat3& transform)
     DrawMesh(MESH_WEAPON_SWORD, transform, a->animator, BONE_UNIT_KNIGHT_WEAPON);
     DrawMesh(MESH_UNIT_KNIGHT, transform, a->animator, BONE_UNIT_KNIGHT_BODY);
     DrawMesh(MESH_UNIT_KNIGHT_VISOR, transform, a->animator, BONE_UNIT_KNIGHT_VISOR);
+
+    BindDepth(-7.0f);
+    BindColor(SetAlpha(COLOR_BLACK, 0.1f));
+    Mat3 shadow_transform = transform * Scale(Vec2{1.0f, -0.5f});
+    BindMaterial(g_game.shadow_material);
+    DrawMesh(MESH_WEAPON_SWORD, shadow_transform, a->animator, BONE_UNIT_KNIGHT_WEAPON);
+    DrawMesh(MESH_UNIT_KNIGHT, shadow_transform, a->animator, BONE_UNIT_KNIGHT_BODY);
+    DrawMesh(MESH_UNIT_KNIGHT_VISOR, shadow_transform, a->animator, BONE_UNIT_KNIGHT_VISOR);
+    BindDepth(0.0f);
 }
 
 struct FindKnightTargetArgs {
@@ -76,7 +85,7 @@ void UpdateKnight(Entity* e)
     }
 
     if (args.target_distance - args.target->size > KNIGHT_RANGE) {
-        e->position += GetTeamDirection(u->team) * GetGameFrameTime() * KNIGHT_SPEED;
+        MoveTowards(u, args.target->position, KNIGHT_SPEED);
         u->cooldown = KNIGHT_COOLDOWN;
 
         if (u->state != UNIT_STATE_MOVING) {

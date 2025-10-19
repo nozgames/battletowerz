@@ -18,9 +18,13 @@ static void RenderTower(Entity* e, const Mat3& transform)
 {
     TowerEntity* a = CastArcher(e);
     BindColor(GetTeamColor(a->team));
-    BindTransform(transform);
     BindMaterial(g_game.material);
-    DrawMesh(MESH_TOWER_PLAYER_TEMP);
+    DrawMesh(MESH_TOWER_PLAYER_TEMP, transform);
+    BindDepth(-7.0f);
+    BindMaterial(g_game.shadow_material);
+    BindColor(SetAlpha(COLOR_BLACK, 0.1f));
+    DrawMesh(MESH_TOWER_PLAYER_TEMP, transform * Scale(Vec2{1.0f,-0.5f}));
+    BindDepth(0.0f);
 }
 
 TowerEntity* CreateTower(Team team, const Vec2& position)

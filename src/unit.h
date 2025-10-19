@@ -72,6 +72,7 @@ extern void EnumerateUnits(Team team, bool (*callback)(UnitEntity* unit, void* u
 extern void Damage(UnitEntity* u, DamageType damage_type, float amount);
 extern UnitEntity* FindClosestEnemy(UnitEntity* unit);
 extern UnitEntity* FindClosestUnit(const Vec2& position);
+extern void MoveTowards(UnitEntity* unit, const Vec2& target_position, float speed);
 
 // @team
 inline Vec2 GetTeamDirection(Team team) {
