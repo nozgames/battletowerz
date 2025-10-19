@@ -19,6 +19,8 @@ Font* FONT_SEGUISB = nullptr;
 Vfx* VFX_ARROW_HIT = nullptr;
 
 // @Mesh
+Mesh* MESH_ICON_FIGHT = nullptr;
+Mesh* MESH_ARCHER_BODY = nullptr;
 Mesh* MESH_WEAPON_SWORD = nullptr;
 Mesh* MESH_UNIT_KNIGHT_VISOR = nullptr;
 Mesh* MESH_UNIT_KNIGHT = nullptr;
@@ -38,6 +40,7 @@ Shader* SHADER_VIGNETTE = nullptr;
 Skeleton* SKELETON_UNIT_KNIGHT = nullptr;
 
 // @Texture
+Texture* TEXTURE_PALETTE_RED = nullptr;
 Texture* TEXTURE_PALETTE = nullptr;
 
 // @name
@@ -47,12 +50,15 @@ const Name* NAME_WEAPON = nullptr;
 const Name* NAME_VISOR = nullptr;
 
 // @path
+const Name* PATH_MESH_ICON_FIGHT = nullptr;
+const Name* PATH_MESH_ARCHER_BODY = nullptr;
 const Name* PATH_SHADER_VFX = nullptr;
 const Name* PATH_SHADER_UI_VIGNETTE = nullptr;
 const Name* PATH_SHADER_UI = nullptr;
 const Name* PATH_SHADER_TEXT = nullptr;
 const Name* PATH_SHADER_LIT = nullptr;
 const Name* PATH_VFX_ARROW_HIT = nullptr;
+const Name* PATH_TEXTURE_PALETTE_RED = nullptr;
 const Name* PATH_TEXTURE_PALETTE = nullptr;
 const Name* PATH_SHADER_VIGNETTE = nullptr;
 const Name* PATH_MESH_WEAPON_SWORD = nullptr;
@@ -77,12 +83,15 @@ bool LoadAssets(Allocator* allocator)
     NAME_VISOR = GetName("visor");
 
     // @path
+    PATH_MESH_ICON_FIGHT = GetName("icon_fight");
+    PATH_MESH_ARCHER_BODY = GetName("archer_body");
     PATH_SHADER_VFX = GetName("vfx");
     PATH_SHADER_UI_VIGNETTE = GetName("ui_vignette");
     PATH_SHADER_UI = GetName("ui");
     PATH_SHADER_TEXT = GetName("text");
     PATH_SHADER_LIT = GetName("lit");
     PATH_VFX_ARROW_HIT = GetName("arrow_hit");
+    PATH_TEXTURE_PALETTE_RED = GetName("palette_red");
     PATH_TEXTURE_PALETTE = GetName("palette");
     PATH_SHADER_VIGNETTE = GetName("vignette");
     PATH_MESH_WEAPON_SWORD = GetName("weapon_sword");
@@ -132,6 +141,8 @@ bool LoadAssets(Allocator* allocator)
     VFX = _VFX;
 
     // @Mesh
+    NOZ_LOAD_MESH(allocator, PATH_MESH_ICON_FIGHT, MESH_ICON_FIGHT);
+    NOZ_LOAD_MESH(allocator, PATH_MESH_ARCHER_BODY, MESH_ARCHER_BODY);
     NOZ_LOAD_MESH(allocator, PATH_MESH_WEAPON_SWORD, MESH_WEAPON_SWORD);
     NOZ_LOAD_MESH(allocator, PATH_MESH_UNIT_KNIGHT_VISOR, MESH_UNIT_KNIGHT_VISOR);
     NOZ_LOAD_MESH(allocator, PATH_MESH_UNIT_KNIGHT, MESH_UNIT_KNIGHT);
@@ -140,6 +151,8 @@ bool LoadAssets(Allocator* allocator)
     NOZ_LOAD_MESH(allocator, PATH_MESH_TOWER_ENEMY_TEMP, MESH_TOWER_ENEMY_TEMP);
 
     static Mesh* _MESH[] = {
+        MESH_ICON_FIGHT,
+        MESH_ARCHER_BODY,
         MESH_WEAPON_SWORD,
         MESH_UNIT_KNIGHT_VISOR,
         MESH_UNIT_KNIGHT,
@@ -182,9 +195,11 @@ bool LoadAssets(Allocator* allocator)
     SKELETON = _SKELETON;
 
     // @Texture
+    NOZ_LOAD_TEXTURE(allocator, PATH_TEXTURE_PALETTE_RED, TEXTURE_PALETTE_RED);
     NOZ_LOAD_TEXTURE(allocator, PATH_TEXTURE_PALETTE, TEXTURE_PALETTE);
 
     static Texture* _TEXTURE[] = {
+        TEXTURE_PALETTE_RED,
         TEXTURE_PALETTE,
         nullptr
     };
@@ -209,6 +224,8 @@ void UnloadAssets()
     Free(VFX_ARROW_HIT);
 
     // @Mesh
+    Free(MESH_ICON_FIGHT);
+    Free(MESH_ARCHER_BODY);
     Free(MESH_WEAPON_SWORD);
     Free(MESH_UNIT_KNIGHT_VISOR);
     Free(MESH_UNIT_KNIGHT);
@@ -228,6 +245,7 @@ void UnloadAssets()
     Free(SKELETON_UNIT_KNIGHT);
 
     // @Texture
+    Free(TEXTURE_PALETTE_RED);
     Free(TEXTURE_PALETTE);
 }
 
@@ -247,6 +265,8 @@ void HotloadAsset(const Name* incoming_name, AssetSignature incoming_signature)
     NOZ_RELOAD_VFX(PATH_VFX_ARROW_HIT, VFX_ARROW_HIT);
 
     // @Mesh
+    NOZ_RELOAD_MESH(PATH_MESH_ICON_FIGHT, MESH_ICON_FIGHT);
+    NOZ_RELOAD_MESH(PATH_MESH_ARCHER_BODY, MESH_ARCHER_BODY);
     NOZ_RELOAD_MESH(PATH_MESH_WEAPON_SWORD, MESH_WEAPON_SWORD);
     NOZ_RELOAD_MESH(PATH_MESH_UNIT_KNIGHT_VISOR, MESH_UNIT_KNIGHT_VISOR);
     NOZ_RELOAD_MESH(PATH_MESH_UNIT_KNIGHT, MESH_UNIT_KNIGHT);
@@ -266,6 +286,7 @@ void HotloadAsset(const Name* incoming_name, AssetSignature incoming_signature)
     NOZ_RELOAD_SKELETON(PATH_SKELETON_UNIT_KNIGHT, SKELETON_UNIT_KNIGHT);
 
     // @Texture
+    NOZ_RELOAD_TEXTURE(PATH_TEXTURE_PALETTE_RED, TEXTURE_PALETTE_RED);
     NOZ_RELOAD_TEXTURE(PATH_TEXTURE_PALETTE, TEXTURE_PALETTE);
 }
 

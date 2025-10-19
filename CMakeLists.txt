@@ -12,6 +12,7 @@ add_subdirectory(noz noz)
     
 set(SOURCE_FILES
     src/game.cpp
+    src/battle.cpp
     src/main.cpp
     src/entity.cpp
     src/unit.cpp

@@ -19,6 +19,8 @@ extern Font* FONT_SEGUISB;
 extern Vfx* VFX_ARROW_HIT;
 
 // @Mesh
+extern Mesh* MESH_ICON_FIGHT;
+extern Mesh* MESH_ARCHER_BODY;
 extern Mesh* MESH_WEAPON_SWORD;
 extern Mesh* MESH_UNIT_KNIGHT_VISOR;
 extern Mesh* MESH_UNIT_KNIGHT;
@@ -38,6 +40,7 @@ extern Shader* SHADER_VIGNETTE;
 extern Skeleton* SKELETON_UNIT_KNIGHT;
 
 // @Texture
+extern Texture* TEXTURE_PALETTE_RED;
 extern Texture* TEXTURE_PALETTE;
 
 // @name

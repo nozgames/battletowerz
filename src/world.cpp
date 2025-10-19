@@ -3,7 +3,6 @@
 //
 
 struct WorldSystem {
-    Mesh* grid_mesh;
 };
 
 static WorldSystem g_world = {};
@@ -30,14 +29,14 @@ static void DrawGrid(Camera* camera) {
     for (float x = start_x; x <= right + 1.0f; x += 1.0f) {
         Vec2 line_center = { x, (top + bottom) * 0.5f };
         Vec2 line_scale = { line_thickness, (top - bottom) * 0.5f };
-        DrawMesh(g_world.grid_mesh, TRS(line_center, 0, line_scale));
+        DrawMesh(g_game.line_mesh, TRS(line_center, 0, line_scale));
     }
 
     const float start_y = floorf(bottom);
     for (float y = start_y; y <= top + 1.0f; y += 1.0f) {
         Vec2 line_center = { (left + right) * 0.5f, y };
         Vec2 line_scale = { (right - left) * 0.5f, line_thickness };
-        DrawMesh(g_world.grid_mesh, TRS(line_center, 0, line_scale));
+        DrawMesh(g_game.line_mesh, TRS(line_center, 0, line_scale));
     }
 
     BindDepth(0.0f);
@@ -48,17 +47,4 @@ void DrawWorld(Camera* camera) {
 }
 
 void InitWorld() {
-    constexpr Vec2 gridColor = ColorUV(7,0);
-
-    PushScratch();
-    MeshBuilder* builder = CreateMeshBuilder(ALLOCATOR_SCRATCH, 4, 6);
-    Clear(builder);
-    AddVertex(builder, Vec2{-1,-1}, VEC3_ZERO, gridColor);
-    AddVertex(builder, Vec2{ 1,-1}, VEC3_ZERO, gridColor);
-    AddVertex(builder, Vec2{ 1, 1}, VEC3_ZERO, gridColor);
-    AddVertex(builder, Vec2{-1, 1}, VEC3_ZERO, gridColor);
-    AddTriangle(builder, 0, 1, 2);
-    AddTriangle(builder, 0, 2, 3);
-    g_world.grid_mesh = CreateMesh(ALLOCATOR_DEFAULT, builder, NAME_NONE, true);
-    PopScratch();
 }

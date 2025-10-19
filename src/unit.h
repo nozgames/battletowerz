@@ -5,6 +5,7 @@
 #pragma once
 
 enum Team {
+    TEAM_UNKNOWN=-1,
     TEAM_RED,
     TEAM_BLUE,
     TEAM_COUNT
@@ -69,6 +70,8 @@ struct UnitInfo {
 extern UnitEntity* CreateUnit(UnitType type, Team team, const EntityVtable& vtable, const Vec2& position = VEC2_ZERO, float rotation=0.0f, const Vec2& scale=VEC2_ONE);
 extern void EnumerateUnits(Team team, bool (*callback)(UnitEntity* unit, void* user_data), void* user_data);
 extern void Damage(UnitEntity* u, DamageType damage_type, float amount);
+extern UnitEntity* FindClosestEnemy(UnitEntity* unit);
+extern UnitEntity* FindClosestUnit(const Vec2& position);
 
 // @team
 inline Vec2 GetTeamDirection(Team team) {

@@ -62,7 +62,7 @@ void UpdateArcher(Entity* e)
         e->position += GetTeamDirection(a->team) * GetFrameTime() * ARCHER_SPEED;
         a->cooldown = ARCHER_COOLDOWN;
     } else {
-        a->cooldown -= GetFrameTime();
+        a->cooldown -= GetGameFrameTime();
         if (a->cooldown <= 0.0f) {
             a->cooldown = ARCHER_COOLDOWN;
             Damage(args.target, DAMAGE_TYPE_PHYSICAL, ARCHER_DAMAGE);

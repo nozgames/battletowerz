@@ -70,13 +70,13 @@ void UpdateKnight(Entity* e)
     }
 
     if (u->cooldown > 0.0f) {
-        u->cooldown -= GetFrameTime();
+        u->cooldown -= GetGameFrameTime();
         if (u->cooldown < 0.0f)
             u->cooldown = 0.0f;
     }
 
     if (args.target_distance - args.target->size > KNIGHT_RANGE) {
-        e->position += GetTeamDirection(u->team) * GetFrameTime() * KNIGHT_SPEED;
+        e->position += GetTeamDirection(u->team) * GetGameFrameTime() * KNIGHT_SPEED;
         u->cooldown = KNIGHT_COOLDOWN;
 
         if (u->state != UNIT_STATE_MOVING) {
@@ -104,6 +104,7 @@ KnightEntity* CreateKnight(Team team, const Vec2& position)
 
     KnightEntity* k = static_cast<KnightEntity*>(CreateUnit(UNIT_TYPE_KNIGHT, team, vtable, position, 0.0f, {GetTeamDirection(team).x, 1.0f}));
     k->health = KNIGHT_HEALTH;
+    k->size = 1.0f;
     Init(k->animator, SKELETON_UNIT_KNIGHT);
     Play(k->animator, ANIMATION_UNIT_KNIGHT_IDLE, 1.0f, true);
     return k;
