@@ -39,6 +39,7 @@ enum GameState {
     GAME_STATE_MAIN_MENU,
     GAME_STATE_EDIT,
     GAME_STATE_BATTLE,
+    GAME_STATE_GAME_OVER,
     GAME_STATE_PAUSE,
     GAME_STATE_COUNT
 };
@@ -123,5 +124,6 @@ extern void UpdateEditor();
 // @battle
 extern void StartBattle(const BattleSetup& setup);
 extern void UpdateBattle();
+extern void UpdateBattleUI();
 extern void DrawBattle();
 extern void HandleUnitDeath(UnitEntity* entity, DamageType damage_type);
