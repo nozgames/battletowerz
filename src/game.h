@@ -30,6 +30,8 @@ constexpr float GRAVITY = -50.0f;
 constexpr EventId EVENT_GAME_OVER = 1;
 constexpr EventId EVENT_VICTORY = 2;
 
+#include "entity.h"
+
 enum GameState
 {
     GAME_STATE_LOADING,
@@ -37,40 +39,6 @@ enum GameState
     GAME_STATE_PLAYING,
     GAME_STATE_PAUSED,
     GAME_STATE_COUNT
-};
-
-
-enum EntityType
-{
-    ENTITY_TYPE_NONE,
-    ENTITY_TYPE_UNIT,
-    ENTITY_TYPE_COUNT
-};
-
-struct Entity;
-
-struct EntityVtable
-{
-    void (*update)(Entity* entity);
-    void (*render)(Entity* entity, const Mat3& transform);
-};
-
-struct Entity {
-    EntityType type;
-    EntityVtable vtable;
-    Vec2 position;
-    Vec2 scale;
-    float depth;
-    float rotation;
-    Animator animator;
-};
-
-#include "unit.h"
-
-union FatEntity
-{
-    Entity entity;
-    FatUnitEntity unit;
 };
 
 struct Game
@@ -90,12 +58,43 @@ struct Game
     PoolAllocator* entity_allocator;
 
     bool quit;
+
+    Vec2 mouse_position;
+    Vec2 pan_position;
+    Vec2 pan_position_camera;
+    Vec2 mouse_world_position;
 };
 
 extern Game g_game;
 
 #include "game_assets.h"
 
+// @game
+extern void SetGameState(GameState state);
+extern bool IsGameState(GameState state);
+
 // @entity
 extern Entity* CreateEntity(EntityType type, const EntityVtable& vtable, const Vec2& position = VEC2_ZERO, float rotation=0.0f, const Vec2& scale=VEC2_ONE);
 extern void UpdateAnimator(Entity* entity);
+
+// @world
+extern void InitWorld();
+extern void DrawWorld(Camera* camera);
+
+// @colors
+constexpr Color BACKGROUND_COLOR = Color32ToColor(240,240,240,255);
+constexpr Color VIGNETTE_COLOR = Color32ToColor(148,148,148,255);
+constexpr Color FOREGROUND_COLOR = Color32ToColor(88,88,88,255);
+constexpr Color HOVER_COLOR = Color32ToColor(85, 177, 241,255);
+constexpr Color GRID_COLOR = {0.4f, 0.4f, 0.4f, 0.1f};
+
+// @menu
+extern void UpdateMenu();
+extern void InitMenu();
+extern void OpenMainMenu();
+extern void OpenPauseMenu();
+
+// @edit
+extern void InitEditor();
+extern void UpdateEditorUI();
+extern void UpdateEditor();

@@ -11,6 +11,7 @@ enum Team {
 };
 
 enum UnitType {
+    UNIT_TYPE_UNKNOWN = -1,
     UNIT_TYPE_ARCHER,
     UNIT_TYPE_KNIGHT,
     UNIT_TYPE_TOWER,
@@ -56,6 +57,14 @@ union FatUnitEntity {
     TowerEntity tower;
 };
 
+typedef UnitEntity* (*UnitCreateFunc)(Team team, const Vec2& position);
+
+struct UnitInfo {
+    UnitType type;
+    const Name* name;
+    UnitCreateFunc create_func;
+};
+
 // @unit
 extern UnitEntity* CreateUnit(UnitType type, Team team, const EntityVtable& vtable, const Vec2& position = VEC2_ZERO, float rotation=0.0f, const Vec2& scale=VEC2_ONE);
 extern void EnumerateUnits(Team team, bool (*callback)(UnitEntity* unit, void* user_data), void* user_data);
@@ -95,3 +104,7 @@ extern KnightEntity* CreateKnight(Team team, const Vec2& position);
 
 // @tower
 extern TowerEntity* CreateTower(Team team, const Vec2& position);
+
+// @database
+extern void InitUnitDatabase();
+extern const UnitInfo* GetUnitInfo(UnitType unit_type);

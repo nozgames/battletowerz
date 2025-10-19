@@ -2,16 +2,13 @@
 //  Battle TowerZ - Copyright(c) 2025 NoZ Games, LLC
 //
 
-#include "game.h"
-
 struct UnitCallbackArgs {
     Team team;
     void* user_data;
     bool (*callback)(UnitEntity* unit, void* user_data);
 };
 
-static bool UnitCallback(u32 item_index, void* item_ptr, void* user_data)
-{
+static bool UnitCallback(u32 item_index, void* item_ptr, void* user_data) {
     (void)item_index;
 
     assert(item_ptr);
@@ -27,8 +24,7 @@ static bool UnitCallback(u32 item_index, void* item_ptr, void* user_data)
     return args->callback(u, args->user_data);
 }
 
-void EnumerateUnits(Team team, bool (*callback)(UnitEntity* unit, void* user_data), void* user_data)
-{
+void EnumerateUnits(Team team, bool (*callback)(UnitEntity* unit, void* user_data), void* user_data) {
     UnitCallbackArgs args = { team, user_data, callback };
     Enumerate(g_game.entity_allocator, UnitCallback, &args);
 }
@@ -41,8 +37,7 @@ void Damage(UnitEntity* u, DamageType damage_type, float amount) {
     }
 }
 
-UnitEntity* CreateUnit(UnitType type, Team team, const EntityVtable& vtable, const Vec2& position, float rotation, const Vec2& scale)
-{
+UnitEntity* CreateUnit(UnitType type, Team team, const EntityVtable& vtable, const Vec2& position, float rotation, const Vec2& scale) {
     UnitEntity* u = static_cast<UnitEntity*>(CreateEntity(ENTITY_TYPE_UNIT, vtable, position, rotation, scale));
     u->state = UNIT_STATE_IDLE;
     u->team = team;

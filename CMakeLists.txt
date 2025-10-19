@@ -15,6 +15,10 @@ set(SOURCE_FILES
     src/main.cpp
     src/entity.cpp
     src/unit.cpp
+    src/unit_database.cpp
+    src/menu.cpp
+    src/world.cpp
+    src/editor.cpp
     src/units/archer.cpp
     src/units/tower.cpp
     src/units/knight.cpp
