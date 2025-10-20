@@ -10,13 +10,18 @@ inline ProjectileEntity* CastArrow(Entity* e) {
 }
 
 static void RenderArrow(Entity* e, const Mat3& transform) {
-    (void)e;
+    ProjectileEntity* p = CastArrow(e);
 
     BindDepth(1.0f);
     BindMaterial(g_game.material);
-    BindColor(COLOR_WHITE);
+    BindColor(GetTeamColor(p->team));
     DrawMesh(MESH_PROJECTILE_ARROW, transform * Scale(1.0f + (e->position.z / 10.0f)));
     BindDepth(0.0f);
+
+    BindDepth(-7.0f);
+    BindColor({0,0,0,0.05f});
+    BindMaterial(g_game.shadow_material);
+    DrawMesh(MESH_PROJECTILE_ARROW, TRS(XY(e->position), Angle(Normalize(p->target - p->start)), e->scale) * Scale(1.0f + (e->position.z / 10.0f)));
 }
 
 static void UpdateArrow(Entity* e) {
@@ -58,6 +63,7 @@ ProjectileEntity* CreateArrow(Team team, const Vec3& position, const Vec2& targe
 
     ProjectileEntity* e = CreateProjectile(PROJECTILE_TYPE_ARROW, team, vtable, position, VEC3_ZERO, VEC2_ONE);
     e->start = XY(position);
+    e->target = target;
     e->last_position = position;
     CalculateTrajectoryWithGravity(e, target, speed);
     return e;

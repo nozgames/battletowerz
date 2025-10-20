@@ -25,6 +25,7 @@ void RenderArcher(Entity* e, const Mat3& transform_a) {
 
     Mat3 transform = transform_a * Scale(1);
 
+    BindDepth(2.0f - (a->position.y / 10.0f));
     DrawMesh(MESH_HUMAN_FOOT_R, transform, e->animator, BONE_HUMAN_FOOT_R);
     DrawMesh(MESH_HUMAN_LEG_L, transform, e->animator, BONE_HUMAN_LEG_L);
     DrawMesh(MESH_HUMAN_LEG_R, transform, e->animator, BONE_HUMAN_LEG_R);
@@ -36,6 +37,7 @@ void RenderArcher(Entity* e, const Mat3& transform_a) {
     DrawMesh(MESH_HUMAN_EYE, transform, e->animator, BONE_HUMAN_EYE_L);
     DrawMesh(MESH_HUMAN_EYE, transform, e->animator, BONE_HUMAN_EYE_R);
     DrawMesh(MESH_HUMAN_HAND, transform, e->animator, BONE_HUMAN_HAND_L);
+    BindDepth(0.0f);
 }
 
 
