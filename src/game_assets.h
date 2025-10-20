@@ -12,6 +12,8 @@ extern Animation* ANIMATION_UNIT_KNIGHT_RUN;
 extern Animation* ANIMATION_UNIT_KNIGHT_IDLE;
 extern Animation* ANIMATION_UNIT_KNIGHT_ATTACK;
 extern Animation* ANIMATION_HUMAN_IDLE;
+extern Animation* ANIMATION_ARCHER_IDLE;
+extern Animation* ANIMATION_ARCHER_DRAW;
 
 // @Font
 extern Font* FONT_SEGUISB;
@@ -20,7 +22,6 @@ extern Font* FONT_SEGUISB;
 extern Vfx* VFX_ARROW_HIT;
 
 // @Mesh
-extern Mesh* MESH_TOWER_ENEMY_TEMP;
 extern Mesh* MESH_PROJECTILE_ARROW;
 extern Mesh* MESH_ICON_FIGHT;
 extern Mesh* MESH_HUMAN_LEG_R;
@@ -33,12 +34,13 @@ extern Mesh* MESH_HUMAN_EYE;
 extern Mesh* MESH_HUMAN_BODY;
 extern Mesh* MESH_ARCHER_HEAD;
 extern Mesh* MESH_ARCHER_BODY;
-extern Mesh* MESH_WEAPON_BOW;
-extern Mesh* MESH_TOWER_PLAYER_TEMP;
+extern Mesh* MESH_TOWER_ENEMY_TEMP;
 extern Mesh* MESH_WEAPON_SWORD;
+extern Mesh* MESH_WEAPON_BOW;
 extern Mesh* MESH_UNIT_KNIGHT_VISOR;
 extern Mesh* MESH_UNIT_KNIGHT;
 extern Mesh* MESH_UNIT_ARCHER;
+extern Mesh* MESH_TOWER_PLAYER_TEMP;
 
 // @Shader
 extern Shader* SHADER_VFX;
@@ -51,6 +53,7 @@ extern Shader* SHADER_SHADOW;
 
 // @Skeleton
 extern Skeleton* SKELETON_HUMAN;
+extern Skeleton* SKELETON_ARCHER;
 extern Skeleton* SKELETON_UNIT_KNIGHT;
 
 // @Texture
@@ -61,18 +64,34 @@ extern Texture* TEXTURE_PALETTE;
 extern const Name* NAME_ROOT;
 extern const Name* NAME_BODY;
 extern const Name* NAME_LEG_R;
-extern const Name* NAME_FOOT_R;
-extern const Name* NAME_LEG_L;
-extern const Name* NAME_FOOT_L;
-extern const Name* NAME_HEAD;
-extern const Name* NAME_HAND_L;
-extern const Name* NAME_HAND_R;
-extern const Name* NAME_EYE_R;
-extern const Name* NAME_EYE_L;
 extern const Name* NAME_BONE;
+extern const Name* NAME_LEG_L;
+extern const Name* NAME_LOOK;
+extern const Name* NAME_HEAD;
+extern const Name* NAME_FOOT_R;
+extern const Name* NAME_FOOT_L;
+extern const Name* NAME_EYE_L;
+extern const Name* NAME_EYE_R;
+extern const Name* NAME_HAND_R;
+extern const Name* NAME_HAND_L;
 extern const Name* NAME_WEAPON;
 extern const Name* NAME_VISOR;
 
+
+// @BONE_ARCHER
+constexpr int BONE_ARCHER_ROOT = 0;
+constexpr int BONE_ARCHER_BODY = 1;
+constexpr int BONE_ARCHER_LEG_R = 2;
+constexpr int BONE_ARCHER_BONE = 3;
+constexpr int BONE_ARCHER_LEG_L = 4;
+constexpr int BONE_ARCHER_LOOK = 5;
+constexpr int BONE_ARCHER_HEAD = 6;
+constexpr int BONE_ARCHER_FOOT_R = 7;
+constexpr int BONE_ARCHER_FOOT_L = 8;
+constexpr int BONE_ARCHER_EYE_L = 9;
+constexpr int BONE_ARCHER_EYE_R = 10;
+constexpr int BONE_ARCHER_HAND_R = 11;
+constexpr int BONE_ARCHER_HAND_L = 12;
 
 // @BONE_HUMAN
 constexpr int BONE_HUMAN_ROOT = 0;

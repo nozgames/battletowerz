@@ -1,9 +1,9 @@
+[editor]
+position = (15.047330,3.930435)
+sort_order = 300
+
 [skin]
 unit_knight_visor = 3
 unit_knight = 1
 weapon_sword = 2
-
-[editor]
-sort_order = 260
-position = (15.047330,3.930435)
 

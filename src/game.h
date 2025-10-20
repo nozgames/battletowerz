@@ -26,7 +26,7 @@ constexpr int WORLD_MAX_TILES = 1024;
 
 constexpr float MAX_FALL_SPEED = 100.0f;
 
-constexpr float GRAVITY = -9.0f;
+constexpr float GRAVITY = -5.0f;
 
 
 constexpr EventId EVENT_GAME_OVER = 1;

@@ -26,17 +26,34 @@ void RenderArcher(Entity* e, const Mat3& transform_a) {
     Mat3 transform = transform_a * Scale(1);
 
     BindDepth(2.0f - (a->position.y / 10.0f));
-    DrawMesh(MESH_HUMAN_FOOT_R, transform, e->animator, BONE_HUMAN_FOOT_R);
-    DrawMesh(MESH_HUMAN_LEG_L, transform, e->animator, BONE_HUMAN_LEG_L);
-    DrawMesh(MESH_HUMAN_LEG_R, transform, e->animator, BONE_HUMAN_LEG_R);
-    DrawMesh(MESH_HUMAN_FOOT_L, transform, e->animator, BONE_HUMAN_FOOT_L);
-    DrawMesh(MESH_WEAPON_BOW, transform, e->animator, BONE_HUMAN_HAND_R);
-    DrawMesh(MESH_HUMAN_HAND, transform, e->animator, BONE_HUMAN_HAND_R);
-    DrawMesh(MESH_ARCHER_BODY, transform, e->animator, BONE_HUMAN_BODY);
-    DrawMesh(MESH_ARCHER_HEAD, transform, e->animator, BONE_HUMAN_HEAD);
-    DrawMesh(MESH_HUMAN_EYE, transform, e->animator, BONE_HUMAN_EYE_L);
-    DrawMesh(MESH_HUMAN_EYE, transform, e->animator, BONE_HUMAN_EYE_R);
-    DrawMesh(MESH_HUMAN_HAND, transform, e->animator, BONE_HUMAN_HAND_L);
+    DrawMesh(MESH_HUMAN_FOOT_R, transform, e->animator, BONE_ARCHER_FOOT_R);
+    DrawMesh(MESH_HUMAN_LEG_L, transform, e->animator, BONE_ARCHER_LEG_L);
+    DrawMesh(MESH_HUMAN_LEG_R, transform, e->animator, BONE_ARCHER_LEG_R);
+    DrawMesh(MESH_HUMAN_FOOT_L, transform, e->animator, BONE_ARCHER_FOOT_L);
+    DrawMesh(MESH_ARCHER_BODY, transform, e->animator, BONE_ARCHER_BODY);
+    DrawMesh(MESH_ARCHER_HEAD, transform, e->animator, BONE_ARCHER_HEAD);
+    DrawMesh(MESH_HUMAN_EYE, transform, e->animator, BONE_ARCHER_EYE_L);
+    DrawMesh(MESH_HUMAN_EYE, transform, e->animator, BONE_ARCHER_EYE_R);
+    DrawMesh(MESH_WEAPON_BOW, transform, e->animator, BONE_ARCHER_HAND_R);
+    DrawMesh(MESH_HUMAN_HAND, transform, e->animator, BONE_ARCHER_HAND_R);
+    DrawMesh(MESH_HUMAN_HAND, transform, e->animator, BONE_ARCHER_HAND_L);
+    BindDepth(0.0f);
+
+    BindDepth(-7.0f);
+    transform = transform * Scale({1, -0.5f});
+    BindColor({0,0,0,0.1f});
+    BindMaterial(g_game.shadow_material);
+    DrawMesh(MESH_HUMAN_FOOT_R, transform, e->animator, BONE_ARCHER_FOOT_R);
+    DrawMesh(MESH_HUMAN_LEG_L, transform, e->animator, BONE_ARCHER_LEG_L);
+    DrawMesh(MESH_HUMAN_LEG_R, transform, e->animator, BONE_ARCHER_LEG_R);
+    DrawMesh(MESH_HUMAN_FOOT_L, transform, e->animator, BONE_ARCHER_FOOT_L);
+    DrawMesh(MESH_ARCHER_BODY, transform, e->animator, BONE_ARCHER_BODY);
+    DrawMesh(MESH_ARCHER_HEAD, transform, e->animator, BONE_ARCHER_HEAD);
+    DrawMesh(MESH_HUMAN_EYE, transform, e->animator, BONE_ARCHER_EYE_L);
+    DrawMesh(MESH_HUMAN_EYE, transform, e->animator, BONE_ARCHER_EYE_R);
+    DrawMesh(MESH_WEAPON_BOW, transform, e->animator, BONE_ARCHER_HAND_R);
+    DrawMesh(MESH_HUMAN_HAND, transform, e->animator, BONE_ARCHER_HAND_R);
+    DrawMesh(MESH_HUMAN_HAND, transform, e->animator, BONE_ARCHER_HAND_L);
     BindDepth(0.0f);
 }
 
@@ -71,6 +88,16 @@ void UpdateArcher(Entity* e) {
     if (!args.target)
         return;
 
+    if (!IsPlaying(a->animator) && !IsLooping(a->animator)) {
+        Vec2 hand = TRS(XY(a->position), 0.0f, a->scale) * a->animator.bones[BONE_ARCHER_HAND_R] * VEC2_ZERO;
+        Play(a->animator, ANIMATION_ARCHER_IDLE, 1.0f, true);
+        CreateArrow(
+            a->team,
+            Vec3{hand.x, hand.y, 0.0f},
+            XY(args.target->position),
+            4.0f);
+    }
+
     if (args.target_distance > ARCHER_RANGE) {
         MoveTowards(a, XY(args.target->position), ARCHER_SPEED);
         a->cooldown = ARCHER_COOLDOWN;
@@ -78,11 +105,7 @@ void UpdateArcher(Entity* e) {
         a->cooldown -= GetGameFrameTime();
         if (a->cooldown <= 0.0f) {
             a->cooldown = ARCHER_COOLDOWN;
-            CreateArrow(
-                a->team,
-                a->position,
-                XY(args.target->position),
-                4.0f);
+            Play(a->animator, ANIMATION_ARCHER_DRAW, 1.0f, false);
             //Damage(args.target, DAMAGE_TYPE_PHYSICAL, ARCHER_DAMAGE);
             //Play(VFX_ARROW_HIT, WorldToScreen(args.target->position));
         }
@@ -102,7 +125,7 @@ ArcherEntity* CreateArcher(Team team, const Vec3& position)
     a->health = ARCHER_HEALTH;
     a->size = ARCHER_SIZE;
 
-    Init(a->animator, SKELETON_HUMAN);
-    Play(a->animator, ANIMATION_HUMAN_IDLE, 1.0f, true);
+    Init(a->animator, SKELETON_ARCHER);
+    Play(a->animator, ANIMATION_ARCHER_IDLE, 1.0f, true);
     return a;
 }

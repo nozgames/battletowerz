@@ -1,0 +1,15 @@
+[skin]
+human_foot_l = 8
+human_hand = 12, 11
+human_foot_r = 7
+human_eye = 9, 10
+human_leg_r = 2
+human_leg_l = 4
+archer_body = 3
+archer_head = 6
+weapon_bow = 11
+
+[editor]
+sort_order = 280
+position = (4.000000,-6.000000)
+

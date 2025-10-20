@@ -1,8 +1,9 @@
-[editor]
-sort_order = 230
-position = (0.000000,0.000000)
-
 [shader]
 blend = true
 depth = true
+depth_less = true
+
+[editor]
+position = (-1.848162,-1.754821)
+sort_order = 260
 
