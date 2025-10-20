@@ -12,7 +12,7 @@ void DestroyAllEntities() {
     Clear(g_game.entity_allocator);
 }
 
-Entity* CreateEntity(EntityType type, const EntityVtable& vtable, const Vec2& position, float rotation, const Vec2& scale) {
+Entity* CreateEntity(EntityType type, const EntityVtable& vtable, const Vec3& position, float rotation, const Vec2& scale) {
     Entity* e = static_cast<Entity*>(Alloc(g_game.entity_allocator, sizeof(FatEntity)));
     e->type = type;
     e->vtable = vtable;

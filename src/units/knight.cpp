@@ -47,7 +47,7 @@ static bool FindKnightTarget(UnitEntity* u, void* user_data)
     assert(u);
     assert(user_data);
     FindKnightTargetArgs* args = static_cast<FindKnightTargetArgs*>(user_data);
-    float distance = Distance(args->a->position, u->position);
+    float distance = Distance(XY(args->a->position), XY(u->position));
     if (distance < args->target_distance) {
         args->target = u;
         args->target_distance = distance;
@@ -62,7 +62,7 @@ static void SetKnightIdleState(KnightEntity* u) {
     Play(u->animator, ANIMATION_UNIT_KNIGHT_IDLE, 1.0f, true);
 }
 
-void UpdateKnight(Entity* e)
+void UpdateArrow(Entity* e)
 {
     KnightEntity* u = CastKnight(e);
     Update(u->animator);
@@ -85,7 +85,7 @@ void UpdateKnight(Entity* e)
     }
 
     if (args.target_distance - args.target->size > KNIGHT_RANGE) {
-        MoveTowards(u, args.target->position, KNIGHT_SPEED);
+        MoveTowards(u, XY(args.target->position), KNIGHT_SPEED);
         u->cooldown = KNIGHT_COOLDOWN;
 
         if (u->state != UNIT_STATE_MOVING) {
@@ -97,17 +97,17 @@ void UpdateKnight(Entity* e)
         u->cooldown = KNIGHT_COOLDOWN;
         u->state = UNIT_STATE_ATTACKING;
         Damage(args.target, DAMAGE_TYPE_PHYSICAL, KNIGHT_DAMAGE);
-        Play(VFX_ARROW_HIT, args.target->position);
+        Play(VFX_ARROW_HIT, WorldToScreen(args.target->position));
         Play(u->animator, ANIMATION_UNIT_KNIGHT_ATTACK, 1.0f, false);
     } else if (u->state != UNIT_STATE_IDLE && (IsLooping(u->animator) || !IsPlaying(u->animator))) {
         SetKnightIdleState(u);
     }
 }
 
-KnightEntity* CreateKnight(Team team, const Vec2& position)
+KnightEntity* CreateKnight(Team team, const Vec3& position)
 {
     static EntityVtable vtable = {
-        .update = UpdateKnight,
+        .update = UpdateArrow,
         .render = RenderKnight
     };
 

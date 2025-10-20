@@ -1,4 +1,8 @@
+[editor]
+sort_order = 230
+position = (0.000000,0.000000)
+
 [shader]
-blend=true
-depth=true
+blend = true
+depth = true
 

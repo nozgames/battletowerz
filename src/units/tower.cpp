@@ -27,7 +27,7 @@ static void RenderTower(Entity* e, const Mat3& transform)
     BindDepth(0.0f);
 }
 
-TowerEntity* CreateTower(Team team, const Vec2& position)
+TowerEntity* CreateTower(Team team, const Vec3& position)
 {
     static EntityVtable vtable = {
         .render = RenderTower

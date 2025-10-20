@@ -49,7 +49,7 @@ static bool EnumerateClosestEnemy(UnitEntity* u, void* user_data) {
     assert(u);
     assert(user_data);
     FindTargetArgs* args = static_cast<FindTargetArgs*>(user_data);
-    float distance = Distance(args->position, u->position);
+    float distance = Distance(args->position, XY(u->position));
     if (distance < args->target_distance) {
         args->target = u;
         args->target_distance = distance;
@@ -60,7 +60,7 @@ static bool EnumerateClosestEnemy(UnitEntity* u, void* user_data) {
 UnitEntity* FindClosestEnemy(UnitEntity* unit) {
     FindTargetArgs args {
         .unit = unit,
-        .position = unit->position,
+        .position = XY(unit->position),
         .target = nullptr,
         .target_distance = F32_MAX
     };
@@ -80,11 +80,13 @@ UnitEntity* FindClosestUnit(const Vec2& position) {
 }
 
 void MoveTowards(UnitEntity* unit, const Vec2& target_position, float speed) {
-    Vec2 direction = Normalize(target_position - unit->position);
-    unit->position += direction * speed * GetGameFrameTime();
+    Vec2 direction = Normalize(target_position - XY(unit->position));
+    Vec2 move = direction * speed * GetGameFrameTime();
+    unit->position.x += move.x;
+    unit->position.y += move.y;
 }
 
-UnitEntity* CreateUnit(UnitType type, Team team, const EntityVtable& vtable, const Vec2& position, float rotation, const Vec2& scale) {
+UnitEntity* CreateUnit(UnitType type, Team team, const EntityVtable& vtable, const Vec3& position, float rotation, const Vec2& scale) {
     UnitEntity* u = static_cast<UnitEntity*>(CreateEntity(ENTITY_TYPE_UNIT, vtable, position, rotation, scale));
     u->state = UNIT_STATE_IDLE;
     u->team = team;

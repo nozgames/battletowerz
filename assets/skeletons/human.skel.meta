@@ -1,0 +1,14 @@
+[skin]
+human_leg_l = 4
+human_eye = 9, 10
+human_leg_r = 2
+human_head = 6
+human_foot_l = 5
+human_hand = 7, 8
+human_foot_r = 3
+human_body = 11
+
+[editor]
+position = (9.165492,0.305409)
+sort_order = 250
+

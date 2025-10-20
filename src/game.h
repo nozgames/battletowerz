@@ -26,7 +26,7 @@ constexpr int WORLD_MAX_TILES = 1024;
 
 constexpr float MAX_FALL_SPEED = 100.0f;
 
-constexpr float GRAVITY = -50.0f;
+constexpr float GRAVITY = -9.0f;
 
 
 constexpr EventId EVENT_GAME_OVER = 1;
@@ -91,11 +91,6 @@ extern void SetGameState(GameState state);
 extern bool IsGameState(GameState state);
 extern bool IsPlaying();
 extern float GetGameFrameTime();
-
-// @entity
-extern Entity* CreateEntity(EntityType type, const EntityVtable& vtable, const Vec2& position = VEC2_ZERO, float rotation=0.0f, const Vec2& scale=VEC2_ONE);
-extern void UpdateAnimator(Entity* entity);
-extern void DestroyAllEntities();
 
 // @world
 extern void InitWorld();

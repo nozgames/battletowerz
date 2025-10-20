@@ -67,7 +67,7 @@ struct UnitInfo {
 };
 
 // @unit
-extern UnitEntity* CreateUnit(UnitType type, Team team, const EntityVtable& vtable, const Vec2& position = VEC2_ZERO, float rotation=0.0f, const Vec2& scale=VEC2_ONE);
+extern UnitEntity* CreateUnit(UnitType type, Team team, const EntityVtable& vtable, const Vec3& position = VEC3_ZERO, float rotation=0.0f, const Vec2& scale=VEC2_ONE);
 extern void EnumerateUnits(Team team, bool (*callback)(UnitEntity* unit, void* user_data), void* user_data);
 extern void Damage(UnitEntity* u, DamageType damage_type, float amount);
 extern UnitEntity* FindClosestEnemy(UnitEntity* unit);
@@ -101,13 +101,13 @@ inline Team GetOppositeTeam(Team team) {
 }
 
 // @archer
-extern ArcherEntity* CreateArcher(Team team, const Vec2& position);
+extern ArcherEntity* CreateArcher(Team team, const Vec3& position);
 
 // @knight
-extern KnightEntity* CreateKnight(Team team, const Vec2& position);
+extern KnightEntity* CreateKnight(Team team, const Vec3& position);
 
 // @tower
-extern TowerEntity* CreateTower(Team team, const Vec2& position);
+extern TowerEntity* CreateTower(Team team, const Vec3& position);
 
 // @database
 extern void InitUnitDatabase();

@@ -61,7 +61,7 @@ static void HandleFightButton(const TapDetails&, void*) {
         const EditorUnit& editor_unit = g_editor.units[i];
         g_game.battle_setup.units[g_game.battle_setup.unit_count++] = {
             .unit_info = editor_unit.unit_info,
-            .position = editor_unit.entity->position,
+            .position = XY(editor_unit.entity->position),
             .team = editor_unit.team,
         };
     }
@@ -141,7 +141,7 @@ void UpdateEditor() {
 
     g_editor.hovered_unit = GetEditorUnit(FindClosestUnit(g_game.mouse_world_position));
     if (g_editor.hovered_unit) {
-        float distance = Distance(g_editor.hovered_unit->entity->position, g_game.mouse_world_position);
+        float distance = Distance(XY(g_editor.hovered_unit->entity->position), g_game.mouse_world_position);
         LogInfo("%s hovered at distance %.2f", g_editor.hovered_unit->unit_info->name->value, distance);
         if (distance > g_editor.hovered_unit->entity->size)
             g_editor.hovered_unit = nullptr;

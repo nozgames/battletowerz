@@ -18,14 +18,26 @@ inline ArcherEntity* CastArcher(Entity* e) {
     return a;
 }
 
-void RenderArcher(Entity* e, const Mat3& transform)
-{
+void RenderArcher(Entity* e, const Mat3& transform_a) {
     ArcherEntity* a = CastArcher(e);
     BindColor(GetTeamColor(a->team));
-    BindTransform(transform);
     BindMaterial(g_game.material);
-    DrawMesh(MESH_UNIT_ARCHER);
+
+    Mat3 transform = transform_a * Scale(1);
+
+    DrawMesh(MESH_HUMAN_FOOT_R, transform, e->animator, BONE_HUMAN_FOOT_R);
+    DrawMesh(MESH_HUMAN_LEG_L, transform, e->animator, BONE_HUMAN_LEG_L);
+    DrawMesh(MESH_HUMAN_LEG_R, transform, e->animator, BONE_HUMAN_LEG_R);
+    DrawMesh(MESH_HUMAN_FOOT_L, transform, e->animator, BONE_HUMAN_FOOT_L);
+    DrawMesh(MESH_WEAPON_BOW, transform, e->animator, BONE_HUMAN_HAND_R);
+    DrawMesh(MESH_HUMAN_HAND, transform, e->animator, BONE_HUMAN_HAND_R);
+    DrawMesh(MESH_ARCHER_BODY, transform, e->animator, BONE_HUMAN_BODY);
+    DrawMesh(MESH_ARCHER_HEAD, transform, e->animator, BONE_HUMAN_HEAD);
+    DrawMesh(MESH_HUMAN_EYE, transform, e->animator, BONE_HUMAN_EYE_L);
+    DrawMesh(MESH_HUMAN_EYE, transform, e->animator, BONE_HUMAN_EYE_R);
+    DrawMesh(MESH_HUMAN_HAND, transform, e->animator, BONE_HUMAN_HAND_L);
 }
+
 
 struct FindArcherTargetArgs {
     ArcherEntity* a;
@@ -38,7 +50,7 @@ static bool FindArcherTarget(UnitEntity* u, void* user_data)
     assert(u);
     assert(user_data);
     FindArcherTargetArgs* args = static_cast<FindArcherTargetArgs*>(user_data);
-    float distance = Distance(args->a->position, u->position);
+    float distance = Distance(XY(args->a->position), XY(u->position));
     if (distance < args->target_distance) {
         args->target = u;
         args->target_distance = distance;
@@ -58,19 +70,26 @@ void UpdateArcher(Entity* e) {
         return;
 
     if (args.target_distance > ARCHER_RANGE) {
-        MoveTowards(a, args.target->position, ARCHER_SPEED);
+        MoveTowards(a, XY(args.target->position), ARCHER_SPEED);
         a->cooldown = ARCHER_COOLDOWN;
     } else {
         a->cooldown -= GetGameFrameTime();
         if (a->cooldown <= 0.0f) {
             a->cooldown = ARCHER_COOLDOWN;
-            Damage(args.target, DAMAGE_TYPE_PHYSICAL, ARCHER_DAMAGE);
-            Play(VFX_ARROW_HIT, args.target->position);
+            CreateArrow(
+                a->team,
+                a->position,
+                XY(args.target->position),
+                4.0f);
+            //Damage(args.target, DAMAGE_TYPE_PHYSICAL, ARCHER_DAMAGE);
+            //Play(VFX_ARROW_HIT, WorldToScreen(args.target->position));
         }
     }
+
+    Update(a->animator);
 }
 
-ArcherEntity* CreateArcher(Team team, const Vec2& position)
+ArcherEntity* CreateArcher(Team team, const Vec3& position)
 {
     static EntityVtable vtable = {
         .update = UpdateArcher,
@@ -80,5 +99,8 @@ ArcherEntity* CreateArcher(Team team, const Vec2& position)
     ArcherEntity* a = static_cast<ArcherEntity*>(CreateUnit(UNIT_TYPE_ARCHER, team, vtable, position, 0.0f, {GetTeamDirection(team).x, 1.0f}));
     a->health = ARCHER_HEALTH;
     a->size = ARCHER_SIZE;
+
+    Init(a->animator, SKELETON_HUMAN);
+    Play(a->animator, ANIMATION_HUMAN_IDLE, 1.0f, true);
     return a;
 }

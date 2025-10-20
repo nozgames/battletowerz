@@ -11,6 +11,7 @@
 extern Animation* ANIMATION_UNIT_KNIGHT_RUN;
 extern Animation* ANIMATION_UNIT_KNIGHT_IDLE;
 extern Animation* ANIMATION_UNIT_KNIGHT_ATTACK;
+extern Animation* ANIMATION_HUMAN_IDLE;
 
 // @Font
 extern Font* FONT_SEGUISB;
@@ -19,14 +20,25 @@ extern Font* FONT_SEGUISB;
 extern Vfx* VFX_ARROW_HIT;
 
 // @Mesh
+extern Mesh* MESH_TOWER_ENEMY_TEMP;
+extern Mesh* MESH_PROJECTILE_ARROW;
+extern Mesh* MESH_ICON_FIGHT;
+extern Mesh* MESH_HUMAN_LEG_R;
+extern Mesh* MESH_HUMAN_LEG_L;
+extern Mesh* MESH_HUMAN_HEAD;
+extern Mesh* MESH_HUMAN_HAND;
+extern Mesh* MESH_HUMAN_FOOT_R;
+extern Mesh* MESH_HUMAN_FOOT_L;
+extern Mesh* MESH_HUMAN_EYE;
+extern Mesh* MESH_HUMAN_BODY;
+extern Mesh* MESH_ARCHER_HEAD;
+extern Mesh* MESH_ARCHER_BODY;
+extern Mesh* MESH_WEAPON_BOW;
+extern Mesh* MESH_TOWER_PLAYER_TEMP;
 extern Mesh* MESH_WEAPON_SWORD;
 extern Mesh* MESH_UNIT_KNIGHT_VISOR;
 extern Mesh* MESH_UNIT_KNIGHT;
 extern Mesh* MESH_UNIT_ARCHER;
-extern Mesh* MESH_TOWER_PLAYER_TEMP;
-extern Mesh* MESH_TOWER_ENEMY_TEMP;
-extern Mesh* MESH_ICON_FIGHT;
-extern Mesh* MESH_ARCHER_BODY;
 
 // @Shader
 extern Shader* SHADER_VFX;
@@ -38,6 +50,7 @@ extern Shader* SHADER_VIGNETTE;
 extern Shader* SHADER_SHADOW;
 
 // @Skeleton
+extern Skeleton* SKELETON_HUMAN;
 extern Skeleton* SKELETON_UNIT_KNIGHT;
 
 // @Texture
@@ -47,9 +60,33 @@ extern Texture* TEXTURE_PALETTE;
 // @name
 extern const Name* NAME_ROOT;
 extern const Name* NAME_BODY;
+extern const Name* NAME_LEG_R;
+extern const Name* NAME_FOOT_R;
+extern const Name* NAME_LEG_L;
+extern const Name* NAME_FOOT_L;
+extern const Name* NAME_HEAD;
+extern const Name* NAME_HAND_L;
+extern const Name* NAME_HAND_R;
+extern const Name* NAME_EYE_R;
+extern const Name* NAME_EYE_L;
+extern const Name* NAME_BONE;
 extern const Name* NAME_WEAPON;
 extern const Name* NAME_VISOR;
 
+
+// @BONE_HUMAN
+constexpr int BONE_HUMAN_ROOT = 0;
+constexpr int BONE_HUMAN_BODY = 1;
+constexpr int BONE_HUMAN_LEG_R = 2;
+constexpr int BONE_HUMAN_FOOT_R = 3;
+constexpr int BONE_HUMAN_LEG_L = 4;
+constexpr int BONE_HUMAN_FOOT_L = 5;
+constexpr int BONE_HUMAN_HEAD = 6;
+constexpr int BONE_HUMAN_HAND_L = 7;
+constexpr int BONE_HUMAN_HAND_R = 8;
+constexpr int BONE_HUMAN_EYE_R = 9;
+constexpr int BONE_HUMAN_EYE_L = 10;
+constexpr int BONE_HUMAN_BONE = 11;
 
 // @BONE_UNIT_KNIGHT
 constexpr int BONE_UNIT_KNIGHT_ROOT = 0;
