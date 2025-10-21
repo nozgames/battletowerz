@@ -1,0 +1,5 @@
+- [ ] Event system for animations
+- [ ] Archer
+  - [ ] choose target location as soon as draw starts
+  - [ ] fire arrow at specific animation frame
+  - 
