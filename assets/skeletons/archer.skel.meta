@@ -10,6 +10,6 @@ archer_head = 6
 weapon_bow = 11
 
 [editor]
-sort_order = 270
+sort_order = 190
 position = (4.591114,-5.891110)
 

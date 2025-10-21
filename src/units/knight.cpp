@@ -22,17 +22,17 @@ static void RenderKnight(Entity* e, const Mat3& transform)
     KnightEntity* a = CastKnight(e);
     BindColor(GetTeamColor(a->team));
     BindMaterial(g_game.material);
-    DrawMesh(MESH_WEAPON_SWORD, transform, a->animator, BONE_UNIT_KNIGHT_WEAPON);
-    DrawMesh(MESH_UNIT_KNIGHT, transform, a->animator, BONE_UNIT_KNIGHT_BODY);
-    DrawMesh(MESH_UNIT_KNIGHT_VISOR, transform, a->animator, BONE_UNIT_KNIGHT_VISOR);
+    // DrawMesh(MESH_WEAPON_SWORD, transform, a->animator, BONE_UNIT_KNIGHT_WEAPON);
+    // DrawMesh(MESH_UNIT_KNIGHT, transform, a->animator, BONE_UNIT_KNIGHT_BODY);
+    // DrawMesh(MESH_UNIT_KNIGHT_VISOR, transform, a->animator, BONE_UNIT_KNIGHT_VISOR);
 
     BindDepth(-7.0f);
     BindColor(SetAlpha(COLOR_BLACK, 0.1f));
     Mat3 shadow_transform = transform * Scale(Vec2{1.0f, -0.5f});
     BindMaterial(g_game.shadow_material);
-    DrawMesh(MESH_WEAPON_SWORD, shadow_transform, a->animator, BONE_UNIT_KNIGHT_WEAPON);
-    DrawMesh(MESH_UNIT_KNIGHT, shadow_transform, a->animator, BONE_UNIT_KNIGHT_BODY);
-    DrawMesh(MESH_UNIT_KNIGHT_VISOR, shadow_transform, a->animator, BONE_UNIT_KNIGHT_VISOR);
+    // DrawMesh(MESH_WEAPON_SWORD, shadow_transform, a->animator, BONE_UNIT_KNIGHT_WEAPON);
+    // DrawMesh(MESH_UNIT_KNIGHT, shadow_transform, a->animator, BONE_UNIT_KNIGHT_BODY);
+    // DrawMesh(MESH_UNIT_KNIGHT_VISOR, shadow_transform, a->animator, BONE_UNIT_KNIGHT_VISOR);
     BindDepth(0.0f);
 }
 
@@ -59,7 +59,7 @@ static void SetKnightIdleState(KnightEntity* u) {
     if (u->state == UNIT_STATE_IDLE)
         return;
     u->state = UNIT_STATE_IDLE;
-    Play(u->animator, ANIMATION_UNIT_KNIGHT_IDLE, 1.0f, true);
+    //Play(u->animator, ANIMATION_UNIT_KNIGHT_IDLE, 1.0f, true);
 }
 
 void UpdateArrow(Entity* e)
@@ -90,7 +90,7 @@ void UpdateArrow(Entity* e)
 
         if (u->state != UNIT_STATE_MOVING) {
             u->state = UNIT_STATE_MOVING;
-            Play(u->animator, ANIMATION_UNIT_KNIGHT_RUN, 1.0f, true);
+            //Play(u->animator, ANIMATION_UNIT_KNIGHT_RUN, 1.0f, true);
         }
 
     } else if (u->cooldown <= 0.0f) {
@@ -98,7 +98,7 @@ void UpdateArrow(Entity* e)
         u->state = UNIT_STATE_ATTACKING;
         Damage(args.target, DAMAGE_TYPE_PHYSICAL, KNIGHT_DAMAGE);
         Play(VFX_ARROW_HIT, WorldToScreen(args.target->position));
-        Play(u->animator, ANIMATION_UNIT_KNIGHT_ATTACK, 1.0f, false);
+        //Play(u->animator, ANIMATION_UNIT_KNIGHT_ATTACK, 1.0f, false);
     } else if (u->state != UNIT_STATE_IDLE && (IsLooping(u->animator) || !IsPlaying(u->animator))) {
         SetKnightIdleState(u);
     }
@@ -114,7 +114,7 @@ KnightEntity* CreateKnight(Team team, const Vec3& position)
     KnightEntity* k = static_cast<KnightEntity*>(CreateUnit(UNIT_TYPE_KNIGHT, team, vtable, position, 0.0f, {GetTeamDirection(team).x, 1.0f}));
     k->health = KNIGHT_HEALTH;
     k->size = 1.0f;
-    Init(k->animator, SKELETON_UNIT_KNIGHT);
-    Play(k->animator, ANIMATION_UNIT_KNIGHT_IDLE, 1.0f, true);
+    // Init(k->animator, SKELETON_UNIT_KNIGHT);
+    // Play(k->animator, ANIMATION_UNIT_KNIGHT_IDLE, 1.0f, true);
     return k;
 }
