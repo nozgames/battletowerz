@@ -4,6 +4,7 @@ srgb = true
 clamp = true
 
 [editor]
-position = (2.508049,-30.515554)
-sort_order = 220
+sort_order = 280
+position = (4.562063,-30.468872)
+scale = 1.000000
 

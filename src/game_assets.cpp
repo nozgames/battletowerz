@@ -8,9 +8,9 @@
 
 
 // @Animation
-Animation* ANIMATION_HUMAN_IDLE = nullptr;
-Animation* ANIMATION_ARCHER_IDLE = nullptr;
-Animation* ANIMATION_ARCHER_DRAW = nullptr;
+Animation* ANIMATION_COWBOY_SHOOT = nullptr;
+Animation* ANIMATION_COWBOY_RUN = nullptr;
+Animation* ANIMATION_COWBOY_IDLE = nullptr;
 
 // @Font
 Font* FONT_SEGUISB = nullptr;
@@ -19,20 +19,26 @@ Font* FONT_SEGUISB = nullptr;
 Vfx* VFX_ARROW_HIT = nullptr;
 
 // @Mesh
+Mesh* MESH_HUMAN_HAND_L = nullptr;
+Mesh* MESH_HUMAN_FOOT_R = nullptr;
+Mesh* MESH_HUMAN_FOOT_L = nullptr;
+Mesh* MESH_HUMAN_EYE = nullptr;
+Mesh* MESH_COWBOY_TIE = nullptr;
+Mesh* MESH_COWBOY_PISTOL = nullptr;
+Mesh* MESH_COWBOY_MUSTACHE = nullptr;
+Mesh* MESH_COWBOY_HEAD = nullptr;
+Mesh* MESH_COWBOY_BODY = nullptr;
+Mesh* MESH_COWBOY_ARM_R = nullptr;
+Mesh* MESH_COWBOY_ARM_L = nullptr;
+Mesh* MESH_ARCHER_HEAD = nullptr;
+Mesh* MESH_ARCHER_BODY = nullptr;
+Mesh* MESH_HUMAN_HAND_R = nullptr;
 Mesh* MESH_WEAPON_BOW = nullptr;
 Mesh* MESH_TOWER_PLAYER_TEMP = nullptr;
 Mesh* MESH_PROJECTILE_ARROW = nullptr;
 Mesh* MESH_ICON_FIGHT = nullptr;
 Mesh* MESH_HUMAN_LEG_R = nullptr;
 Mesh* MESH_HUMAN_LEG_L = nullptr;
-Mesh* MESH_HUMAN_HEAD = nullptr;
-Mesh* MESH_HUMAN_HAND = nullptr;
-Mesh* MESH_HUMAN_FOOT_R = nullptr;
-Mesh* MESH_HUMAN_FOOT_L = nullptr;
-Mesh* MESH_HUMAN_EYE = nullptr;
-Mesh* MESH_HUMAN_BODY = nullptr;
-Mesh* MESH_ARCHER_HEAD = nullptr;
-Mesh* MESH_ARCHER_BODY = nullptr;
 
 // @Shader
 Shader* SHADER_VFX = nullptr;
@@ -44,39 +50,56 @@ Shader* SHADER_VIGNETTE = nullptr;
 Shader* SHADER_SHADOW = nullptr;
 
 // @Skeleton
-Skeleton* SKELETON_HUMAN = nullptr;
-Skeleton* SKELETON_ARCHER = nullptr;
+Skeleton* SKELETON_COWBOY = nullptr;
 
 // @Texture
-Texture* TEXTURE_PALETTE_RED = nullptr;
 Texture* TEXTURE_PALETTE = nullptr;
 
 // @name
 const Name* NAME_ROOT = nullptr;
 const Name* NAME_BODY = nullptr;
-const Name* NAME_LEG_R = nullptr;
-const Name* NAME_BONE = nullptr;
-const Name* NAME_LEG_L = nullptr;
-const Name* NAME_LOOK = nullptr;
 const Name* NAME_HEAD = nullptr;
-const Name* NAME_FOOT_R = nullptr;
+const Name* NAME_MUSTACHE = nullptr;
+const Name* NAME_ARM_L = nullptr;
+const Name* NAME_ARM_R = nullptr;
+const Name* NAME_LEFT_R = nullptr;
+const Name* NAME_LEFT_L = nullptr;
+const Name* NAME_CHEST = nullptr;
 const Name* NAME_FOOT_L = nullptr;
+const Name* NAME_FOOT_R = nullptr;
 const Name* NAME_EYE_L = nullptr;
 const Name* NAME_EYE_R = nullptr;
-const Name* NAME_HAND_R = nullptr;
+const Name* NAME_TIE = nullptr;
 const Name* NAME_HAND_L = nullptr;
+const Name* NAME_HAND_R = nullptr;
 
 // @path
+const Name* PATH_MESH_HUMAN_HAND_L = nullptr;
+const Name* PATH_MESH_HUMAN_FOOT_R = nullptr;
+const Name* PATH_MESH_HUMAN_FOOT_L = nullptr;
+const Name* PATH_MESH_HUMAN_EYE = nullptr;
+const Name* PATH_MESH_COWBOY_TIE = nullptr;
+const Name* PATH_MESH_COWBOY_PISTOL = nullptr;
+const Name* PATH_MESH_COWBOY_MUSTACHE = nullptr;
+const Name* PATH_MESH_COWBOY_HEAD = nullptr;
+const Name* PATH_MESH_COWBOY_BODY = nullptr;
+const Name* PATH_MESH_COWBOY_ARM_R = nullptr;
+const Name* PATH_MESH_COWBOY_ARM_L = nullptr;
+const Name* PATH_MESH_ARCHER_HEAD = nullptr;
+const Name* PATH_MESH_ARCHER_BODY = nullptr;
+const Name* PATH_FONT_SEGUISB = nullptr;
+const Name* PATH_ANIMATION_COWBOY_SHOOT = nullptr;
+const Name* PATH_ANIMATION_COWBOY_RUN = nullptr;
 const Name* PATH_SHADER_VFX = nullptr;
+const Name* PATH_MESH_HUMAN_HAND_R = nullptr;
+const Name* PATH_ANIMATION_COWBOY_IDLE = nullptr;
 const Name* PATH_SHADER_UI_VIGNETTE = nullptr;
 const Name* PATH_SHADER_UI = nullptr;
 const Name* PATH_SHADER_TEXT = nullptr;
 const Name* PATH_SHADER_LIT = nullptr;
 const Name* PATH_VFX_ARROW_HIT = nullptr;
-const Name* PATH_TEXTURE_PALETTE_RED = nullptr;
 const Name* PATH_TEXTURE_PALETTE = nullptr;
-const Name* PATH_SKELETON_HUMAN = nullptr;
-const Name* PATH_SKELETON_ARCHER = nullptr;
+const Name* PATH_SKELETON_COWBOY = nullptr;
 const Name* PATH_SHADER_VIGNETTE = nullptr;
 const Name* PATH_SHADER_SHADOW = nullptr;
 const Name* PATH_MESH_WEAPON_BOW = nullptr;
@@ -85,18 +108,6 @@ const Name* PATH_MESH_PROJECTILE_ARROW = nullptr;
 const Name* PATH_MESH_ICON_FIGHT = nullptr;
 const Name* PATH_MESH_HUMAN_LEG_R = nullptr;
 const Name* PATH_MESH_HUMAN_LEG_L = nullptr;
-const Name* PATH_MESH_HUMAN_HEAD = nullptr;
-const Name* PATH_MESH_HUMAN_HAND = nullptr;
-const Name* PATH_MESH_HUMAN_FOOT_R = nullptr;
-const Name* PATH_MESH_HUMAN_FOOT_L = nullptr;
-const Name* PATH_MESH_HUMAN_EYE = nullptr;
-const Name* PATH_MESH_HUMAN_BODY = nullptr;
-const Name* PATH_MESH_ARCHER_HEAD = nullptr;
-const Name* PATH_MESH_ARCHER_BODY = nullptr;
-const Name* PATH_FONT_SEGUISB = nullptr;
-const Name* PATH_ANIMATION_HUMAN_IDLE = nullptr;
-const Name* PATH_ANIMATION_ARCHER_IDLE = nullptr;
-const Name* PATH_ANIMATION_ARCHER_DRAW = nullptr;
 
 // @load
 bool LoadAssets(Allocator* allocator)
@@ -104,29 +115,48 @@ bool LoadAssets(Allocator* allocator)
     // @name
     NAME_ROOT = GetName("root");
     NAME_BODY = GetName("body");
-    NAME_LEG_R = GetName("leg_r");
-    NAME_BONE = GetName("Bone");
-    NAME_LEG_L = GetName("leg_l");
-    NAME_LOOK = GetName("look");
     NAME_HEAD = GetName("head");
-    NAME_FOOT_R = GetName("foot_r");
+    NAME_MUSTACHE = GetName("mustache");
+    NAME_ARM_L = GetName("arm_l");
+    NAME_ARM_R = GetName("arm_r");
+    NAME_LEFT_R = GetName("left_r");
+    NAME_LEFT_L = GetName("left_l");
+    NAME_CHEST = GetName("chest");
     NAME_FOOT_L = GetName("foot_l");
+    NAME_FOOT_R = GetName("foot_r");
     NAME_EYE_L = GetName("eye_l");
     NAME_EYE_R = GetName("eye_r");
-    NAME_HAND_R = GetName("hand_r");
+    NAME_TIE = GetName("tie");
     NAME_HAND_L = GetName("hand_l");
+    NAME_HAND_R = GetName("hand_r");
 
     // @path
+    PATH_MESH_HUMAN_HAND_L = GetName("human_hand_l");
+    PATH_MESH_HUMAN_FOOT_R = GetName("human_foot_r");
+    PATH_MESH_HUMAN_FOOT_L = GetName("human_foot_l");
+    PATH_MESH_HUMAN_EYE = GetName("human_eye");
+    PATH_MESH_COWBOY_TIE = GetName("cowboy_tie");
+    PATH_MESH_COWBOY_PISTOL = GetName("cowboy_pistol");
+    PATH_MESH_COWBOY_MUSTACHE = GetName("cowboy_mustache");
+    PATH_MESH_COWBOY_HEAD = GetName("cowboy_head");
+    PATH_MESH_COWBOY_BODY = GetName("cowboy_body");
+    PATH_MESH_COWBOY_ARM_R = GetName("cowboy_arm_r");
+    PATH_MESH_COWBOY_ARM_L = GetName("cowboy_arm_l");
+    PATH_MESH_ARCHER_HEAD = GetName("archer_head");
+    PATH_MESH_ARCHER_BODY = GetName("archer_body");
+    PATH_FONT_SEGUISB = GetName("seguisb");
+    PATH_ANIMATION_COWBOY_SHOOT = GetName("cowboy_shoot");
+    PATH_ANIMATION_COWBOY_RUN = GetName("cowboy_run");
     PATH_SHADER_VFX = GetName("vfx");
+    PATH_MESH_HUMAN_HAND_R = GetName("human_hand_r");
+    PATH_ANIMATION_COWBOY_IDLE = GetName("cowboy_idle");
     PATH_SHADER_UI_VIGNETTE = GetName("ui_vignette");
     PATH_SHADER_UI = GetName("ui");
     PATH_SHADER_TEXT = GetName("text");
     PATH_SHADER_LIT = GetName("lit");
     PATH_VFX_ARROW_HIT = GetName("arrow_hit");
-    PATH_TEXTURE_PALETTE_RED = GetName("palette_red");
     PATH_TEXTURE_PALETTE = GetName("palette");
-    PATH_SKELETON_HUMAN = GetName("human");
-    PATH_SKELETON_ARCHER = GetName("archer");
+    PATH_SKELETON_COWBOY = GetName("cowboy");
     PATH_SHADER_VIGNETTE = GetName("vignette");
     PATH_SHADER_SHADOW = GetName("shadow");
     PATH_MESH_WEAPON_BOW = GetName("weapon_bow");
@@ -135,28 +165,16 @@ bool LoadAssets(Allocator* allocator)
     PATH_MESH_ICON_FIGHT = GetName("icon_fight");
     PATH_MESH_HUMAN_LEG_R = GetName("human_leg_r");
     PATH_MESH_HUMAN_LEG_L = GetName("human_leg_l");
-    PATH_MESH_HUMAN_HEAD = GetName("human_head");
-    PATH_MESH_HUMAN_HAND = GetName("human_hand");
-    PATH_MESH_HUMAN_FOOT_R = GetName("human_foot_r");
-    PATH_MESH_HUMAN_FOOT_L = GetName("human_foot_l");
-    PATH_MESH_HUMAN_EYE = GetName("human_eye");
-    PATH_MESH_HUMAN_BODY = GetName("human_body");
-    PATH_MESH_ARCHER_HEAD = GetName("archer_head");
-    PATH_MESH_ARCHER_BODY = GetName("archer_body");
-    PATH_FONT_SEGUISB = GetName("seguisb");
-    PATH_ANIMATION_HUMAN_IDLE = GetName("human_idle");
-    PATH_ANIMATION_ARCHER_IDLE = GetName("archer_idle");
-    PATH_ANIMATION_ARCHER_DRAW = GetName("archer_draw");
 
     // @Animation
-    NOZ_LOAD_ANIMATION(allocator, PATH_ANIMATION_HUMAN_IDLE, ANIMATION_HUMAN_IDLE);
-    NOZ_LOAD_ANIMATION(allocator, PATH_ANIMATION_ARCHER_IDLE, ANIMATION_ARCHER_IDLE);
-    NOZ_LOAD_ANIMATION(allocator, PATH_ANIMATION_ARCHER_DRAW, ANIMATION_ARCHER_DRAW);
+    NOZ_LOAD_ANIMATION(allocator, PATH_ANIMATION_COWBOY_SHOOT, ANIMATION_COWBOY_SHOOT);
+    NOZ_LOAD_ANIMATION(allocator, PATH_ANIMATION_COWBOY_RUN, ANIMATION_COWBOY_RUN);
+    NOZ_LOAD_ANIMATION(allocator, PATH_ANIMATION_COWBOY_IDLE, ANIMATION_COWBOY_IDLE);
 
     static Animation* _ANIMATION[] = {
-        ANIMATION_HUMAN_IDLE,
-        ANIMATION_ARCHER_IDLE,
-        ANIMATION_ARCHER_DRAW,
+        ANIMATION_COWBOY_SHOOT,
+        ANIMATION_COWBOY_RUN,
+        ANIMATION_COWBOY_IDLE,
         nullptr
     };
 
@@ -183,36 +201,48 @@ bool LoadAssets(Allocator* allocator)
     VFX = _VFX;
 
     // @Mesh
+    NOZ_LOAD_MESH(allocator, PATH_MESH_HUMAN_HAND_L, MESH_HUMAN_HAND_L);
+    NOZ_LOAD_MESH(allocator, PATH_MESH_HUMAN_FOOT_R, MESH_HUMAN_FOOT_R);
+    NOZ_LOAD_MESH(allocator, PATH_MESH_HUMAN_FOOT_L, MESH_HUMAN_FOOT_L);
+    NOZ_LOAD_MESH(allocator, PATH_MESH_HUMAN_EYE, MESH_HUMAN_EYE);
+    NOZ_LOAD_MESH(allocator, PATH_MESH_COWBOY_TIE, MESH_COWBOY_TIE);
+    NOZ_LOAD_MESH(allocator, PATH_MESH_COWBOY_PISTOL, MESH_COWBOY_PISTOL);
+    NOZ_LOAD_MESH(allocator, PATH_MESH_COWBOY_MUSTACHE, MESH_COWBOY_MUSTACHE);
+    NOZ_LOAD_MESH(allocator, PATH_MESH_COWBOY_HEAD, MESH_COWBOY_HEAD);
+    NOZ_LOAD_MESH(allocator, PATH_MESH_COWBOY_BODY, MESH_COWBOY_BODY);
+    NOZ_LOAD_MESH(allocator, PATH_MESH_COWBOY_ARM_R, MESH_COWBOY_ARM_R);
+    NOZ_LOAD_MESH(allocator, PATH_MESH_COWBOY_ARM_L, MESH_COWBOY_ARM_L);
+    NOZ_LOAD_MESH(allocator, PATH_MESH_ARCHER_HEAD, MESH_ARCHER_HEAD);
+    NOZ_LOAD_MESH(allocator, PATH_MESH_ARCHER_BODY, MESH_ARCHER_BODY);
+    NOZ_LOAD_MESH(allocator, PATH_MESH_HUMAN_HAND_R, MESH_HUMAN_HAND_R);
     NOZ_LOAD_MESH(allocator, PATH_MESH_WEAPON_BOW, MESH_WEAPON_BOW);
     NOZ_LOAD_MESH(allocator, PATH_MESH_TOWER_PLAYER_TEMP, MESH_TOWER_PLAYER_TEMP);
     NOZ_LOAD_MESH(allocator, PATH_MESH_PROJECTILE_ARROW, MESH_PROJECTILE_ARROW);
     NOZ_LOAD_MESH(allocator, PATH_MESH_ICON_FIGHT, MESH_ICON_FIGHT);
     NOZ_LOAD_MESH(allocator, PATH_MESH_HUMAN_LEG_R, MESH_HUMAN_LEG_R);
     NOZ_LOAD_MESH(allocator, PATH_MESH_HUMAN_LEG_L, MESH_HUMAN_LEG_L);
-    NOZ_LOAD_MESH(allocator, PATH_MESH_HUMAN_HEAD, MESH_HUMAN_HEAD);
-    NOZ_LOAD_MESH(allocator, PATH_MESH_HUMAN_HAND, MESH_HUMAN_HAND);
-    NOZ_LOAD_MESH(allocator, PATH_MESH_HUMAN_FOOT_R, MESH_HUMAN_FOOT_R);
-    NOZ_LOAD_MESH(allocator, PATH_MESH_HUMAN_FOOT_L, MESH_HUMAN_FOOT_L);
-    NOZ_LOAD_MESH(allocator, PATH_MESH_HUMAN_EYE, MESH_HUMAN_EYE);
-    NOZ_LOAD_MESH(allocator, PATH_MESH_HUMAN_BODY, MESH_HUMAN_BODY);
-    NOZ_LOAD_MESH(allocator, PATH_MESH_ARCHER_HEAD, MESH_ARCHER_HEAD);
-    NOZ_LOAD_MESH(allocator, PATH_MESH_ARCHER_BODY, MESH_ARCHER_BODY);
 
     static Mesh* _MESH[] = {
+        MESH_HUMAN_HAND_L,
+        MESH_HUMAN_FOOT_R,
+        MESH_HUMAN_FOOT_L,
+        MESH_HUMAN_EYE,
+        MESH_COWBOY_TIE,
+        MESH_COWBOY_PISTOL,
+        MESH_COWBOY_MUSTACHE,
+        MESH_COWBOY_HEAD,
+        MESH_COWBOY_BODY,
+        MESH_COWBOY_ARM_R,
+        MESH_COWBOY_ARM_L,
+        MESH_ARCHER_HEAD,
+        MESH_ARCHER_BODY,
+        MESH_HUMAN_HAND_R,
         MESH_WEAPON_BOW,
         MESH_TOWER_PLAYER_TEMP,
         MESH_PROJECTILE_ARROW,
         MESH_ICON_FIGHT,
         MESH_HUMAN_LEG_R,
         MESH_HUMAN_LEG_L,
-        MESH_HUMAN_HEAD,
-        MESH_HUMAN_HAND,
-        MESH_HUMAN_FOOT_R,
-        MESH_HUMAN_FOOT_L,
-        MESH_HUMAN_EYE,
-        MESH_HUMAN_BODY,
-        MESH_ARCHER_HEAD,
-        MESH_ARCHER_BODY,
         nullptr
     };
 
@@ -241,23 +271,19 @@ bool LoadAssets(Allocator* allocator)
     SHADER = _SHADER;
 
     // @Skeleton
-    NOZ_LOAD_SKELETON(allocator, PATH_SKELETON_HUMAN, SKELETON_HUMAN);
-    NOZ_LOAD_SKELETON(allocator, PATH_SKELETON_ARCHER, SKELETON_ARCHER);
+    NOZ_LOAD_SKELETON(allocator, PATH_SKELETON_COWBOY, SKELETON_COWBOY);
 
     static Skeleton* _SKELETON[] = {
-        SKELETON_HUMAN,
-        SKELETON_ARCHER,
+        SKELETON_COWBOY,
         nullptr
     };
 
     SKELETON = _SKELETON;
 
     // @Texture
-    NOZ_LOAD_TEXTURE(allocator, PATH_TEXTURE_PALETTE_RED, TEXTURE_PALETTE_RED);
     NOZ_LOAD_TEXTURE(allocator, PATH_TEXTURE_PALETTE, TEXTURE_PALETTE);
 
     static Texture* _TEXTURE[] = {
-        TEXTURE_PALETTE_RED,
         TEXTURE_PALETTE,
         nullptr
     };
@@ -271,9 +297,9 @@ bool LoadAssets(Allocator* allocator)
 void UnloadAssets()
 {
     // @Animation
-    Free(ANIMATION_HUMAN_IDLE);
-    Free(ANIMATION_ARCHER_IDLE);
-    Free(ANIMATION_ARCHER_DRAW);
+    Free(ANIMATION_COWBOY_SHOOT);
+    Free(ANIMATION_COWBOY_RUN);
+    Free(ANIMATION_COWBOY_IDLE);
 
     // @Font
     Free(FONT_SEGUISB);
@@ -282,20 +308,26 @@ void UnloadAssets()
     Free(VFX_ARROW_HIT);
 
     // @Mesh
+    Free(MESH_HUMAN_HAND_L);
+    Free(MESH_HUMAN_FOOT_R);
+    Free(MESH_HUMAN_FOOT_L);
+    Free(MESH_HUMAN_EYE);
+    Free(MESH_COWBOY_TIE);
+    Free(MESH_COWBOY_PISTOL);
+    Free(MESH_COWBOY_MUSTACHE);
+    Free(MESH_COWBOY_HEAD);
+    Free(MESH_COWBOY_BODY);
+    Free(MESH_COWBOY_ARM_R);
+    Free(MESH_COWBOY_ARM_L);
+    Free(MESH_ARCHER_HEAD);
+    Free(MESH_ARCHER_BODY);
+    Free(MESH_HUMAN_HAND_R);
     Free(MESH_WEAPON_BOW);
     Free(MESH_TOWER_PLAYER_TEMP);
     Free(MESH_PROJECTILE_ARROW);
     Free(MESH_ICON_FIGHT);
     Free(MESH_HUMAN_LEG_R);
     Free(MESH_HUMAN_LEG_L);
-    Free(MESH_HUMAN_HEAD);
-    Free(MESH_HUMAN_HAND);
-    Free(MESH_HUMAN_FOOT_R);
-    Free(MESH_HUMAN_FOOT_L);
-    Free(MESH_HUMAN_EYE);
-    Free(MESH_HUMAN_BODY);
-    Free(MESH_ARCHER_HEAD);
-    Free(MESH_ARCHER_BODY);
 
     // @Shader
     Free(SHADER_VFX);
@@ -307,11 +339,9 @@ void UnloadAssets()
     Free(SHADER_SHADOW);
 
     // @Skeleton
-    Free(SKELETON_HUMAN);
-    Free(SKELETON_ARCHER);
+    Free(SKELETON_COWBOY);
 
     // @Texture
-    Free(TEXTURE_PALETTE_RED);
     Free(TEXTURE_PALETTE);
 }
 
@@ -320,9 +350,9 @@ void UnloadAssets()
 void HotloadAsset(const Name* incoming_name, AssetSignature incoming_signature)
 {
     // @Animation
-    NOZ_RELOAD_ANIMATION(PATH_ANIMATION_HUMAN_IDLE, ANIMATION_HUMAN_IDLE);
-    NOZ_RELOAD_ANIMATION(PATH_ANIMATION_ARCHER_IDLE, ANIMATION_ARCHER_IDLE);
-    NOZ_RELOAD_ANIMATION(PATH_ANIMATION_ARCHER_DRAW, ANIMATION_ARCHER_DRAW);
+    NOZ_RELOAD_ANIMATION(PATH_ANIMATION_COWBOY_SHOOT, ANIMATION_COWBOY_SHOOT);
+    NOZ_RELOAD_ANIMATION(PATH_ANIMATION_COWBOY_RUN, ANIMATION_COWBOY_RUN);
+    NOZ_RELOAD_ANIMATION(PATH_ANIMATION_COWBOY_IDLE, ANIMATION_COWBOY_IDLE);
 
     // @Font
     NOZ_RELOAD_FONT(PATH_FONT_SEGUISB, FONT_SEGUISB);
@@ -331,20 +361,26 @@ void HotloadAsset(const Name* incoming_name, AssetSignature incoming_signature)
     NOZ_RELOAD_VFX(PATH_VFX_ARROW_HIT, VFX_ARROW_HIT);
 
     // @Mesh
+    NOZ_RELOAD_MESH(PATH_MESH_HUMAN_HAND_L, MESH_HUMAN_HAND_L);
+    NOZ_RELOAD_MESH(PATH_MESH_HUMAN_FOOT_R, MESH_HUMAN_FOOT_R);
+    NOZ_RELOAD_MESH(PATH_MESH_HUMAN_FOOT_L, MESH_HUMAN_FOOT_L);
+    NOZ_RELOAD_MESH(PATH_MESH_HUMAN_EYE, MESH_HUMAN_EYE);
+    NOZ_RELOAD_MESH(PATH_MESH_COWBOY_TIE, MESH_COWBOY_TIE);
+    NOZ_RELOAD_MESH(PATH_MESH_COWBOY_PISTOL, MESH_COWBOY_PISTOL);
+    NOZ_RELOAD_MESH(PATH_MESH_COWBOY_MUSTACHE, MESH_COWBOY_MUSTACHE);
+    NOZ_RELOAD_MESH(PATH_MESH_COWBOY_HEAD, MESH_COWBOY_HEAD);
+    NOZ_RELOAD_MESH(PATH_MESH_COWBOY_BODY, MESH_COWBOY_BODY);
+    NOZ_RELOAD_MESH(PATH_MESH_COWBOY_ARM_R, MESH_COWBOY_ARM_R);
+    NOZ_RELOAD_MESH(PATH_MESH_COWBOY_ARM_L, MESH_COWBOY_ARM_L);
+    NOZ_RELOAD_MESH(PATH_MESH_ARCHER_HEAD, MESH_ARCHER_HEAD);
+    NOZ_RELOAD_MESH(PATH_MESH_ARCHER_BODY, MESH_ARCHER_BODY);
+    NOZ_RELOAD_MESH(PATH_MESH_HUMAN_HAND_R, MESH_HUMAN_HAND_R);
     NOZ_RELOAD_MESH(PATH_MESH_WEAPON_BOW, MESH_WEAPON_BOW);
     NOZ_RELOAD_MESH(PATH_MESH_TOWER_PLAYER_TEMP, MESH_TOWER_PLAYER_TEMP);
     NOZ_RELOAD_MESH(PATH_MESH_PROJECTILE_ARROW, MESH_PROJECTILE_ARROW);
     NOZ_RELOAD_MESH(PATH_MESH_ICON_FIGHT, MESH_ICON_FIGHT);
     NOZ_RELOAD_MESH(PATH_MESH_HUMAN_LEG_R, MESH_HUMAN_LEG_R);
     NOZ_RELOAD_MESH(PATH_MESH_HUMAN_LEG_L, MESH_HUMAN_LEG_L);
-    NOZ_RELOAD_MESH(PATH_MESH_HUMAN_HEAD, MESH_HUMAN_HEAD);
-    NOZ_RELOAD_MESH(PATH_MESH_HUMAN_HAND, MESH_HUMAN_HAND);
-    NOZ_RELOAD_MESH(PATH_MESH_HUMAN_FOOT_R, MESH_HUMAN_FOOT_R);
-    NOZ_RELOAD_MESH(PATH_MESH_HUMAN_FOOT_L, MESH_HUMAN_FOOT_L);
-    NOZ_RELOAD_MESH(PATH_MESH_HUMAN_EYE, MESH_HUMAN_EYE);
-    NOZ_RELOAD_MESH(PATH_MESH_HUMAN_BODY, MESH_HUMAN_BODY);
-    NOZ_RELOAD_MESH(PATH_MESH_ARCHER_HEAD, MESH_ARCHER_HEAD);
-    NOZ_RELOAD_MESH(PATH_MESH_ARCHER_BODY, MESH_ARCHER_BODY);
 
     // @Shader
     NOZ_RELOAD_SHADER(PATH_SHADER_VFX, SHADER_VFX);
@@ -356,11 +392,9 @@ void HotloadAsset(const Name* incoming_name, AssetSignature incoming_signature)
     NOZ_RELOAD_SHADER(PATH_SHADER_SHADOW, SHADER_SHADOW);
 
     // @Skeleton
-    NOZ_RELOAD_SKELETON(PATH_SKELETON_HUMAN, SKELETON_HUMAN);
-    NOZ_RELOAD_SKELETON(PATH_SKELETON_ARCHER, SKELETON_ARCHER);
+    NOZ_RELOAD_SKELETON(PATH_SKELETON_COWBOY, SKELETON_COWBOY);
 
     // @Texture
-    NOZ_RELOAD_TEXTURE(PATH_TEXTURE_PALETTE_RED, TEXTURE_PALETTE_RED);
     NOZ_RELOAD_TEXTURE(PATH_TEXTURE_PALETTE, TEXTURE_PALETTE);
 }
 

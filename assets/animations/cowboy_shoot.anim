@@ -1,0 +1,27 @@
+s "cowboy"
+b "root"
+b "body"
+b "head"
+b "mustache"
+b "arm_l"
+b "arm_r"
+b "left_r"
+b "left_l"
+b "chest"
+b "foot_l"
+b "foot_r"
+b "eye_l"
+b "eye_r"
+b "tie"
+b "hand_l"
+b "hand_r"
+f
+h 2b 4 p -0.001785 -0.031243 r 155.764923
+h 2b 5 r 11.085335
+h 2b 14 p -0.047678 -0.123760 r -93.533150
+h 2b 15 p 0.006155 0.003517 r -12.115263
+f
+h 2b 4 p -0.039225 -0.019925 r 136.578720
+h 2b 5 r 11.085335
+h 2b 14 p -0.013721 0.044278 r -89.697380
+h 2b 15 p -0.103552 0.036602 r 15.055382

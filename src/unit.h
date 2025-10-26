@@ -83,6 +83,14 @@ inline Vec2 GetTeamDirection(Team team) {
     return directions[team];
 }
 
+inline Vec2 GetTeamColorOffset(Team team) {
+    static Vec2 color_offsets[TEAM_COUNT] = {
+        Vec2{0.5f, 0.0f},
+        Vec2{0.0f, 0.0f}
+    };
+    return color_offsets[team];
+}
+
 inline Color GetTeamColor(Team team) {
     static Color colors[TEAM_COUNT] = {
         Color32ToColor(228, 92, 95, 255),

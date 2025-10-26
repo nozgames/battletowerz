@@ -1,5 +1,22 @@
+- [ ] Change coordinate system to have Y up
+- [ ] Add costs to units
+- [ ] Center line is too straight and colors are wrong
+- [ ] custom palette for each team color 
 - [ ] Event system for animations
+- [ ] Unit collision system
+- [ ] Unit separation logic based on size to prevent overlap
 - [ ] Archer
+  - [ ] New graphics 
   - [ ] choose target location as soon as draw starts
   - [ ] fire arrow at specific animation frame
-  - 
+  - [ ] Arrow should stick in ground if misses 
+  - [ ] Arrow should stick in unit if its hits and do damage
+  - [ ] Hit detection on physics that includes height
+  - [ ] Arrow shoot effect
+  - [ ] Arrow impact effect
+  - [ ] Arrow draw sound
+  - [ ] Arrow shoot sound
+  - [ ] Arrow impact sound
+  - [ ] show arrow in bow when ready to fire
+- [ ] Knight
+  - [ ] new graphics
