@@ -27,4 +27,5 @@ void InitUnitDatabase() {
     InitUnitInfo(UNIT_TYPE_TOWER, "Tower", (UnitCreateFunc)CreateTower);
     InitUnitInfo(UNIT_TYPE_ARCHER, "Archer", (UnitCreateFunc)CreateArcher);
     InitUnitInfo(UNIT_TYPE_KNIGHT, "Knight", (UnitCreateFunc)CreateKnight);
+    InitUnitInfo(UNIT_TYPE_COWBOY, "Cowboy", (UnitCreateFunc)CreateCowboy);
 }

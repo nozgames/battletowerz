@@ -1,0 +1,21 @@
+[vfx]
+loop = false
+duration = 0.1
+
+[emitters]
+fire_burst
+
+[fire_burst]
+rate = 0
+burst = 10
+duration = 0.1
+angle = [0, 360]
+spawn = [(-0.01, -0.01), (0.01, 0.01)]
+
+[fire_burst.particle]
+duration = 0.1
+size = 0.5 => 0
+color = #AAAAAA
+rotation = [0, 360]
+speed = 20
+

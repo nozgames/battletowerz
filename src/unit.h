@@ -14,6 +14,7 @@ enum Team {
 enum UnitType {
     UNIT_TYPE_UNKNOWN = -1,
     UNIT_TYPE_ARCHER,
+    UNIT_TYPE_COWBOY,
     UNIT_TYPE_KNIGHT,
     UNIT_TYPE_TOWER,
     UNIT_TYPE_COUNT
@@ -45,6 +46,10 @@ struct ArcherEntity : UnitEntity {
 };
 
 struct KnightEntity : UnitEntity {
+    float cooldown;
+};
+
+struct CowboyEntity : UnitEntity {
     float cooldown;
 };
 
@@ -110,6 +115,9 @@ inline Team GetOppositeTeam(Team team) {
 
 // @archer
 extern ArcherEntity* CreateArcher(Team team, const Vec3& position);
+
+// @cowboy
+extern CowboyEntity* CreateCowboy(Team team, const Vec3& position);
 
 // @knight
 extern KnightEntity* CreateKnight(Team team, const Vec3& position);

@@ -23,6 +23,7 @@ set(SOURCE_FILES
     src/editor.cpp
     src/projectiles/arrow.cpp
     src/units/archer.cpp
+    src/units/cowboy.cpp
     src/units/tower.cpp
     src/units/knight.cpp
     src/game_assets.cpp

@@ -1,20 +1,20 @@
-[editor]
-sort_order = 220
-position = (18.484184,0.009490)
-
 [skin]
-cowboy_arm_r = 5
-human_leg_r = 6
-human_leg_l = 7
-cowboy_body = 8
-cowboy_head = 2
-human_hand_r = 15
-cowboy_tie = 13
 human_hand_l = 14
 cowboy_mustache = 3
-cowboy_arm_l = 4
+cowboy_body = 8
+cowboy_head = 2
+cowboy_arm_r = 5
+cowboy_tie = 13
+human_hand_r = 15
+human_leg_r = 6
+human_leg_l = 7
 cowboy_pistol = 15
-human_eye = 12, 11
-human_foot_l = 9
+cowboy_arm_l = 4
 human_foot_r = 10
+human_foot_l = 9
+human_eye = 11, 12
+
+[editor]
+position = (18.484184,0.009490)
+sort_order = 260
 

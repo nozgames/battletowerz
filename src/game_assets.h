@@ -16,6 +16,7 @@ extern Animation* ANIMATION_COWBOY_IDLE;
 extern Font* FONT_SEGUISB;
 
 // @Vfx
+extern Vfx* VFX_BOW_FIRE;
 extern Vfx* VFX_ARROW_HIT;
 
 // @Mesh

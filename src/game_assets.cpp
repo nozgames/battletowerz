@@ -16,6 +16,7 @@ Animation* ANIMATION_COWBOY_IDLE = nullptr;
 Font* FONT_SEGUISB = nullptr;
 
 // @Vfx
+Vfx* VFX_BOW_FIRE = nullptr;
 Vfx* VFX_ARROW_HIT = nullptr;
 
 // @Mesh
@@ -97,6 +98,7 @@ const Name* PATH_SHADER_UI_VIGNETTE = nullptr;
 const Name* PATH_SHADER_UI = nullptr;
 const Name* PATH_SHADER_TEXT = nullptr;
 const Name* PATH_SHADER_LIT = nullptr;
+const Name* PATH_VFX_BOW_FIRE = nullptr;
 const Name* PATH_VFX_ARROW_HIT = nullptr;
 const Name* PATH_TEXTURE_PALETTE = nullptr;
 const Name* PATH_SKELETON_COWBOY = nullptr;
@@ -154,6 +156,7 @@ bool LoadAssets(Allocator* allocator)
     PATH_SHADER_UI = GetName("ui");
     PATH_SHADER_TEXT = GetName("text");
     PATH_SHADER_LIT = GetName("lit");
+    PATH_VFX_BOW_FIRE = GetName("bow_fire");
     PATH_VFX_ARROW_HIT = GetName("arrow_hit");
     PATH_TEXTURE_PALETTE = GetName("palette");
     PATH_SKELETON_COWBOY = GetName("cowboy");
@@ -191,9 +194,11 @@ bool LoadAssets(Allocator* allocator)
     FONT = _FONT;
 
     // @Vfx
+    NOZ_LOAD_VFX(allocator, PATH_VFX_BOW_FIRE, VFX_BOW_FIRE);
     NOZ_LOAD_VFX(allocator, PATH_VFX_ARROW_HIT, VFX_ARROW_HIT);
 
     static Vfx* _VFX[] = {
+        VFX_BOW_FIRE,
         VFX_ARROW_HIT,
         nullptr
     };
@@ -305,6 +310,7 @@ void UnloadAssets()
     Free(FONT_SEGUISB);
 
     // @Vfx
+    Free(VFX_BOW_FIRE);
     Free(VFX_ARROW_HIT);
 
     // @Mesh
@@ -358,6 +364,7 @@ void HotloadAsset(const Name* incoming_name, AssetSignature incoming_signature)
     NOZ_RELOAD_FONT(PATH_FONT_SEGUISB, FONT_SEGUISB);
 
     // @Vfx
+    NOZ_RELOAD_VFX(PATH_VFX_BOW_FIRE, VFX_BOW_FIRE);
     NOZ_RELOAD_VFX(PATH_VFX_ARROW_HIT, VFX_ARROW_HIT);
 
     // @Mesh

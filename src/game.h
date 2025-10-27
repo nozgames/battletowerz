@@ -9,8 +9,8 @@ constexpr int MAX_UNITS = 1024;
 constexpr int MAX_PROJECTILES = 2048;
 constexpr int MAX_ENTITIES = MAX_UNITS + MAX_PROJECTILES;
 
-constexpr float TILE_SIZE = 1.5f;
-constexpr int WORLD_TILE_WIDTH = 20;
+constexpr float TILE_SIZE = 1;
+constexpr int WORLD_TILE_WIDTH = 10;
 constexpr float WORLD_WIDTH = (f32)WORLD_TILE_WIDTH * TILE_SIZE;
 constexpr float WORLD_BOTTOM = 0.0f;
 constexpr float WORLD_LEFT = -(f32)WORLD_WIDTH * 0.5f;

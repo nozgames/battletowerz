@@ -89,9 +89,10 @@ void UpdateEditorUI() {
         // bottom
         Align({.alignment = ALIGNMENT_BOTTOM_CENTER, .margin=EdgeInsetsBottom(20)}, [] {
             Row({.spacing=10}, [] {
-                UnitButton(UNIT_TYPE_TOWER);
-                UnitButton(UNIT_TYPE_KNIGHT);
-                UnitButton(UNIT_TYPE_ARCHER);
+                // UnitButton(UNIT_TYPE_TOWER);
+                // UnitButton(UNIT_TYPE_KNIGHT);
+                // UnitButton(UNIT_TYPE_ARCHER);
+                UnitButton(UNIT_TYPE_COWBOY);
             });
         });
     });
