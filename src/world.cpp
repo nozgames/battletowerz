@@ -7,7 +7,7 @@ struct WorldSystem {
 
 static WorldSystem g_world = {};
 
-static void DrawGrid(Camera* camera) {
+void DrawGrid(Camera* camera) {
     Bounds2 bounds = GetBounds(camera);
     const float left = bounds.min.x;
     const float right = bounds.max.x;

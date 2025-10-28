@@ -108,7 +108,7 @@ KnightEntity* CreateKnight(Team team, const Vec3& position)
 {
     static EntityVtable vtable = {
         .update = UpdateArrow,
-        .render = RenderKnight
+        .draw = RenderKnight
     };
 
     KnightEntity* k = static_cast<KnightEntity*>(CreateUnit(UNIT_TYPE_KNIGHT, team, vtable, position, 0.0f, {GetTeamDirection(team).x, 1.0f}));

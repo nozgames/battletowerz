@@ -4,8 +4,12 @@
 
 #pragma once
 
-enum EntityType
-{
+enum DamageType {
+    DAMAGE_TYPE_PHYSICAL,
+    DAMAGE_TYPE_COUNT
+};
+
+enum EntityType {
     ENTITY_TYPE_NONE,
     ENTITY_TYPE_UNIT,
     ENTITY_TYPE_PROJECTILE,
@@ -14,10 +18,11 @@ enum EntityType
 
 struct Entity;
 
-struct EntityVtable
-{
+struct EntityVtable {
     void (*update)(Entity* entity);
-    void (*render)(Entity* entity, const Mat3& transform);
+    void (*draw)(Entity* entity, const Mat3& transform);
+    void (*draw_shadow)(Entity* entity, const Mat3& transform);
+    void (*death)(Entity* entity, DamageType damage_type);
 };
 
 struct Entity {
@@ -33,8 +38,7 @@ struct Entity {
 #include "unit.h"
 #include "projectile.h"
 
-union FatEntity
-{
+union FatEntity {
     Entity entity;
     FatUnitEntity unit;
     ProjectileEntity projectile;

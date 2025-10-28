@@ -8,6 +8,7 @@ enum ProjectileType
 {
     PROJECTILE_TYPE_NONE,
     PROJECTILE_TYPE_ARROW,
+    PROJECTILE_TYPE_BULLET,
     PROJECTILE_TYPE_COUNT
 };
 
@@ -33,4 +34,8 @@ extern ProjectileEntity* CreateProjectile(ProjectileType type, Team team, const 
 
 // @arrow
 extern ProjectileEntity* CreateArrow(Team team, const Vec3& position, const Vec2& target, float speed);
+
+// @bullet
+extern ProjectileEntity* CreateBullet(Team team, const Vec3& position, const Vec2& target, float speed);
+
 

@@ -11,6 +11,7 @@
 extern Animation* ANIMATION_COWBOY_SHOOT;
 extern Animation* ANIMATION_COWBOY_RUN;
 extern Animation* ANIMATION_COWBOY_IDLE;
+extern Animation* ANIMATION_COWBOY_DEATH;
 
 // @Font
 extern Font* FONT_SEGUISB;
@@ -23,6 +24,7 @@ extern Vfx* VFX_ARROW_HIT;
 extern Mesh* MESH_HUMAN_HAND_L;
 extern Mesh* MESH_HUMAN_FOOT_R;
 extern Mesh* MESH_HUMAN_FOOT_L;
+extern Mesh* MESH_HUMAN_EYE_DEAD;
 extern Mesh* MESH_HUMAN_EYE;
 extern Mesh* MESH_COWBOY_TIE;
 extern Mesh* MESH_COWBOY_PISTOL;
@@ -31,11 +33,12 @@ extern Mesh* MESH_COWBOY_HEAD;
 extern Mesh* MESH_COWBOY_BODY;
 extern Mesh* MESH_COWBOY_ARM_R;
 extern Mesh* MESH_COWBOY_ARM_L;
-extern Mesh* MESH_ARCHER_HEAD;
-extern Mesh* MESH_ARCHER_BODY;
+extern Mesh* MESH_BULLET_CASING;
+extern Mesh* MESH_BULLET;
 extern Mesh* MESH_HUMAN_HAND_R;
 extern Mesh* MESH_WEAPON_BOW;
 extern Mesh* MESH_TOWER_PLAYER_TEMP;
+extern Mesh* MESH_TEAM_LINE;
 extern Mesh* MESH_PROJECTILE_ARROW;
 extern Mesh* MESH_ICON_FIGHT;
 extern Mesh* MESH_HUMAN_LEG_R;
@@ -52,6 +55,9 @@ extern Shader* SHADER_SHADOW;
 
 // @Skeleton
 extern Skeleton* SKELETON_COWBOY;
+
+// @Sound
+extern Sound* SOUND_REVOLVER_FIRE_A;
 
 // @Texture
 extern Texture* TEXTURE_PALETTE;

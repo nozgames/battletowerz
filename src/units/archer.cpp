@@ -105,7 +105,7 @@ ArcherEntity* CreateArcher(Team team, const Vec3& position)
 {
     static EntityVtable vtable = {
         .update = UpdateArcher,
-        .render = DrawArcher
+        .draw = DrawArcher
     };
 
     ArcherEntity* a = static_cast<ArcherEntity*>(CreateUnit(UNIT_TYPE_ARCHER, team, vtable, position, 0.0f, {GetTeamDirection(team).x, 1.0f}));

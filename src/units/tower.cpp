@@ -30,7 +30,7 @@ static void RenderTower(Entity* e, const Mat3& transform)
 TowerEntity* CreateTower(Team team, const Vec3& position)
 {
     static EntityVtable vtable = {
-        .render = RenderTower
+        .draw = RenderTower
     };
 
     TowerEntity* t = static_cast<TowerEntity*>(CreateUnit(UNIT_TYPE_TOWER, team, vtable, position, 0.0f, {GetTeamDirection(team).x, 1.0f}));

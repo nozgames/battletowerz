@@ -1,10 +1,21 @@
+- [ ] Game over UI
+  - [ ] Slow down time and then pause
+  - [ ] Letter box screen by adding black bars to top and bottom 
+  - [ ] Show "victory" text at top
+  - [ ] Show controls at the bottom
+  - [ ] Allow camera control
+  - [ ] Sound when game ends
+- [ ] WASD to control camera pan
+- [ ] Drag left button to place units (prevent overlap)
+- [ ] Drag right button to remove units (prevent overlap)
+- [ ] Unit separation logic based on size to prevent overlap
+- [ ] desaturate dead units over time
+- [ ] Blood on ground where units die or get hurt
+- [ ] dead state
 - [ ] Change coordinate system to have Y up
 - [ ] Add costs to units
-- [ ] Center line is too straight and colors are wrong
-- [ ] custom palette for each team color 
 - [ ] Event system for animations
 - [ ] Unit collision system
-- [ ] Unit separation logic based on size to prevent overlap
 - [ ] Archer
   - [ ] New graphics 
   - [ ] choose target location as soon as draw starts
@@ -18,5 +29,14 @@
   - [ ] Arrow shoot sound
   - [ ] Arrow impact sound
   - [ ] show arrow in bow when ready to fire
+- [ ] Gunslinger
+  - [ ] Quick 6 shot burst for larger enemies
+  - [ ] single shot, small cooldown, big reload
+  - [ ] reload animation
+  - [ ] gunshot sound
+  - [ ] reload sound
+  - [ ] muzzle flash
+  - [ ] bullet casing ejection
 - [ ] Knight
   - [ ] new graphics
+  - 

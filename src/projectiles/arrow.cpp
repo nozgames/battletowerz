@@ -58,7 +58,7 @@ static void CalculateTrajectoryWithGravity(ProjectileEntity* p, const Vec2& targ
 ProjectileEntity* CreateArrow(Team team, const Vec3& position, const Vec2& target, float speed) {
     static EntityVtable vtable = {
         .update = UpdateArrow,
-        .render = RenderArrow
+        .draw = RenderArrow
     };
 
     ProjectileEntity* e = CreateProjectile(PROJECTILE_TYPE_ARROW, team, vtable, position, VEC3_ZERO, VEC2_ONE);

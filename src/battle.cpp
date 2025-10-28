@@ -2,6 +2,16 @@
 //  Battle TowerZ - Copyright(c) 2025 NoZ Games, LLC
 //
 
+constexpr float BATTLE_SLOW_MOTION_TIME_SCALE = 0.1f;
+constexpr float GAME_OVER_FREEZE_TIME = 1.5f;
+constexpr float GAME_OVER_UI_TIME = 1.0f;
+constexpr Color GAME_OVER_LETTERBOX_COLOR = {0.3f, 0.3f, 0.3f, 1.0f};
+constexpr Color GAME_OVER_LETTERBOX_BORDER_COLOR = {0.1f, 0.1f, 0.1f, 1.0f};
+constexpr float GAME_OVER_LETTERBOX_BORDER_WIDTH = 4.0f;
+constexpr float GAME_OVER_LETTERBOX_HEIGHT = 200.0f;
+constexpr int GAME_OVER_VICTORY_FONT_SIZE = 60;
+constexpr int GAME_OVER_INSTRUCTIONS_FONT_SIZE = 40;
+
 enum BattleState {
     BATTLE_STATE_SIMULATE,
     BATTLE_STATE_GAME_OVER,
@@ -12,6 +22,8 @@ struct Battle {
     int team_counts[TEAM_COUNT];
     bool finished;
     int winning_team;
+    float state_time;
+    InputSet* input;
 };
 
 static Battle g_battle = {};
@@ -28,19 +40,60 @@ bool UpdateEntity(u32 index, void* item, void* user_data) {
     return true;
 }
 
-static void UpdateGameOverMenu() {
+static void UpdateGameOverState() {
+    if (WasButtonPressed(g_battle.input, KEY_TAB)) {
+        SetGameState(GAME_STATE_EDIT);
+        return;
+    }
+
+    g_battle.state_time += GetFrameTime();
+
+    float freeze_time = Tween(1.0f, 0.0f, g_battle.state_time, GAME_OVER_FREEZE_TIME, EaseOutQuadratic);
+    SetGameTimeScale(BATTLE_SLOW_MOTION_TIME_SCALE * freeze_time);
+
     Canvas([] {
-        Align({.alignment = ALIGNMENT_CENTER}, [] {
-            Column({.spacing = 20.0f}, [] {
-                Label("Battle Over!", {.font = FONT_SEGUISB, .font_size = 50, .align = ALIGNMENT_CENTER});
-                const char* result_text = (g_battle.winning_team == TEAM_UNKNOWN) ? "It's a Draw!" : (g_battle.winning_team == TEAM_RED) ? "Red Wins!" : "Blue Wins!";
-                Label(result_text, {.font = FONT_SEGUISB, .font_size = 40, .align = ALIGNMENT_CENTER});
-                Container({.width=400, .height = 100}, [] {
-                    GestureDetector({.on_tap = [](const TapDetails&, void*) {
-                        SetGameState(GAME_STATE_EDIT);
-                    }}, [] {
-                        Rectangle({.color_func = [](auto s, auto, auto) { return (s&ELEMENT_STATE_HOVERED) ? HOVER_COLOR : FOREGROUND_COLOR; }});
-                        Label("RETURN TO MAIN MENU", {.font = FONT_SEGUISB, .font_size = 30, .align = ALIGNMENT_CENTER});
+        float ui_time = Tween(1.0f, 0.0f, g_battle.state_time, GAME_OVER_UI_TIME, EaseOutQuadratic);
+        Transformed({.translate = Vec2{0,ui_time * -GAME_OVER_LETTERBOX_HEIGHT}}, [] {
+            Align({.alignment = ALIGNMENT_TOP}, [] {
+                Container({.height=GAME_OVER_LETTERBOX_HEIGHT, .color = GAME_OVER_LETTERBOX_COLOR}, [] {
+                    Align({.alignment = ALIGNMENT_BOTTOM}, [] {
+                        Container({.height=GAME_OVER_LETTERBOX_BORDER_WIDTH, .color = GAME_OVER_LETTERBOX_BORDER_COLOR});
+                    });
+
+                    if (g_battle.winning_team == TEAM_UNKNOWN) {
+                        Label("DRAW!", {.font = FONT_SEGUISB, .font_size = GAME_OVER_VICTORY_FONT_SIZE, .align = ALIGNMENT_CENTER});
+                        return;
+                    }
+
+                    Align({.alignment = ALIGNMENT_CENTER}, [] {
+                        Row([] {
+                            if (g_battle.winning_team == TEAM_RED)
+                                Label("RED ", {.font = FONT_SEGUISB, .font_size = GAME_OVER_VICTORY_FONT_SIZE, .color = GetTeamColor(TEAM_RED)});
+                            else
+                                Label("BLUE ", {.font = FONT_SEGUISB, .font_size = GAME_OVER_VICTORY_FONT_SIZE, .color = GetTeamColor(TEAM_BLUE)});
+
+                            Label("VICTORY!", {.font = FONT_SEGUISB, .font_size = GAME_OVER_VICTORY_FONT_SIZE});
+                        });
+                    });
+                });
+            });
+        });
+
+        Transformed({.translate = Vec2{0,ui_time * GAME_OVER_LETTERBOX_HEIGHT}}, [] {
+            Align({.alignment = ALIGNMENT_BOTTOM}, [] {
+                Container({.height=GAME_OVER_LETTERBOX_HEIGHT, .color = GAME_OVER_LETTERBOX_COLOR}, [] {
+                    Align({.alignment = ALIGNMENT_TOP}, [] {
+                        Container({.height=GAME_OVER_LETTERBOX_BORDER_WIDTH, .color = GAME_OVER_LETTERBOX_BORDER_COLOR});
+                    });
+
+                    Align({.alignment = ALIGNMENT_CENTER}, [] {
+                        Row([] {
+                            Label("PRESS ", {.font = FONT_SEGUISB, .font_size = GAME_OVER_INSTRUCTIONS_FONT_SIZE});
+                            Container({.padding=EdgeInsets(0,10,0,10), .color = COLOR_WHITE}, [] {
+                                Label("TAB ", {.font = FONT_SEGUISB, .font_size = GAME_OVER_INSTRUCTIONS_FONT_SIZE, .color = GAME_OVER_LETTERBOX_COLOR});
+                            });
+                            Label(" TO CONTINUE", {.font = FONT_SEGUISB, .font_size = GAME_OVER_INSTRUCTIONS_FONT_SIZE});
+                        });
                     });
                 });
             });
@@ -53,16 +106,10 @@ void UpdateBattleUI() {
         return;
 
     if (g_battle.state == BATTLE_STATE_GAME_OVER)
-        UpdateGameOverMenu();
+        UpdateGameOverState();
 }
 
-void UpdateBattle() {
-    if (!IsGameState(GAME_STATE_BATTLE))
-        return;
-
-    if (g_battle.state != BATTLE_STATE_SIMULATE)
-        return;
-
+static void CheckForWinner() {
     int team_count = 0;
     Team winner = TEAM_UNKNOWN;
     for (int i = 0; i < TEAM_COUNT; ++i) {
@@ -72,31 +119,31 @@ void UpdateBattle() {
         }
     }
 
-    if (team_count <= 1) {
-        g_battle.state = BATTLE_STATE_GAME_OVER;
-        g_battle.winning_team = winner;
+    if (team_count > 1)
         return;
-    }
 
-    if (WasButtonPressed(g_game.input, MOUSE_RIGHT)) {
-        g_game.pan_position = g_game.mouse_position;
-        g_game.pan_position_camera = GetPosition(g_game.camera);
-    }
+    g_battle.state = BATTLE_STATE_GAME_OVER;
+    g_battle.state_time = 0.0f;
+    g_battle.winning_team = winner;
+}
 
-    if (IsButtonDown(g_game.input, MOUSE_RIGHT)) {
-        Vec2 delta = g_game.mouse_position - g_game.pan_position;
-        Vec2 world_delta = ScreenToWorld(g_game.camera, delta) - ScreenToWorld(g_game.camera, VEC2_ZERO);
-        SetPosition(g_game.camera, g_game.pan_position_camera - world_delta);
-    }
+void UpdateBattle() {
+    if (!IsGameState(GAME_STATE_BATTLE))
+        return;
 
-    if (IsGameState(GAME_STATE_BATTLE)) {
-        Enumerate(g_game.entity_allocator, UpdateEntity);
-    }
+    if (g_battle.state == BATTLE_STATE_SIMULATE)
+        CheckForWinner();
+
+    UpdateCameraZoom();
+    UpdateCameraPan();
+    Enumerate(g_game.entity_allocator, UpdateEntity);
 }
 
 void DrawBattle() {
     if (!IsGameState(GAME_STATE_BATTLE))
         return;
+
+    DrawGrid(g_game.camera);
 }
 
 void HandleUnitDeath(UnitEntity* entity, DamageType damage_type) {
@@ -104,11 +151,28 @@ void HandleUnitDeath(UnitEntity* entity, DamageType damage_type) {
     g_battle.team_counts[entity->team]--;
 }
 
-void StartBattle(const BattleSetup& setup) {
-    g_game.battle_setup = setup;
+void ShutdownBattle() {
+    PopInputSet();
+    Free(g_battle.input);
+    g_battle = {};
+}
 
+void OpenBattle(const BattleSetup& setup) {
+    g_game.battle_setup = setup;
+    SetGameState(GAME_STATE_BATTLE);
+}
+
+void InitBattle() {
     g_battle = {};
     g_battle.state = BATTLE_STATE_SIMULATE;
+    g_battle.input = CreateInputSet(ALLOCATOR_DEFAULT);
+    EnableButton(g_battle.input, MOUSE_LEFT);
+    EnableButton(g_battle.input, MOUSE_RIGHT);
+    EnableButton(g_battle.input, KEY_ESCAPE);
+    EnableButton(g_battle.input, KEY_TAB);
+    PushInputSet(g_battle.input);
+
+    SetGameTimeScale(1.0f);
 
     DestroyAllEntities();
 
@@ -120,5 +184,5 @@ void StartBattle(const BattleSetup& setup) {
             unit_setup.position);
     }
 
-    SetGameState(GAME_STATE_BATTLE);
+    ResetCamera();
 }

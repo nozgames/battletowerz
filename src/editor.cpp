@@ -14,6 +14,7 @@ struct Editor {
     EditorUnit* hovered_unit;
     EditorUnit units[MAX_UNITS];
     int unit_count;
+    InputSet* input;
 };
 
 static Editor g_editor = {};
@@ -47,15 +48,20 @@ void DrawEditor() {
     if (!IsGameState(GAME_STATE_EDIT))
         return;
 
-    BindDepth(-8.0f);
-    BindColor(COLOR_RED);
-    DrawMesh(g_game.line_mesh, TRS(Vec2{ 0.1f, 0}, 0, Vec2{0.1f, 100}));
-    BindColor(COLOR_BLUE);
-    DrawMesh(g_game.line_mesh, TRS(Vec2{-0.1f, 0}, 0, Vec2{0.1f, 100}));
+    BindDepth(-9.5f);
+    BindMaterial(g_game.material);
+    BindColor(SetAlpha(COLOR_WHITE, 0.9f), GetTeamColorOffset(TEAM_RED));
+    for (int y=-20; y<=20; ++y)
+        DrawMesh(MESH_TEAM_LINE, TRS(Vec2{0, (float)y }, 0, Vec2{-1, 1}));
+    BindColor(SetAlpha(COLOR_WHITE, 0.9f), GetTeamColorOffset(TEAM_BLUE));
+    for (int y=-20; y<=20; ++y)
+        DrawMesh(MESH_TEAM_LINE, TRS(Vec2{0, (float)y }, 0, Vec2{1, 1}));
+
     BindDepth(0.0f);
+    DrawGrid(g_game.camera);
 }
 
-static void HandleFightButton(const TapDetails&, void*) {
+static void BeginBattle() {
     g_game.battle_setup.unit_count = 0;
     for (int i = 0; i < g_editor.unit_count; ++i) {
         const EditorUnit& editor_unit = g_editor.units[i];
@@ -66,7 +72,7 @@ static void HandleFightButton(const TapDetails&, void*) {
         };
     }
 
-    StartBattle(g_game.battle_setup);;
+    OpenBattle(g_game.battle_setup);
 }
 
 void UpdateEditorUI() {
@@ -76,7 +82,7 @@ void UpdateEditorUI() {
     Canvas([] {
         // top
         Align ({.alignment = ALIGNMENT_TOP_CENTER, .margin=EdgeInsetsTop(20)}, [] {
-            GestureDetector({.on_tap = HandleFightButton}, [] {
+            GestureDetector({.on_tap = [] (auto,auto) { BeginBattle(); }}, [] {
                 Container({.width=100, .height=100}, [] {
                      Rectangle({.color_func=GetButtonBackgroundColor});
                      Container({.padding=EdgeInsetsAll(20)}, [] {
@@ -110,6 +116,15 @@ static void AddUnit(const UnitInfo* unit_info, Team team, const Vec2& position) 
     };
 }
 
+static bool TryPlaceUnit(const Vec2& position, float size) {
+    UnitEntity* u = FindClosestUnit(position);
+    if (!u)
+        return true;
+
+    float distance = Distance(XY(u->position), position);
+    return distance - size > 0.0f;
+}
+
 static int GetEditorUnitIndex(EditorUnit* editor_unit) {
     if (!editor_unit)
         return -1;
@@ -132,12 +147,24 @@ void UpdateEditor() {
     if (!IsGameState(GAME_STATE_EDIT))
         return;
 
-    if (WasButtonPressed(g_game.input, MOUSE_LEFT)) {
+    if (WasButtonPressed(g_editor.input, KEY_TAB)) {
+        BeginBattle();
+        return;
+    }
+
+    if (WasButtonPressed(g_editor.input, KEY_ESCAPE)) {
+        ShutdownEditor();
+        OpenMainMenu();
+        return;
+    }
+
+    if (IsButtonDown(g_editor.input, MOUSE_LEFT)) {
         const UnitInfo* unit_info = GetUnitInfo(g_editor.selected_unit);
-        AddUnit(
-            unit_info,
-            g_game.mouse_world_position.x < 0.0f ? TEAM_BLUE : TEAM_RED,
-            g_game.mouse_world_position);
+        if (unit_info && TryPlaceUnit(g_game.mouse_world_position, unit_info->size))
+            AddUnit(
+                unit_info,
+                g_game.mouse_world_position.x < 0.0f ? TEAM_BLUE : TEAM_RED,
+                g_game.mouse_world_position);
     }
 
     g_editor.hovered_unit = GetEditorUnit(FindClosestUnit(g_game.mouse_world_position));
@@ -148,18 +175,10 @@ void UpdateEditor() {
             g_editor.hovered_unit = nullptr;
     }
 
-    if (WasButtonPressed(g_game.input, MOUSE_RIGHT)) {
-        g_game.pan_position = g_game.mouse_position;
-        g_game.pan_position_camera = GetPosition(g_game.camera);
-    }
+    UpdateCameraPan();
+    UpdateCameraZoom();
 
-    if (IsButtonDown(g_game.input, MOUSE_RIGHT)) {
-        Vec2 delta = g_game.mouse_position - g_game.pan_position;
-        Vec2 world_delta = ScreenToWorld(g_game.camera, delta) - ScreenToWorld(g_game.camera, VEC2_ZERO);
-        SetPosition(g_game.camera, g_game.pan_position_camera - world_delta);
-    }
-
-    if (WasButtonReleased(g_game.input, MOUSE_RIGHT)) {
+    if (WasButtonReleased(g_editor.input, MOUSE_RIGHT)) {
         if (g_editor.hovered_unit) {
             int unit_index = GetEditorUnitIndex(g_editor.hovered_unit);
             assert(unit_index >= 0 && unit_index < g_editor.unit_count);
@@ -170,11 +189,26 @@ void UpdateEditor() {
     }
 }
 
-void InitEditor() {
+void ShutdownEditor() {
+    PopInputSet();
+    DestroyAllEntities();
+    Free(g_editor.input);
     g_editor = {};
+}
+
+void InitEditor() {
     g_editor.selected_unit = UNIT_TYPE_UNKNOWN;
 
+    g_editor.input = CreateInputSet(ALLOCATOR_DEFAULT);
+    EnableButton(g_editor.input, KEY_TAB);
+    EnableButton(g_editor.input, KEY_ESCAPE);
+    EnableButton(g_editor.input, MOUSE_LEFT);
+    EnableButton(g_editor.input, MOUSE_RIGHT);
+
+    ResetCamera();
     DestroyAllEntities();
+    SetGameTimeScale(0.0f);
+    PushInputSet(g_editor.input);
 
     for (int i=0; i<g_game.battle_setup.unit_count; ++i) {
         const UnitSetup& unit_setup = g_game.battle_setup.units[i];
@@ -183,4 +217,6 @@ void InitEditor() {
             unit_setup.team,
             unit_setup.position);
     }
+
+    SetGameState(GAME_STATE_EDIT);
 }

@@ -9,15 +9,13 @@ constexpr int MAX_UNITS = 1024;
 constexpr int MAX_PROJECTILES = 2048;
 constexpr int MAX_ENTITIES = MAX_UNITS + MAX_PROJECTILES;
 
-constexpr float TILE_SIZE = 1;
-constexpr int WORLD_TILE_WIDTH = 10;
-constexpr float WORLD_WIDTH = (f32)WORLD_TILE_WIDTH * TILE_SIZE;
-constexpr float WORLD_BOTTOM = 0.0f;
-constexpr float WORLD_LEFT = -(f32)WORLD_WIDTH * 0.5f;
-constexpr float WORLD_RIGHT = (f32)WORLD_WIDTH * 0.5f;
+constexpr float VIEW_HEIGHT = 20.0f;
+constexpr float VIEW_MIN_HEIGHT = 5.0f;
+constexpr float VIEW_MAX_HEIGHT = 100.0f;
 
-constexpr float VIEW_LEFT = WORLD_LEFT - 1.0f;
-constexpr float VIEW_RIGHT = WORLD_RIGHT + 1.0f;
+constexpr float ZOOM_MIN = VIEW_HEIGHT / VIEW_MAX_HEIGHT;
+constexpr float ZOOM_MAX = VIEW_HEIGHT / VIEW_MIN_HEIGHT;
+constexpr float ZOOM_STEP = 0.1f;
 
 constexpr int UI_REF_WIDTH = 1920;
 constexpr int UI_REF_HEIGHT = 1080;
@@ -63,6 +61,7 @@ struct Game {
     InputSet* input;
     InputSet* input_ui;
     Camera* camera;
+    float zoom;
 
     Material* background_material;
     Material* shadow_material;
@@ -80,6 +79,8 @@ struct Game {
     Vec2 mouse_world_position;
 
     BattleSetup battle_setup;
+
+    float time_scale;
 };
 
 extern Game g_game;
@@ -91,10 +92,16 @@ extern void SetGameState(GameState state);
 extern bool IsGameState(GameState state);
 extern bool IsPlaying();
 extern float GetGameFrameTime();
+extern void UpdateCameraZoom();
+extern void UpdateCameraPan();
+extern void ResetCamera();
+extern void SetGameTimeScale(float time_scale);
+inline float GetGameTimeScale() { return g_game.time_scale; }
 
 // @world
 extern void InitWorld();
 extern void DrawWorld(Camera* camera);
+extern void DrawGrid(Camera* camera);
 
 // @colors
 constexpr Color BACKGROUND_COLOR = Color32ToColor(240,240,240,255);
@@ -112,12 +119,16 @@ extern Color GetButtonBackgroundColor(ElementState state, float time, void* user
 
 // @edit
 extern void InitEditor();
+extern void ShutdownEditor();
+extern void OpenEditor();
 extern void DrawEditor();
 extern void UpdateEditorUI();
 extern void UpdateEditor();
 
 // @battle
-extern void StartBattle(const BattleSetup& setup);
+extern void OpenBattle(const BattleSetup& setup);
+extern void InitBattle();
+extern void ShutdownBattle();
 extern void UpdateBattle();
 extern void UpdateBattleUI();
 extern void DrawBattle();

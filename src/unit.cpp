@@ -32,9 +32,14 @@ void EnumerateUnits(Team team, bool (*callback)(UnitEntity* unit, void* user_dat
 void Damage(UnitEntity* u, DamageType damage_type, float amount) {
     (void) damage_type;
     u->health -= amount;
+
     if (u->health < 0.0f) {
-        HandleUnitDeath(u, damage_type);
-        Free(u);
+        if (u->vtable.death) {
+            u->vtable.death(u, damage_type);
+        } else {
+            HandleUnitDeath(u, damage_type);
+            Free(u);
+        }
     }
 }
 

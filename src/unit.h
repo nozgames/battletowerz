@@ -28,11 +28,6 @@ enum UnitState {
     UNIT_STATE_COUNT
 };
 
-enum DamageType {
-    DAMAGE_TYPE_PHYSICAL,
-    DAMAGE_TYPE_COUNT
-};
-
 struct UnitEntity : Entity {
     UnitType unit_type;
     UnitState state;
@@ -68,10 +63,13 @@ typedef UnitEntity* (*UnitCreateFunc)(Team team, const Vec2& position);
 struct UnitInfo {
     UnitType type;
     const Name* name;
+    float size;
     UnitCreateFunc create_func;
 };
 
 // @unit
+extern void InitUnitInfo(UnitType unit_type, const char* name_str, float size, UnitCreateFunc create_func);
+
 extern UnitEntity* CreateUnit(UnitType type, Team team, const EntityVtable& vtable, const Vec3& position = VEC3_ZERO, float rotation=0.0f, const Vec2& scale=VEC2_ONE);
 extern void EnumerateUnits(Team team, bool (*callback)(UnitEntity* unit, void* user_data), void* user_data);
 extern void Damage(UnitEntity* u, DamageType damage_type, float amount);
