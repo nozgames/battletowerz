@@ -90,15 +90,6 @@ void UpdateCowboy(Entity* e) {
     if (!args.target)
         return;
 
-    if (!IsPlaying(a->animator) && !IsLooping(a->animator)) {
-        Play(a->animator, ANIMATION_COWBOY_IDLE, 1.0f, true);
-        // CreateArrow(
-        //     a->team,
-        //     Vec3{hand.x, hand.y, 0.0f},
-        //     XY(args.target->position),
-        //     4.0f);
-    }
-
     if (args.target_distance > COWBOY_RANGE) {
         if (a->animator.animation != ANIMATION_COWBOY_RUN)
             Play(a->animator, ANIMATION_COWBOY_RUN, 1.0f, true);
@@ -150,5 +141,11 @@ CowboyEntity* CreateCowboy(Team team, const Vec3& position) {
 }
 
 void InitCowboyUnit() {
-    InitUnitInfo(UNIT_TYPE_COWBOY, "Cowboy", COWBOY_SIZE, (UnitCreateFunc)CreateCowboy);
+    InitUnitInfo({
+        .type = UNIT_TYPE_COWBOY,
+        .name = GetName("Cowboy"),
+        .size = COWBOY_SIZE,
+        .create_func = (UnitCreateFunc)CreateCowboy,
+        .icon_mesh = MESH_COWBOY_ICON
+    });
 }

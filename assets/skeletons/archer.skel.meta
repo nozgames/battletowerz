@@ -1,0 +1,19 @@
+[skin]
+human_leg_r = 8
+human_leg_l = 5
+human_hand_r = 14
+archer_quiver = 15
+archer_arm_r = 9
+archer_body = 6
+archer_arm_l = 4
+archer_head_hood = 12
+archer_head = 7
+human_eye = 11, 13, 11
+human_foot_r = 2
+human_hand_l = 10
+human_foot_l = 1
+
+[editor]
+sort_order = 480
+position = (17.667587,-0.982664)
+

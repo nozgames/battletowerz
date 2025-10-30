@@ -2,6 +2,8 @@
 //  Battle TowerZ - Copyright(c) 2025 NoZ Games, LLC
 //
 
+constexpr float EDITOR_UI_BOTTOM_HEIGHT = 120.0f + UI_LETTERBOX_BORDER_WIDTH;
+
 struct EditorUnit {
     const UnitInfo* unit_info;
     Team team;
@@ -28,20 +30,6 @@ static Color GetUnitButtonColor(ElementState state, auto, void* user_data) {
     return g_editor.selected_unit == unit_info->type || (state&ELEMENT_STATE_HOVERED)
         ? HOVER_COLOR
         : FOREGROUND_COLOR;
-}
-
-static void UnitButton(UnitType unit_type) {
-    const UnitInfo* unit_info = GetUnitInfo(unit_type);
-    GestureDetector({.on_tap = [](const TapDetails&, void* user_data) {
-        HandleTapUnit(static_cast<const UnitInfo*>(user_data));
-    }, .user_data = (void*)unit_info}, [unit_info] {
-        Container({.width=80, .height=80}, [unit_info] {
-            Rectangle({.color_func = GetUnitButtonColor, .color_func_user_data = (void*)unit_info });
-            Container({.margin=EdgeInsetsBottom(10)}, [unit_info] {
-                Label(unit_info->name->value, {.font=FONT_SEGUISB, .font_size=14, .color=COLOR_WHITE, .align=ALIGNMENT_BOTTOM_CENTER});
-            });
-        });
-    });
 }
 
 void DrawEditor() {
@@ -75,6 +63,25 @@ static void BeginBattle() {
     OpenBattle(g_game.battle_setup);
 }
 
+static void UnitButton(UnitType unit_type) {
+    const UnitInfo* unit_info = GetUnitInfo(unit_type);
+    GestureDetector({.on_tap = [](const TapDetails&, void* user_data) {
+        HandleTapUnit(static_cast<const UnitInfo*>(user_data));
+    }, .user_data = (void*)unit_info}, [unit_info] {
+        Container({.width=120, .height=120}, [unit_info] {
+            Rectangle({.color_func = GetUnitButtonColor, .color_func_user_data = (void*)unit_info });
+            Container({.margin=EdgeInsetsBottom(10)}, [unit_info] {
+                Align({.alignment=ALIGNMENT_TOP_CENTER, .margin = EdgeInsetsTop(10)}, [unit_info] {
+                    SizedBox({.width=70, .height=70}, [unit_info] {
+                        Image(g_game.material, unit_info->icon_mesh, {.color=COLOR_WHITE});
+                    });
+                });
+                Label(unit_info->name->value, {.font=FONT_SEGUISB, .font_size=18, .color=COLOR_WHITE, .align=ALIGNMENT_BOTTOM_CENTER});
+            });
+        });
+    });
+}
+
 void UpdateEditorUI() {
     if (!IsGameState(GAME_STATE_EDIT))
         return;
@@ -93,12 +100,20 @@ void UpdateEditorUI() {
         });
 
         // bottom
-        Align({.alignment = ALIGNMENT_BOTTOM_CENTER, .margin=EdgeInsetsBottom(20)}, [] {
-            Row({.spacing=10}, [] {
-                // UnitButton(UNIT_TYPE_TOWER);
-                // UnitButton(UNIT_TYPE_KNIGHT);
-                // UnitButton(UNIT_TYPE_ARCHER);
-                UnitButton(UNIT_TYPE_COWBOY);
+        Align({.alignment = ALIGNMENT_BOTTOM}, [] {
+            Container({.height = EDITOR_UI_BOTTOM_HEIGHT, .color = UI_LETTERBOX_COLOR}, [] {
+                Align({.alignment = ALIGNMENT_TOP}, [] {
+                    Container({.height=UI_LETTERBOX_BORDER_WIDTH, .color = UI_LETTERBOX_BORDER_COLOR});
+                });
+                Align({.alignment = ALIGNMENT_BOTTOM_CENTER}, [] {
+                    Row({.spacing=10}, [] {
+                        // UnitButton(UNIT_TYPE_TOWER);
+                        // UnitButton(UNIT_TYPE_KNIGHT);
+                        // UnitButton(UNIT_TYPE_ARCHER);
+                        UnitButton(UNIT_TYPE_COWBOY);
+                        UnitButton(UNIT_TYPE_ARCHER);
+                    });
+                });
             });
         });
     });

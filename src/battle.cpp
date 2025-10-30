@@ -5,9 +5,6 @@
 constexpr float BATTLE_SLOW_MOTION_TIME_SCALE = 0.1f;
 constexpr float GAME_OVER_FREEZE_TIME = 1.5f;
 constexpr float GAME_OVER_UI_TIME = 1.0f;
-constexpr Color GAME_OVER_LETTERBOX_COLOR = {0.3f, 0.3f, 0.3f, 1.0f};
-constexpr Color GAME_OVER_LETTERBOX_BORDER_COLOR = {0.1f, 0.1f, 0.1f, 1.0f};
-constexpr float GAME_OVER_LETTERBOX_BORDER_WIDTH = 4.0f;
 constexpr float GAME_OVER_LETTERBOX_HEIGHT = 200.0f;
 constexpr int GAME_OVER_VICTORY_FONT_SIZE = 60;
 constexpr int GAME_OVER_INSTRUCTIONS_FONT_SIZE = 40;
@@ -53,11 +50,11 @@ static void UpdateGameOverState() {
 
     Canvas([] {
         float ui_time = Tween(1.0f, 0.0f, g_battle.state_time, GAME_OVER_UI_TIME, EaseOutQuadratic);
-        Transformed({.translate = Vec2{0,ui_time * -GAME_OVER_LETTERBOX_HEIGHT}}, [] {
+        Transformed({.translate = Vec2{0, ui_time * -GAME_OVER_LETTERBOX_HEIGHT}}, [] {
             Align({.alignment = ALIGNMENT_TOP}, [] {
-                Container({.height=GAME_OVER_LETTERBOX_HEIGHT, .color = GAME_OVER_LETTERBOX_COLOR}, [] {
+                Container({.height=GAME_OVER_LETTERBOX_HEIGHT, .color = UI_LETTERBOX_COLOR}, [] {
                     Align({.alignment = ALIGNMENT_BOTTOM}, [] {
-                        Container({.height=GAME_OVER_LETTERBOX_BORDER_WIDTH, .color = GAME_OVER_LETTERBOX_BORDER_COLOR});
+                        Container({.height=UI_LETTERBOX_BORDER_WIDTH, .color = UI_LETTERBOX_BORDER_COLOR});
                     });
 
                     if (g_battle.winning_team == TEAM_UNKNOWN) {
@@ -79,18 +76,18 @@ static void UpdateGameOverState() {
             });
         });
 
-        Transformed({.translate = Vec2{0,ui_time * GAME_OVER_LETTERBOX_HEIGHT}}, [] {
+        Transformed({.translate = Vec2{0, ui_time * GAME_OVER_LETTERBOX_HEIGHT}}, [] {
             Align({.alignment = ALIGNMENT_BOTTOM}, [] {
-                Container({.height=GAME_OVER_LETTERBOX_HEIGHT, .color = GAME_OVER_LETTERBOX_COLOR}, [] {
+                Container({.height=GAME_OVER_LETTERBOX_HEIGHT, .color = UI_LETTERBOX_COLOR}, [] {
                     Align({.alignment = ALIGNMENT_TOP}, [] {
-                        Container({.height=GAME_OVER_LETTERBOX_BORDER_WIDTH, .color = GAME_OVER_LETTERBOX_BORDER_COLOR});
+                        Container({.height=UI_LETTERBOX_BORDER_WIDTH, .color = UI_LETTERBOX_BORDER_COLOR});
                     });
 
                     Align({.alignment = ALIGNMENT_CENTER}, [] {
                         Row([] {
                             Label("PRESS ", {.font = FONT_SEGUISB, .font_size = GAME_OVER_INSTRUCTIONS_FONT_SIZE});
                             Container({.padding=EdgeInsets(0,10,0,10), .color = COLOR_WHITE}, [] {
-                                Label("TAB ", {.font = FONT_SEGUISB, .font_size = GAME_OVER_INSTRUCTIONS_FONT_SIZE, .color = GAME_OVER_LETTERBOX_COLOR});
+                                Label("TAB ", {.font = FONT_SEGUISB, .font_size = GAME_OVER_INSTRUCTIONS_FONT_SIZE, .color = UI_LETTERBOX_COLOR});
                             });
                             Label(" TO CONTINUE", {.font = FONT_SEGUISB, .font_size = GAME_OVER_INSTRUCTIONS_FONT_SIZE});
                         });

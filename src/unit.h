@@ -65,10 +65,11 @@ struct UnitInfo {
     const Name* name;
     float size;
     UnitCreateFunc create_func;
+    Mesh* icon_mesh;
 };
 
 // @unit
-extern void InitUnitInfo(UnitType unit_type, const char* name_str, float size, UnitCreateFunc create_func);
+extern void InitUnitInfo(const UnitInfo& unit_info);
 
 extern UnitEntity* CreateUnit(UnitType type, Team team, const EntityVtable& vtable, const Vec3& position = VEC3_ZERO, float rotation=0.0f, const Vec2& scale=VEC2_ONE);
 extern void EnumerateUnits(Team team, bool (*callback)(UnitEntity* unit, void* user_data), void* user_data);

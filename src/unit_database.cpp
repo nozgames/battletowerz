@@ -12,24 +12,14 @@ const UnitInfo* GetUnitInfo(UnitType unit_type) {
     return &g_unit_database[unit_type];
 }
 
-void InitUnitInfo(
-    UnitType unit_type,
-    const char* name_str,
-    float size,
-    UnitCreateFunc create_func) {
-    g_unit_database[unit_type] = {
-        .type = unit_type,
-        .name = GetName(name_str),
-        .size = size,
-        .create_func = create_func
-    };
+void InitUnitInfo(const UnitInfo& unit_info) {
+    g_unit_database[unit_info.type] = unit_info;
 }
 
 extern void InitCowboyUnit();
+extern void InitArcherUnit();
 
 void InitUnitDatabase() {
     InitCowboyUnit();
-//    InitUnitInfo(UNIT_TYPE_TOWER, "Tower", (UnitCreateFunc)CreateTower);
-    // InitUnitInfo(UNIT_TYPE_ARCHER, "Archer", (UnitCreateFunc)CreateArcher);
-    // InitUnitInfo(UNIT_TYPE_KNIGHT, "Knight", (UnitCreateFunc)CreateKnight);
+    InitArcherUnit();
 }

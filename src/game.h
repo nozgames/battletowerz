@@ -104,11 +104,14 @@ extern void DrawWorld(Camera* camera);
 extern void DrawGrid(Camera* camera);
 
 // @colors
-constexpr Color BACKGROUND_COLOR = Color32ToColor(240,240,240,255);
-constexpr Color VIGNETTE_COLOR = Color32ToColor(148,148,148,255);
+constexpr Color BACKGROUND_COLOR = Color32ToColor(220,220,220,255);
+constexpr Color VIGNETTE_COLOR = Color32ToColor(210,210,210,255);
 constexpr Color FOREGROUND_COLOR = Color32ToColor(88,88,88,255);
 constexpr Color HOVER_COLOR = Color32ToColor(85, 177, 241,255);
 constexpr Color GRID_COLOR = {0.4f, 0.4f, 0.4f, 0.1f};
+constexpr Color UI_LETTERBOX_COLOR = {0.3f, 0.3f, 0.3f, 1.0f};
+constexpr Color UI_LETTERBOX_BORDER_COLOR = {0.1f, 0.1f, 0.1f, 1.0f};
+constexpr float UI_LETTERBOX_BORDER_WIDTH = 4.0f;
 
 // @menu
 extern void UpdateMenu();

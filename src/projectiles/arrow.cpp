@@ -14,20 +14,18 @@ static void RenderArrow(Entity* e, const Mat3& transform) {
 
     BindDepth(1.0f);
     BindMaterial(g_game.material);
-    BindColor(GetTeamColor(p->team));
+    BindColor(COLOR_WHITE, GetTeamColorOffset(p->team));
     DrawMesh(MESH_PROJECTILE_ARROW, transform * Scale(1.0f + (e->position.z / 10.0f)));
     BindDepth(0.0f);
-
-    BindDepth(-7.0f);
-    BindColor({0,0,0,0.05f});
-    BindMaterial(g_game.shadow_material);
-    DrawMesh(MESH_PROJECTILE_ARROW, TRS(XY(e->position), Angle(Normalize(p->target - p->start)), e->scale) * Scale(1.0f + (e->position.z / 10.0f)));
 }
 
 static void UpdateArrow(Entity* e) {
     (void)e;
     ProjectileEntity* p = CastArrow(e);
     float dt = GetGameFrameTime();
+    if (dt <= F32_EPSILON)
+        return;
+
     p->elapsed += dt;
     p->velocity.z += GRAVITY * dt;
     p->position += p->velocity * dt;

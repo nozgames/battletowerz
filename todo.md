@@ -1,3 +1,5 @@
+- [ ] Gradient from top to bottom of units 
+- 
 - [ ] Game over UI
   - [ ] Slow down time and then pause
   - [ ] Letter box screen by adding black bars to top and bottom 
