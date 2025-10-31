@@ -185,7 +185,6 @@ void UpdateEditor() {
     g_editor.hovered_unit = GetEditorUnit(FindClosestUnit(g_game.mouse_world_position));
     if (g_editor.hovered_unit) {
         float distance = Distance(XY(g_editor.hovered_unit->entity->position), g_game.mouse_world_position);
-        LogInfo("%s hovered at distance %.2f", g_editor.hovered_unit->unit_info->name->value, distance);
         if (distance > g_editor.hovered_unit->entity->size)
             g_editor.hovered_unit = nullptr;
     }

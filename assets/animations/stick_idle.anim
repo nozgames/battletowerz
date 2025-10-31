@@ -1,36 +1,51 @@
 s "stick"
 b "root"
 b "hip"
-b "spine_a"
-b "spine_b"
+b "spine"
+b "chest"
 b "neck"
 b "head"
-b "arm_u_l"
-b "arm_u_r"
-b "arm_l_l"
-b "arm_l_r"
-b "hand_l"
-b "hand_r"
-b "leg_u_l"
-b "leg_l_l"
-b "leg_u_r"
-b "leg_l_r"
-b "eye_l"
-b "eye_r"
+b "arm_upper_f"
+b "arm_upper_b"
+b "arm_lower_f"
+b "arm_lower_b"
+b "hand_f"
+b "hand_b"
+b "leg_upper_f"
+b "leg_lower_f"
+b "leg_upper_b"
+b "leg_lower_b"
+b "eye_f"
+b "eye_b"
 b "hat"
-b "item_r"
+b "item_b"
+b "foot_f"
+b "foot_b"
 f
-b 1 p 0.000000 -0.023368
-b 2 r -10.801172
-b 3 r -6.369424
-b 4 r 3.409569
-b 5 r 8.714724
-b 6 r 47.282715
-b 7 r -57.608967
-b 8 r 19.918041
-b 9 r 25.918898
-b 12 p -0.015430 0.004748 r -1.676154
-b 13 r -35.785984
-b 14 p 0.010683 0.001187 r 43.218056
-b 15 r -42.763062
-b 17 p -0.000986 0.002961
+h 3b 1 p -0.001799 0.007634
+h 3b 6 r 40.540581
+h 3b 7 r -43.409904
+h 3b 8 r 38.647751
+h 3b 9 r -44.890900
+h 3b 10 r 15.934831
+h 3b 11 r -4.924280
+h 3b 12 r 8.306978
+h 3b 13 r 27.080135
+h 3b 14 r -5.213043
+h 3b 15 r -35.506584
+f
+h 3b 1 p -0.001799 0.010226
+h 3b 2 p 0.000000 0.003355 r 1.614452
+h 3b 3 p 0.000000 0.004473 r -0.976089
+h 3b 4 r 3.309502
+h 3b 5 r -4.378858
+h 3b 6 r 38.547974
+h 3b 7 r -42.570229
+h 3b 8 r 38.647751
+h 3b 9 r -44.890900
+h 3b 10 r 15.934831
+h 3b 11 r -4.924280
+h 3b 12 r 10.860820
+h 3b 13 r 22.771017
+h 3b 14 r -7.965985
+h 3b 15 r -30.672773

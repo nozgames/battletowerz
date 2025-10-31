@@ -8,54 +8,37 @@
 #include <noz/core_assets.h>
 
 // @Mesh
-extern Mesh* MESH_ARCHER_QUIVER;
-extern Mesh* MESH_ARCHER_HEAD_HOOD;
-extern Mesh* MESH_ARCHER_HEAD;
-extern Mesh* MESH_ARCHER_BODY;
-extern Mesh* MESH_ARCHER_ARM_R;
-extern Mesh* MESH_ARCHER_ARM_L;
-extern Mesh* MESH_ICON_FIGHT;
-extern Mesh* MESH_BULLET;
-extern Mesh* MESH_HUMAN_LEG_R;
-extern Mesh* MESH_HUMAN_LEG_L;
-extern Mesh* MESH_HUMAN_HAND_R;
-extern Mesh* MESH_HUMAN_HAND_L;
-extern Mesh* MESH_HUMAN_FOOT_R;
-extern Mesh* MESH_HUMAN_FOOT_L;
-extern Mesh* MESH_HUMAN_EYE_DEAD;
-extern Mesh* MESH_STICK_EYE_DEAD;
-extern Mesh* MESH_COWBOY_TIE;
-extern Mesh* MESH_COWBOY_PISTOL;
-extern Mesh* MESH_COWBOY_MUSTACHE;
-extern Mesh* MESH_COWBOY_ICON;
-extern Mesh* MESH_COWBOY_HEAD;
-extern Mesh* MESH_COWBOY_BODY;
-extern Mesh* MESH_COWBOY_ARM_R;
-extern Mesh* MESH_COWBOY_ARM_L;
-extern Mesh* MESH_BULLET_CASING;
-extern Mesh* MESH_PROJECTILE_ARROW;
-extern Mesh* MESH_STICK_BOOT_SPUR;
-extern Mesh* MESH_STICK_NECK;
-extern Mesh* MESH_STICK_LEG_U;
-extern Mesh* MESH_STICK_LEG_L;
 extern Mesh* MESH_STICK_HIP;
 extern Mesh* MESH_STICK_HEAD;
 extern Mesh* MESH_STICK_HAT_COWBOY;
 extern Mesh* MESH_STICK_HAND_R;
-extern Mesh* MESH_STICK_HAND_L;
-extern Mesh* MESH_HUMAN_EYE;
+extern Mesh* MESH_STICK_REVOLVER;
+extern Mesh* MESH_STICK_EYE_DEAD;
 extern Mesh* MESH_STICK_EYE;
 extern Mesh* MESH_STICK_BOW;
+extern Mesh* MESH_STICK_BOOT_SPUR;
 extern Mesh* MESH_STICK_BODY_B;
 extern Mesh* MESH_STICK_BODY;
 extern Mesh* MESH_STICK_ARM_U_R;
-extern Mesh* MESH_STICK_ARM_U_L;
 extern Mesh* MESH_STICK_ARM_L_R;
-extern Mesh* MESH_STICK_REVOLVER;
-extern Mesh* MESH_TEAM_LINE;
 extern Mesh* MESH_STICK_ARM_L_L;
+extern Mesh* MESH_PROJECTILE_ARROW;
+extern Mesh* MESH_ICON_FIGHT;
+extern Mesh* MESH_COWBOY_ICON;
+extern Mesh* MESH_BULLET_CASING;
+extern Mesh* MESH_BULLET;
+extern Mesh* MESH_STICK_ARM_U_L;
+extern Mesh* MESH_STICK_LEG_L_L;
+extern Mesh* MESH_COWBOY_SPUR_B;
+extern Mesh* MESH_WIZARD_HAT;
 extern Mesh* MESH_WEAPON_BOW;
 extern Mesh* MESH_TOWER_PLAYER_TEMP;
+extern Mesh* MESH_TEAM_LINE;
+extern Mesh* MESH_STICK_HAND_L;
+extern Mesh* MESH_STICK_NECK;
+extern Mesh* MESH_STICK_LEG_U_R;
+extern Mesh* MESH_STICK_LEG_U_L;
+extern Mesh* MESH_STICK_LEG_L_R;
 
 // @Vfx
 extern Vfx* VFX_BOW_FIRE;
@@ -63,21 +46,10 @@ extern Vfx* VFX_ARROW_HIT;
 
 // @Skeleton
 extern Skeleton* SKELETON_STICK;
-extern Skeleton* SKELETON_COWBOY;
-extern Skeleton* SKELETON_ARCHER;
 
 // @Animation
-extern Animation* ANIMATION_STICK_RUN;
-extern Animation* ANIMATION_STICK_DEATH;
-extern Animation* ANIMATION_STICK_BOW_DRAW;
-extern Animation* ANIMATION_COWBOY_SHOOT;
-extern Animation* ANIMATION_COWBOY_RUN;
-extern Animation* ANIMATION_COWBOY_IDLE;
-extern Animation* ANIMATION_COWBOY_DEATH;
-extern Animation* ANIMATION_ARCHER_KILL;
-extern Animation* ANIMATION_ARCHER_IDLE;
-extern Animation* ANIMATION_ARCHER_FIRE;
 extern Animation* ANIMATION_STICK_IDLE;
+extern Animation* ANIMATION_STICK_RUN;
 
 // @Sound
 extern Sound* SOUND_REVOLVER_FIRE_A;
@@ -89,106 +61,62 @@ extern Texture* TEXTURE_PALETTE;
 extern Font* FONT_SEGUISB;
 
 // @Shader
+extern Shader* SHADER_LIT;
 extern Shader* SHADER_VFX;
 extern Shader* SHADER_UI_VIGNETTE;
 extern Shader* SHADER_UI;
 extern Shader* SHADER_TEXT;
-extern Shader* SHADER_LIT;
 extern Shader* SHADER_VIGNETTE;
 extern Shader* SHADER_SHADOW;
 
 // @name
 extern const Name* NAME_ROOT;
 extern const Name* NAME_HIP;
-extern const Name* NAME_SPINE_A;
-extern const Name* NAME_SPINE_B;
+extern const Name* NAME_SPINE;
+extern const Name* NAME_CHEST;
 extern const Name* NAME_NECK;
 extern const Name* NAME_HEAD;
-extern const Name* NAME_ARM_U_L;
-extern const Name* NAME_ARM_U_R;
-extern const Name* NAME_ARM_L_L;
-extern const Name* NAME_ARM_L_R;
-extern const Name* NAME_HAND_L;
-extern const Name* NAME_HAND_R;
-extern const Name* NAME_LEG_U_L;
-extern const Name* NAME_LEG_L_L;
-extern const Name* NAME_LEG_U_R;
-extern const Name* NAME_LEG_L_R;
-extern const Name* NAME_EYE_L;
-extern const Name* NAME_EYE_R;
+extern const Name* NAME_ARM_UPPER_F;
+extern const Name* NAME_ARM_UPPER_B;
+extern const Name* NAME_ARM_LOWER_F;
+extern const Name* NAME_ARM_LOWER_B;
+extern const Name* NAME_HAND_F;
+extern const Name* NAME_HAND_B;
+extern const Name* NAME_LEG_UPPER_F;
+extern const Name* NAME_LEG_LOWER_F;
+extern const Name* NAME_LEG_UPPER_B;
+extern const Name* NAME_LEG_LOWER_B;
+extern const Name* NAME_EYE_F;
+extern const Name* NAME_EYE_B;
 extern const Name* NAME_HAT;
-extern const Name* NAME_ITEM_R;
-extern const Name* NAME_BODY;
-extern const Name* NAME_MUSTACHE;
-extern const Name* NAME_ARM_L;
-extern const Name* NAME_ARM_R;
-extern const Name* NAME_LEFT_R;
-extern const Name* NAME_LEFT_L;
-extern const Name* NAME_CHEST;
-extern const Name* NAME_FOOT_L;
-extern const Name* NAME_FOOT_R;
-extern const Name* NAME_TIE;
-extern const Name* NAME_HOOD;
-extern const Name* NAME_QUIVER;
+extern const Name* NAME_ITEM_B;
+extern const Name* NAME_FOOT_F;
+extern const Name* NAME_FOOT_B;
 
-
-// @BONE_ARCHER
-constexpr int BONE_ARCHER_ROOT = 0;
-constexpr int BONE_ARCHER_FOOT_L = 1;
-constexpr int BONE_ARCHER_FOOT_R = 2;
-constexpr int BONE_ARCHER_BODY = 3;
-constexpr int BONE_ARCHER_ARM_L = 4;
-constexpr int BONE_ARCHER_LEFT_L = 5;
-constexpr int BONE_ARCHER_CHEST = 6;
-constexpr int BONE_ARCHER_HEAD = 7;
-constexpr int BONE_ARCHER_LEFT_R = 8;
-constexpr int BONE_ARCHER_ARM_R = 9;
-constexpr int BONE_ARCHER_HAND_L = 10;
-constexpr int BONE_ARCHER_EYE_L = 11;
-constexpr int BONE_ARCHER_HOOD = 12;
-constexpr int BONE_ARCHER_EYE_R = 13;
-constexpr int BONE_ARCHER_HAND_R = 14;
-constexpr int BONE_ARCHER_QUIVER = 15;
-
-// @BONE_COWBOY
-constexpr int BONE_COWBOY_ROOT = 0;
-constexpr int BONE_COWBOY_BODY = 1;
-constexpr int BONE_COWBOY_HEAD = 2;
-constexpr int BONE_COWBOY_MUSTACHE = 3;
-constexpr int BONE_COWBOY_ARM_L = 4;
-constexpr int BONE_COWBOY_ARM_R = 5;
-constexpr int BONE_COWBOY_LEFT_R = 6;
-constexpr int BONE_COWBOY_LEFT_L = 7;
-constexpr int BONE_COWBOY_CHEST = 8;
-constexpr int BONE_COWBOY_FOOT_L = 9;
-constexpr int BONE_COWBOY_FOOT_R = 10;
-constexpr int BONE_COWBOY_EYE_L = 11;
-constexpr int BONE_COWBOY_EYE_R = 12;
-constexpr int BONE_COWBOY_TIE = 13;
-constexpr int BONE_COWBOY_HAND_L = 14;
-constexpr int BONE_COWBOY_HAND_R = 15;
 
 // @BONE_STICK
 constexpr int BONE_STICK_ROOT = 0;
 constexpr int BONE_STICK_HIP = 1;
-constexpr int BONE_STICK_SPINE_A = 2;
-constexpr int BONE_STICK_SPINE_B = 3;
+constexpr int BONE_STICK_SPINE = 2;
+constexpr int BONE_STICK_CHEST = 3;
 constexpr int BONE_STICK_NECK = 4;
 constexpr int BONE_STICK_HEAD = 5;
-constexpr int BONE_STICK_ARM_U_L = 6;
-constexpr int BONE_STICK_ARM_U_R = 7;
-constexpr int BONE_STICK_ARM_L_L = 8;
-constexpr int BONE_STICK_ARM_L_R = 9;
-constexpr int BONE_STICK_HAND_L = 10;
-constexpr int BONE_STICK_HAND_R = 11;
-constexpr int BONE_STICK_LEG_U_L = 12;
-constexpr int BONE_STICK_LEG_L_L = 13;
-constexpr int BONE_STICK_LEG_U_R = 14;
-constexpr int BONE_STICK_LEG_L_R = 15;
-constexpr int BONE_STICK_EYE_L = 16;
-constexpr int BONE_STICK_EYE_R = 17;
+constexpr int BONE_STICK_ARM_UPPER_F = 6;
+constexpr int BONE_STICK_ARM_UPPER_B = 7;
+constexpr int BONE_STICK_ARM_LOWER_F = 8;
+constexpr int BONE_STICK_ARM_LOWER_B = 9;
+constexpr int BONE_STICK_HAND_F = 10;
+constexpr int BONE_STICK_HAND_B = 11;
+constexpr int BONE_STICK_LEG_UPPER_F = 12;
+constexpr int BONE_STICK_LEG_LOWER_F = 13;
+constexpr int BONE_STICK_LEG_UPPER_B = 14;
+constexpr int BONE_STICK_LEG_LOWER_B = 15;
+constexpr int BONE_STICK_EYE_F = 16;
+constexpr int BONE_STICK_EYE_B = 17;
 constexpr int BONE_STICK_HAT = 18;
-constexpr int BONE_STICK_ITEM_R = 19;
+constexpr int BONE_STICK_ITEM_B = 19;
+constexpr int BONE_STICK_FOOT_F = 20;
+constexpr int BONE_STICK_FOOT_B = 21;
 
 
 extern bool LoadAssets(Allocator* allocator);

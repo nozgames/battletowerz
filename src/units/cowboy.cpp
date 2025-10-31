@@ -18,7 +18,8 @@ inline CowboyEntity* CastCowboy(Entity* e) {
     return a;
 }
 
-static void DrawCowboyInternal(Entity* e, const Mat3& transform, bool shadow) {
+static void DrawCowboyInternal(Entity*, const Mat3&, bool) {
+#if 0
     CowboyEntity* a = CastCowboy(e);
     DrawMesh(MESH_HUMAN_FOOT_L, transform, e->animator, BONE_COWBOY_FOOT_L);
     DrawMesh(MESH_HUMAN_FOOT_R, transform, e->animator, BONE_COWBOY_FOOT_R);
@@ -37,6 +38,7 @@ static void DrawCowboyInternal(Entity* e, const Mat3& transform, bool shadow) {
         DrawMesh(a->health <= 0 ? MESH_HUMAN_EYE_DEAD : MESH_HUMAN_EYE, transform, e->animator, BONE_COWBOY_EYE_R);
     }
     DrawMesh(MESH_COWBOY_MUSTACHE, transform, e->animator, BONE_COWBOY_MUSTACHE);
+#endif
 }
 
 void DrawCowboy(Entity* e, const Mat3& transform) {
@@ -59,7 +61,7 @@ struct FindCowboyTargetArgs {
     float target_distance;
 };
 
-static bool FindCowboyTarget(UnitEntity* u, void* user_data) {
+bool FindCowboyTarget(UnitEntity* u, void* user_data) {
     assert(u);
     assert(user_data);
     if (u->health <= 0.0f)
@@ -79,7 +81,8 @@ void UpdateCowboyDead(Entity* e) {
     Update(a->animator, GetGameTimeScale());
 }
 
-void UpdateCowboy(Entity* e) {
+void UpdateCowboy(Entity*) {
+#if 0
     CowboyEntity* a = CastCowboy(e);
     FindCowboyTargetArgs args {
         .a = a,
@@ -111,13 +114,14 @@ void UpdateCowboy(Entity* e) {
     }
 
     Update(a->animator);
+#endif
 }
 
 void KillCowboy(Entity* e, DamageType damage_type) {
     UnitEntity* u = static_cast<UnitEntity*>(e);
     u->vtable.update = UpdateCowboyDead;
     HandleUnitDeath(u, damage_type);
-    Play(u->animator, ANIMATION_COWBOY_DEATH, 0.5f, false);
+    //Play(u->animator, ANIMATION_COWBOY_DEATH, 0.5f, false);
     // Free(e);
 }
 
@@ -135,8 +139,8 @@ CowboyEntity* CreateCowboy(Team team, const Vec3& position) {
     a->size = COWBOY_SIZE;
     a->cooldown = RandomFloat(COWBOY_COOLDOWN_MIN, COWBOY_COOLDOWN_MAX);
 
-    Init(a->animator, SKELETON_COWBOY);
-    Play(a->animator, ANIMATION_COWBOY_IDLE, 1.0f, true);
+    // Init(a->animator, SKELETON_COWBOY);
+    // Play(a->animator, ANIMATION_COWBOY_IDLE, 1.0f, true);
     return a;
 }
 

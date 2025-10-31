@@ -2,8 +2,6 @@
 //  Battle TowerZ - Copyright(c) 2025 NoZ Games, LLC
 //
 
-#include "game.h"
-
 constexpr float ARCHER_SPEED = 2.0f;
 constexpr float ARCHER_RANGE = 8.0f;
 constexpr float ARCHER_COOLDOWN_MIN = 1.4f;
@@ -191,8 +189,8 @@ void UpdateArcher(Entity* e) {
                 XY(args.target->position),
                 4.0f);
 
-        } else if (!IsPlaying(a->animator) || (a->animator.animation != ANIMATION_STICK_IDLE && a->animator.loop)) {
-            Play(a->animator, ANIMATION_STICK_IDLE, 1.0f, true);
+        } else if (!IsPlaying(a->animator) || (a->animator.animation != ANIMATION_COWBOY_IDLE && a->animator.loop)) {
+            Play(a->animator, ANIMATION_COWBOY_IDLE, 1.0f, true);
         }
     }
 
@@ -214,7 +212,7 @@ ArcherEntity* CreateArcher(Team team, const Vec3& position)
     a->cooldown = RandomFloat(ARCHER_COOLDOWN_MIN, ARCHER_COOLDOWN_MAX);
 
     Init(a->animator, SKELETON_STICK);
-    Play(a->animator, ANIMATION_STICK_IDLE, 1.0f, true);
+    Play(a->animator, ANIMATION_COWBOY_IDLE, 1.0f, true);
     return a;
 }
 

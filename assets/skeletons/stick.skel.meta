@@ -5,16 +5,15 @@ stick_neck = 4
 stick_arm_u_l = 6
 stick_arm_l_l = 8
 stick_hand_l = 10
-stick_leg_u = 14, 12
-stick_leg_l = 13, 15
+stick_leg_u_r = 14
+stick_leg_u_l = 12
+stick_leg_l_r = 15
+stick_leg_l_l = 13
 stick_head = 5
 stick_hip = 1
-stick_eye = 16, 17
-stick_revolver = 19
 stick_arm_u_r = 7
 stick_arm_l_r = 9
 stick_hand_r = 11
-stick_hat_cowboy = 18
 
 [editor]
 sort_order = 0
