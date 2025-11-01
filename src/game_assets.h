@@ -8,37 +8,37 @@
 #include <noz/core_assets.h>
 
 // @Mesh
-extern Mesh* MESH_STICK_HIP;
 extern Mesh* MESH_STICK_HEAD;
 extern Mesh* MESH_STICK_HAT_COWBOY;
 extern Mesh* MESH_STICK_HAND_R;
-extern Mesh* MESH_STICK_REVOLVER;
-extern Mesh* MESH_STICK_EYE_DEAD;
+extern Mesh* MESH_STICK_HAND_L;
+extern Mesh* MESH_STICK_NECK;
 extern Mesh* MESH_STICK_EYE;
 extern Mesh* MESH_STICK_BOW;
 extern Mesh* MESH_STICK_BOOT_SPUR;
 extern Mesh* MESH_STICK_BODY_B;
 extern Mesh* MESH_STICK_BODY;
 extern Mesh* MESH_STICK_ARM_U_R;
-extern Mesh* MESH_STICK_ARM_L_R;
+extern Mesh* MESH_STICK_ARM_U_L;
 extern Mesh* MESH_STICK_ARM_L_L;
 extern Mesh* MESH_PROJECTILE_ARROW;
 extern Mesh* MESH_ICON_FIGHT;
-extern Mesh* MESH_COWBOY_ICON;
+extern Mesh* MESH_COWBOY_SPUR_B;
 extern Mesh* MESH_BULLET_CASING;
 extern Mesh* MESH_BULLET;
-extern Mesh* MESH_STICK_ARM_U_L;
-extern Mesh* MESH_STICK_LEG_L_L;
-extern Mesh* MESH_COWBOY_SPUR_B;
+extern Mesh* MESH_STICK_ARM_L_R;
+extern Mesh* MESH_STICK_HIP;
+extern Mesh* MESH_COWBOY_ICON;
 extern Mesh* MESH_WIZARD_HAT;
 extern Mesh* MESH_WEAPON_BOW;
 extern Mesh* MESH_TOWER_PLAYER_TEMP;
 extern Mesh* MESH_TEAM_LINE;
-extern Mesh* MESH_STICK_HAND_L;
-extern Mesh* MESH_STICK_NECK;
+extern Mesh* MESH_STICK_REVOLVER;
+extern Mesh* MESH_STICK_EYE_DEAD;
 extern Mesh* MESH_STICK_LEG_U_R;
 extern Mesh* MESH_STICK_LEG_U_L;
 extern Mesh* MESH_STICK_LEG_L_R;
+extern Mesh* MESH_STICK_LEG_L_L;
 
 // @Vfx
 extern Vfx* VFX_BOW_FIRE;
@@ -61,12 +61,12 @@ extern Texture* TEXTURE_PALETTE;
 extern Font* FONT_SEGUISB;
 
 // @Shader
-extern Shader* SHADER_LIT;
-extern Shader* SHADER_VFX;
+extern Shader* SHADER_VIGNETTE;
 extern Shader* SHADER_UI_VIGNETTE;
 extern Shader* SHADER_UI;
 extern Shader* SHADER_TEXT;
-extern Shader* SHADER_VIGNETTE;
+extern Shader* SHADER_LIT;
+extern Shader* SHADER_VFX;
 extern Shader* SHADER_SHADOW;
 
 // @name

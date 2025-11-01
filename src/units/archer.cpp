@@ -2,7 +2,7 @@
 //  Battle TowerZ - Copyright(c) 2025 NoZ Games, LLC
 //
 
-constexpr float ARCHER_SPEED = 2.0f;
+constexpr float ARCHER_SPEED = 1.0f;
 constexpr float ARCHER_RANGE = 8.0f;
 constexpr float ARCHER_COOLDOWN_MIN = 1.4f;
 constexpr float ARCHER_COOLDOWN_MAX = 1.6f;
@@ -18,36 +18,34 @@ inline ArcherEntity* CastArcher(Entity* e) {
 }
 
 static void DrawStickRightArm(Entity* e, const Mat3& transform, bool ) {
-    DrawMesh(MESH_STICK_ARM_L_R, transform, e->animator, BONE_STICK_ARM_L_R);
-    DrawMesh(MESH_STICK_ARM_U_R, transform, e->animator, BONE_STICK_ARM_U_R);
-    DrawMesh(MESH_STICK_REVOLVER, transform, e->animator, BONE_STICK_ITEM_R);
-    DrawMesh(MESH_STICK_HAND_R, transform, e->animator, BONE_STICK_HAND_R);
+    DrawMesh(MESH_STICK_ARM_L_R, transform, e->animator, BONE_STICK_ARM_LOWER_B);
+    DrawMesh(MESH_STICK_ARM_U_R, transform, e->animator, BONE_STICK_ARM_UPPER_B);
+    DrawMesh(MESH_STICK_REVOLVER, transform, e->animator, BONE_STICK_ITEM_B);
+    DrawMesh(MESH_STICK_HAND_R, transform, e->animator, BONE_STICK_HAND_B);
 }
 
 static void DrawStickLeftArm(Entity* e, const Mat3& transform, bool ) {
-    DrawMesh(MESH_STICK_ARM_L_L, transform, e->animator, BONE_STICK_ARM_L_L);
-    DrawMesh(MESH_STICK_ARM_U_L, transform, e->animator, BONE_STICK_ARM_U_L);
-    DrawMesh(MESH_STICK_HAND_L, transform, e->animator, BONE_STICK_HAND_L);
+    DrawMesh(MESH_STICK_ARM_L_L, transform, e->animator, BONE_STICK_ARM_LOWER_F);
+    DrawMesh(MESH_STICK_ARM_U_L, transform, e->animator, BONE_STICK_ARM_UPPER_F);
+    DrawMesh(MESH_STICK_HAND_L, transform, e->animator, BONE_STICK_HAND_F);
 }
 
 static void DrawStickBackLeg(Entity* e, const Mat3& transform, bool) {
-    DrawMesh(MESH_STICK_LEG_L, transform, e->animator, BONE_STICK_LEG_L_R);
-    DrawMesh(MESH_STICK_LEG_U, transform, e->animator, BONE_STICK_LEG_U_R);
-    DrawMesh(MESH_STICK_BOOT_SPUR, transform, e->animator, BONE_STICK_LEG_L_R);
+    DrawMesh(MESH_STICK_LEG_U_R, transform, e->animator, BONE_STICK_LEG_UPPER_B);
+    DrawMesh(MESH_STICK_LEG_L_R, transform, e->animator, BONE_STICK_LEG_LOWER_B);
 }
 
 static void DrawStickEyes(UnitEntity* e, const Mat3& transform, bool) {
-    DrawMesh(e->health <= 0 ? MESH_STICK_EYE_DEAD : MESH_STICK_EYE, transform, e->animator, BONE_STICK_EYE_L);
-    DrawMesh(e->health <= 0 ? MESH_STICK_EYE_DEAD : MESH_STICK_EYE, transform, e->animator, BONE_STICK_EYE_R);
+    DrawMesh(e->health <= 0 ? MESH_STICK_EYE_DEAD : MESH_STICK_EYE, transform, e->animator, BONE_STICK_EYE_F);
+    DrawMesh(e->health <= 0 ? MESH_STICK_EYE_DEAD : MESH_STICK_EYE, transform, e->animator, BONE_STICK_EYE_B);
 }
 
 static void DrawStickBody(Entity* e, const Mat3& transform, bool ) {
     DrawMesh(MESH_STICK_HIP, transform, e->animator, BONE_STICK_HIP);
-    DrawMesh(MESH_STICK_BODY, transform, e->animator, BONE_STICK_SPINE_B);
-    DrawMesh(MESH_STICK_BODY_B, transform, e->animator, BONE_STICK_SPINE_A);
-    DrawMesh(MESH_STICK_LEG_L, transform, e->animator, BONE_STICK_LEG_L_L);
-    DrawMesh(MESH_STICK_LEG_U, transform, e->animator, BONE_STICK_LEG_U_L);
-    DrawMesh(MESH_STICK_BOOT_SPUR, transform, e->animator, BONE_STICK_LEG_L_L);
+    DrawMesh(MESH_STICK_BODY_B, transform, e->animator, BONE_STICK_SPINE);
+    DrawMesh(MESH_STICK_BODY, transform, e->animator, BONE_STICK_CHEST);
+    DrawMesh(MESH_STICK_LEG_L_L, transform, e->animator, BONE_STICK_LEG_LOWER_F);
+    DrawMesh(MESH_STICK_LEG_U_L, transform, e->animator, BONE_STICK_LEG_UPPER_F);
     DrawMesh(MESH_STICK_NECK, transform, e->animator, BONE_STICK_NECK);
     DrawMesh(MESH_STICK_HEAD, transform, e->animator, BONE_STICK_HEAD);
 }
@@ -124,7 +122,7 @@ static void KillArcher(Entity* e, DamageType damage_type) {
     UnitEntity* u = static_cast<UnitEntity*>(e);
     u->vtable.update = UpdateArcherDead;
     HandleUnitDeath(u, damage_type);
-    Play(u->animator, ANIMATION_STICK_DEATH, 0.5f, false);
+    //Play(u->animator, ANIMATION_STICK_DEATH, 0.5f, false);
     UpdateArcherDead(e);
     // Free(e);
 }
@@ -179,18 +177,18 @@ void UpdateArcher(Entity* e) {
         a->cooldown -= GetGameFrameTime();
         if (a->cooldown <= 0.0f) {
             a->cooldown = RandomFloat(ARCHER_COOLDOWN_MIN, ARCHER_COOLDOWN_MAX);
-            Play(a->animator, ANIMATION_STICK_BOW_DRAW, 1.0f, false);
+            //Play(a->animator, ANIMATION_STICK_BOW_DRAW, 1.0f, false);
             Damage(args.target, DAMAGE_TYPE_PHYSICAL, ARCHER_DAMAGE);
             Play(VFX_ARROW_HIT, WorldToScreen(args.target->position));
-            Vec2 hand = TRS(XY(a->position), 0.0f, a->scale) * a->animator.bones[BONE_STICK_HAND_R] * VEC2_ZERO;
+            Vec2 hand = TRS(XY(a->position), 0.0f, a->scale) * a->animator.bones[BONE_STICK_HAND_B] * VEC2_ZERO;
             CreateArrow(
                 a->team,
                 Vec3{hand.x, hand.y, 0.0f},
                 XY(args.target->position),
                 4.0f);
 
-        } else if (!IsPlaying(a->animator) || (a->animator.animation != ANIMATION_COWBOY_IDLE && a->animator.loop)) {
-            Play(a->animator, ANIMATION_COWBOY_IDLE, 1.0f, true);
+        } else if (!IsPlaying(a->animator) || (a->animator.animation != ANIMATION_STICK_IDLE && a->animator.loop)) {
+            Play(a->animator, ANIMATION_STICK_IDLE, 1.0f, true);
         }
     }
 
@@ -212,7 +210,7 @@ ArcherEntity* CreateArcher(Team team, const Vec3& position)
     a->cooldown = RandomFloat(ARCHER_COOLDOWN_MIN, ARCHER_COOLDOWN_MAX);
 
     Init(a->animator, SKELETON_STICK);
-    Play(a->animator, ANIMATION_COWBOY_IDLE, 1.0f, true);
+    Play(a->animator, ANIMATION_STICK_IDLE, 1.0f, true);
     return a;
 }
 
