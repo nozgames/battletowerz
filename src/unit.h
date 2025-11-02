@@ -112,6 +112,12 @@ inline Team GetOppositeTeam(Team team) {
     return opposite[team];
 }
 
+extern void BindTeamColor(Team team);
+
+
+// @stick
+extern void DrawStick(Entity* e, const Mat3& transform, bool shadow);
+
 // @archer
 extern ArcherEntity* CreateArcher(Team team, const Vec3& position);
 

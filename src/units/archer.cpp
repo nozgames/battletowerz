@@ -8,7 +8,7 @@ constexpr float ARCHER_COOLDOWN_MIN = 1.4f;
 constexpr float ARCHER_COOLDOWN_MAX = 1.6f;
 constexpr float ARCHER_DAMAGE = 0.75f;
 constexpr float ARCHER_HEALTH = 5.0f;
-constexpr float ARCHER_SIZE = 0.5f;
+constexpr float ARCHER_SIZE = 0.35f;
 
 inline ArcherEntity* CastArcher(Entity* e) {
     assert(e && e->type == ENTITY_TYPE_UNIT);
@@ -17,100 +17,21 @@ inline ArcherEntity* CastArcher(Entity* e) {
     return a;
 }
 
-static void DrawStickRightArm(Entity* e, const Mat3& transform, bool ) {
-    DrawMesh(MESH_STICK_ARM_L_R, transform, e->animator, BONE_STICK_ARM_LOWER_B);
-    DrawMesh(MESH_STICK_ARM_U_R, transform, e->animator, BONE_STICK_ARM_UPPER_B);
-    DrawMesh(MESH_STICK_REVOLVER, transform, e->animator, BONE_STICK_ITEM_B);
-    DrawMesh(MESH_STICK_HAND_R, transform, e->animator, BONE_STICK_HAND_B);
-}
-
-static void DrawStickLeftArm(Entity* e, const Mat3& transform, bool ) {
-    DrawMesh(MESH_STICK_ARM_L_L, transform, e->animator, BONE_STICK_ARM_LOWER_F);
-    DrawMesh(MESH_STICK_ARM_U_L, transform, e->animator, BONE_STICK_ARM_UPPER_F);
-    DrawMesh(MESH_STICK_HAND_L, transform, e->animator, BONE_STICK_HAND_F);
-}
-
-static void DrawStickBackLeg(Entity* e, const Mat3& transform, bool) {
-    DrawMesh(MESH_STICK_LEG_U_R, transform, e->animator, BONE_STICK_LEG_UPPER_B);
-    DrawMesh(MESH_STICK_LEG_L_R, transform, e->animator, BONE_STICK_LEG_LOWER_B);
-}
-
-static void DrawStickEyes(UnitEntity* e, const Mat3& transform, bool) {
-    DrawMesh(e->health <= 0 ? MESH_STICK_EYE_DEAD : MESH_STICK_EYE, transform, e->animator, BONE_STICK_EYE_F);
-    DrawMesh(e->health <= 0 ? MESH_STICK_EYE_DEAD : MESH_STICK_EYE, transform, e->animator, BONE_STICK_EYE_B);
-}
-
-static void DrawStickBody(Entity* e, const Mat3& transform, bool ) {
-    DrawMesh(MESH_STICK_HIP, transform, e->animator, BONE_STICK_HIP);
-    DrawMesh(MESH_STICK_BODY_B, transform, e->animator, BONE_STICK_SPINE);
-    DrawMesh(MESH_STICK_BODY, transform, e->animator, BONE_STICK_CHEST);
-    DrawMesh(MESH_STICK_LEG_L_L, transform, e->animator, BONE_STICK_LEG_LOWER_F);
-    DrawMesh(MESH_STICK_LEG_U_L, transform, e->animator, BONE_STICK_LEG_UPPER_F);
-    DrawMesh(MESH_STICK_NECK, transform, e->animator, BONE_STICK_NECK);
-    DrawMesh(MESH_STICK_HEAD, transform, e->animator, BONE_STICK_HEAD);
-}
-
-static void DrawArcherAttachments(Entity* e, const Mat3& transform, bool) {
-    DrawMesh(MESH_STICK_HAT_COWBOY, transform, e->animator, BONE_STICK_HAT);
-}
-
-static void BindColor(UnitEntity* u) {
-    BindColor(COLOR_WHITE, GetTeamColorOffset(u->team));
-}
-
-static void BindOutlineColor(UnitEntity* u) {
-    BindColor(COLOR_WHITE, GetTeamColorOffset(u->team) + Vec2{0.0f, 1.0f/16.0f});
-}
-
 static void DrawArcherInternal(Entity* e, const Mat3& transform, bool shadow) {
-    ArcherEntity* a = CastArcher(e);
-
-    if (!shadow) {
-        BindOutlineColor(a);
-        DrawStickRightArm(a, transform, shadow);
-        BindColor(a);
-    }
-
-    DrawStickRightArm(a, transform, shadow);
-
-    if (!shadow) {
-        BindOutlineColor(a);
-        DrawStickBackLeg(a, transform, shadow);
-        BindColor(a);
-    }
-    DrawStickBackLeg(e, transform, shadow);
-
-    if (!shadow) {
-        BindOutlineColor(a);
-        DrawStickBody(a, transform, shadow);
-        BindColor(a);
-    }
-    DrawStickBody(a, transform, shadow);
-
-    if (!shadow) {
-        BindOutlineColor(a);
-        DrawStickLeftArm(a, transform, shadow);
-        BindColor(a);
-    }
-    DrawStickLeftArm(a, transform, shadow);
-
-    if (!shadow) {
-        BindColor(a);
-    }
-
-    DrawStickEyes(a, transform, false);
-
-    if (!shadow) {
-        BindOutlineColor(a);
-        DrawArcherAttachments(a, transform, shadow);
-        BindColor(a);
-    }
-    DrawArcherAttachments(a, transform, shadow);
+    DrawStick(e, transform, shadow);
+    //DrawMesh(MESH_STICK_HAT_COWBOY, transform, e->animator, BONE_STICK_HAT);
 }
 
 void DrawArcher(Entity* e, const Mat3& transform) {
+    BindDepth(2.0f - (e->position.y) * 2);
     BindMaterial(g_game.material);
+    BindTeamColor(static_cast<UnitEntity*>(e)->team);
     DrawArcherInternal(e, transform, false);
+}
+
+void DrawArcherShadow(Entity* e, const Mat3& transform) {
+    ArcherEntity* a = CastArcher(e);
+    DrawArcherInternal(a, transform, true);
 }
 
 static void UpdateArcherDead(Entity* e) {
@@ -127,20 +48,13 @@ static void KillArcher(Entity* e, DamageType damage_type) {
     // Free(e);
 }
 
-
-void DrawArcherShadow(Entity* e, const Mat3& transform) {
-    ArcherEntity* a = CastArcher(e);
-    DrawArcherInternal(a, transform, true);
-}
-
 struct FindArcherTargetArgs {
     ArcherEntity* a;
     UnitEntity* target;
     float target_distance;
 };
 
-static bool FindArcherTarget(UnitEntity* u, void* user_data)
-{
+static bool FindArcherTarget(UnitEntity* u, void* user_data) {
     assert(u);
     assert(user_data);
 

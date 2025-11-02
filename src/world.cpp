@@ -21,7 +21,7 @@ void DrawGrid(Camera* camera) {
     float pixels_per_world_unit = screen_size.y / world_height;
     float line_thickness = 1.0f / pixels_per_world_unit;
 
-    BindDepth(-9.0f);
+    BindDepth(-39.0f);
     BindColor(GRID_COLOR);
     BindMaterial(g_game.material);
 
