@@ -137,7 +137,7 @@ static bool TryPlaceUnit(const Vec2& position, float size) {
         return true;
 
     float distance = Distance(XY(u->position), position);
-    return distance - size > 0.0f;
+    return distance - size - u->size > 0.0f;
 }
 
 static int GetEditorUnitIndex(EditorUnit* editor_unit) {

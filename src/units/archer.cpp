@@ -8,7 +8,7 @@ constexpr float ARCHER_COOLDOWN_MIN = 1.4f;
 constexpr float ARCHER_COOLDOWN_MAX = 1.6f;
 constexpr float ARCHER_DAMAGE = 0.75f;
 constexpr float ARCHER_HEALTH = 5.0f;
-constexpr float ARCHER_SIZE = .85f;
+constexpr float ARCHER_SIZE = .5f;
 
 inline ArcherEntity* CastArcher(Entity* e) {
     assert(e && e->type == ENTITY_TYPE_UNIT);
@@ -45,7 +45,7 @@ static void KillArcher(Entity* e, DamageType damage_type) {
     HandleUnitDeath(u, damage_type);
     //Play(u->animator, ANIMATION_STICK_DEATH, 0.5f, false);
     UpdateArcherDead(e);
-    // Free(e);
+     Free(e);
 }
 
 struct FindArcherTargetArgs {
@@ -82,19 +82,29 @@ void UpdateArcher(Entity* e) {
         return;
 
     Vec2 avoid = {};
-    if (args.target_distance > ARCHER_RANGE) {
+    float avoid_strength = GetAvoidVelocity(a, &avoid);
+
+    // Use a threshold to prevent ping-ponging: only prioritize avoidance if strength is significant
+    constexpr float AVOID_THRESHOLD = 0.3f;
+
+    if (args.target_distance > ARCHER_RANGE || avoid_strength > AVOID_THRESHOLD) {
         if (a->animator.animation != ANIMATION_STICK_RUN)
             Play(a->animator, ANIMATION_STICK_RUN, 1.0f, true);
-
-        TryGetAvoidVelocity(a, &avoid);
-
-        MoveTowards(a, XY(args.target->position), ARCHER_SPEED, avoid);
+        // Use weight of 2.0 to give avoidance more influence over target direction
+        MoveTowards(a, XY(args.target->position), ARCHER_SPEED, avoid, 2.0f);
 
         DebugLine(XY(a->position), XY(a->position) + avoid * ARCHER_SPEED, COLOR_RED);
         DebugLine(XY(a->position), XY(a->position) + Normalize(XY(args.target->position) - XY(a->position)) * ARCHER_SPEED, COLOR_GREEN);
 
         a->cooldown = RandomFloat(ARCHER_COOLDOWN_MIN, ARCHER_COOLDOWN_MAX);
     } else {
+        // In range - attack mode
+        // Apply subtle avoidance adjustments even while attacking to maintain spacing
+        if (avoid_strength > 0.05f) {
+            // Move with weak avoidance, prioritizing staying in place (move toward current position)
+            MoveTowards(a, XY(a->position), ARCHER_SPEED * 0.3f, avoid, 1.0f);
+        }
+
         a->cooldown -= GetGameFrameTime();
         if (a->cooldown <= 0.0f) {
             a->cooldown = RandomFloat(ARCHER_COOLDOWN_MIN, ARCHER_COOLDOWN_MAX);
@@ -107,13 +117,9 @@ void UpdateArcher(Entity* e) {
                 Vec3{hand.x, hand.y, 0.0f},
                 XY(args.target->position),
                 4.0f);
+        }
 
-        // } else if (TryGetAvoidVelocity(a, &avoid)) {
-        //     if (a->animator.animation != ANIMATION_STICK_RUN)
-        //         Play(a->animator, ANIMATION_STICK_RUN, 1.0f, true);
-        //
-        //     MoveTowards(a, XY(a->position), ARCHER_SPEED, avoid);
-        } else if (!IsPlaying(a->animator) || (a->animator.animation != ANIMATION_ARCHER_IDLE && a->animator.loop)) {
+        if (!IsPlaying(a->animator) || (a->animator.animation != ANIMATION_ARCHER_IDLE && a->animator.loop)) {
             Play(a->animator, ANIMATION_ARCHER_IDLE, 1.0f, true);
         }
     }

@@ -84,9 +84,15 @@ UnitEntity* FindClosestUnit(const Vec2& position) {
     return args.target;
 }
 
-void MoveTowards(UnitEntity* unit, const Vec2& target_position, float speed, const Vec2& avoid_velocity) {
-    Vec2 direction = Normalize(target_position - XY(unit->position)) + avoid_velocity;
-    Vec2 move = direction * speed * GetGameFrameTime();
+void MoveTowards(UnitEntity* unit, const Vec2& target_position, float speed, const Vec2& avoid_velocity, float avoid_weight) {
+    // Combine target direction with weighted avoidance velocity, then normalize
+    Vec2 target_direction = Normalize(target_position - XY(unit->position));
+    Vec2 combined_direction = target_direction + (avoid_velocity * avoid_weight);
+
+    // Normalize to maintain consistent speed
+    Vec2 normalized_direction = Normalize(combined_direction);
+
+    Vec2 move = normalized_direction * speed * GetGameFrameTime();
     unit->position.x += move.x;
     unit->position.y += move.y;
 }
@@ -112,14 +118,23 @@ static bool EnumerateAvoidVelocity(UnitEntity* u, void* user_data) {
     if (u == args->unit || u->health <= 0.0f)
         return true;
 
-    float distance_sqr = DistanceSqr(XY(args->unit->position), XY(u->position));
-    if (distance_sqr > u->size * u->size + args->unit->size * args->unit->size)
+    float avoidance_radius = (u->size + args->unit->size);
+    float distance = Distance(XY(args->unit->position), XY(u->position));
+
+    if (distance > avoidance_radius)
         return true;
 
-    float distance_max = u->size + args->unit->size;
-    float distance = Distance(XY(args->unit->position), XY(u->position));
+    // Avoid division by zero if units are exactly on top of each other
+    if (distance < 0.01f)
+        distance = 0.01f;
+
     Vec2 direction = Normalize(XY(args->unit->position) - XY(u->position));
-    float strength = (distance_max - distance) / distance_max;
+
+    // Use quadratic falloff for more aggressive avoidance when close
+    float normalized_distance = distance / avoidance_radius;
+    float strength = (1.0f - normalized_distance) * (1.0f - normalized_distance);
+
+    // Accumulate forces (don't average yet)
     args->velocity += direction * strength;
     args->count++;
 
@@ -127,7 +142,7 @@ static bool EnumerateAvoidVelocity(UnitEntity* u, void* user_data) {
 }
 
 
-bool TryGetAvoidVelocity(UnitEntity* u, Vec2* out_velocity) {
+float GetAvoidVelocity(UnitEntity* u, Vec2* out_velocity) {
     AvoidVelocityArgs args = {
         .unit = u,
         .velocity = VEC2_ZERO,
@@ -136,10 +151,14 @@ bool TryGetAvoidVelocity(UnitEntity* u, Vec2* out_velocity) {
     EnumerateUnits(u->team, EnumerateAvoidVelocity, &args);
     if (args.count == 0) {
         *out_velocity = VEC2_ZERO;
-        return false;
+        return 0.0f;
     }
 
-    *out_velocity = Normalize(args.velocity / (float)args.count);
+    // Return the magnitude (strength) of avoidance needed
+    float strength = Length(args.velocity);
 
-    return true;
+    // Normalize for direction
+    *out_velocity = Normalize(args.velocity);
+
+    return strength;
 }
