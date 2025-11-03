@@ -38,6 +38,9 @@ struct UnitEntity : Entity {
 
 struct ArcherEntity : UnitEntity {
     float cooldown;
+    Vec2 last_position;
+    float stuck_timer;
+    float lateral_offset;
 };
 
 struct KnightEntity : UnitEntity {

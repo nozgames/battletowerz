@@ -90,8 +90,40 @@ void UpdateArcher(Entity* e) {
     if (args.target_distance > ARCHER_RANGE || avoid_strength > AVOID_THRESHOLD) {
         if (a->animator.animation != ANIMATION_STICK_RUN)
             Play(a->animator, ANIMATION_STICK_RUN, 1.0f, true);
+
+        // Detect if unit is blocked (making little progress toward target)
+        Vec2 current_pos = XY(a->position);
+        float distance_moved = Distance(current_pos, a->last_position);
+        float dt = GetGameFrameTime();
+
+        // If moving very slowly, increment stuck timer
+        constexpr float MIN_PROGRESS = 0.1f;
+        if (distance_moved < MIN_PROGRESS * dt) {
+            a->stuck_timer += dt;
+        } else {
+            a->stuck_timer = 0.0f;
+            a->lateral_offset = 0.0f; // Reset offset when making progress
+        }
+
+        // If stuck for more than 0.5 seconds, pick a lateral offset to path around
+        if (a->stuck_timer > 0.5f && a->lateral_offset == 0.0f) {
+            // Randomly pick left or right to avoid predictable behavior
+            a->lateral_offset = (RandomFloat(0.0f, 1.0f) > 0.5f) ? 2.0f : -2.0f;
+        }
+
+        // Calculate target with lateral offset if stuck
+        Vec2 target_pos = XY(args.target->position);
+        if (a->lateral_offset != 0.0f) {
+            // Get perpendicular direction to target
+            Vec2 to_target = Normalize(target_pos - current_pos);
+            Vec2 perpendicular = Vec2{-to_target.y, to_target.x};
+            target_pos = current_pos + (to_target * 3.0f) + (perpendicular * a->lateral_offset);
+        }
+
         // Use weight of 2.0 to give avoidance more influence over target direction
-        MoveTowards(a, XY(args.target->position), ARCHER_SPEED, avoid, 2.0f);
+        MoveTowards(a, target_pos, ARCHER_SPEED, avoid, 2.0f);
+
+        a->last_position = current_pos;
 
         DebugLine(XY(a->position), XY(a->position) + avoid * ARCHER_SPEED, COLOR_RED);
         DebugLine(XY(a->position), XY(a->position) + Normalize(XY(args.target->position) - XY(a->position)) * ARCHER_SPEED, COLOR_GREEN);
@@ -139,6 +171,9 @@ ArcherEntity* CreateArcher(Team team, const Vec3& position) {
     a->health = ARCHER_HEALTH;
     a->size = ARCHER_SIZE;
     a->cooldown = RandomFloat(ARCHER_COOLDOWN_MIN, ARCHER_COOLDOWN_MAX);
+    a->last_position = XY(position);
+    a->stuck_timer = 0.0f;
+    a->lateral_offset = 0.0f;
 
     Init(a->animator, SKELETON_STICK);
     Play(a->animator, ANIMATION_ARCHER_IDLE, 1.0f, true);
