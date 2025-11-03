@@ -84,8 +84,8 @@ UnitEntity* FindClosestUnit(const Vec2& position) {
     return args.target;
 }
 
-void MoveTowards(UnitEntity* unit, const Vec2& target_position, float speed) {
-    Vec2 direction = Normalize(target_position - XY(unit->position));
+void MoveTowards(UnitEntity* unit, const Vec2& target_position, float speed, const Vec2& avoid_velocity) {
+    Vec2 direction = Normalize(target_position - XY(unit->position)) + avoid_velocity;
     Vec2 move = direction * speed * GetGameFrameTime();
     unit->position.x += move.x;
     unit->position.y += move.y;
@@ -97,4 +97,49 @@ UnitEntity* CreateUnit(UnitType type, Team team, const EntityVtable& vtable, con
     u->team = team;
     u->unit_type = type;
     return u;
+}
+
+struct AvoidVelocityArgs {
+    UnitEntity* unit;
+    Vec2 velocity;
+    int count;
+};
+
+static bool EnumerateAvoidVelocity(UnitEntity* u, void* user_data) {
+    assert(u);
+    assert(user_data);
+    AvoidVelocityArgs* args = static_cast<AvoidVelocityArgs*>(user_data);
+    if (u == args->unit || u->health <= 0.0f)
+        return true;
+
+    float distance_sqr = DistanceSqr(XY(args->unit->position), XY(u->position));
+    if (distance_sqr > u->size * u->size + args->unit->size * args->unit->size)
+        return true;
+
+    float distance_max = u->size + args->unit->size;
+    float distance = Distance(XY(args->unit->position), XY(u->position));
+    Vec2 direction = Normalize(XY(args->unit->position) - XY(u->position));
+    float strength = (distance_max - distance) / distance_max;
+    args->velocity += direction * strength;
+    args->count++;
+
+    return true;
+}
+
+
+bool TryGetAvoidVelocity(UnitEntity* u, Vec2* out_velocity) {
+    AvoidVelocityArgs args = {
+        .unit = u,
+        .velocity = VEC2_ZERO,
+        .count = 0
+    };;
+    EnumerateUnits(u->team, EnumerateAvoidVelocity, &args);
+    if (args.count == 0) {
+        *out_velocity = VEC2_ZERO;
+        return false;
+    }
+
+    *out_velocity = Normalize(args.velocity / (float)args.count);
+
+    return true;
 }

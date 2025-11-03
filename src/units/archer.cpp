@@ -8,7 +8,7 @@ constexpr float ARCHER_COOLDOWN_MIN = 1.4f;
 constexpr float ARCHER_COOLDOWN_MAX = 1.6f;
 constexpr float ARCHER_DAMAGE = 0.75f;
 constexpr float ARCHER_HEALTH = 5.0f;
-constexpr float ARCHER_SIZE = 0.35f;
+constexpr float ARCHER_SIZE = .85f;
 
 inline ArcherEntity* CastArcher(Entity* e) {
     assert(e && e->type == ENTITY_TYPE_UNIT);
@@ -19,11 +19,11 @@ inline ArcherEntity* CastArcher(Entity* e) {
 
 static void DrawArcherInternal(Entity* e, const Mat3& transform, bool shadow) {
     DrawStick(e, transform, shadow);
-    //DrawMesh(MESH_STICK_HAT_COWBOY, transform, e->animator, BONE_STICK_HAT);
+    DrawMesh(MESH_STICK_BOW, transform, e->animator, BONE_STICK_ITEM_B);
 }
 
 void DrawArcher(Entity* e, const Mat3& transform) {
-    BindDepth(2.0f - (e->position.y) * 2);
+    BindDepth(0.0f - (e->position.y) * 5);
     BindMaterial(g_game.material);
     BindTeamColor(static_cast<UnitEntity*>(e)->team);
     DrawArcherInternal(e, transform, false);
@@ -81,11 +81,18 @@ void UpdateArcher(Entity* e) {
     if (!args.target)
         return;
 
+    Vec2 avoid = {};
     if (args.target_distance > ARCHER_RANGE) {
         if (a->animator.animation != ANIMATION_STICK_RUN)
             Play(a->animator, ANIMATION_STICK_RUN, 1.0f, true);
 
-        MoveTowards(a, XY(args.target->position), ARCHER_SPEED);
+        TryGetAvoidVelocity(a, &avoid);
+
+        MoveTowards(a, XY(args.target->position), ARCHER_SPEED, avoid);
+
+        DebugLine(XY(a->position), XY(a->position) + avoid * ARCHER_SPEED, COLOR_RED);
+        DebugLine(XY(a->position), XY(a->position) + Normalize(XY(args.target->position) - XY(a->position)) * ARCHER_SPEED, COLOR_GREEN);
+
         a->cooldown = RandomFloat(ARCHER_COOLDOWN_MIN, ARCHER_COOLDOWN_MAX);
     } else {
         a->cooldown -= GetGameFrameTime();
@@ -101,16 +108,20 @@ void UpdateArcher(Entity* e) {
                 XY(args.target->position),
                 4.0f);
 
-        } else if (!IsPlaying(a->animator) || (a->animator.animation != ANIMATION_STICK_IDLE && a->animator.loop)) {
-            Play(a->animator, ANIMATION_STICK_IDLE, 1.0f, true);
+        // } else if (TryGetAvoidVelocity(a, &avoid)) {
+        //     if (a->animator.animation != ANIMATION_STICK_RUN)
+        //         Play(a->animator, ANIMATION_STICK_RUN, 1.0f, true);
+        //
+        //     MoveTowards(a, XY(a->position), ARCHER_SPEED, avoid);
+        } else if (!IsPlaying(a->animator) || (a->animator.animation != ANIMATION_ARCHER_IDLE && a->animator.loop)) {
+            Play(a->animator, ANIMATION_ARCHER_IDLE, 1.0f, true);
         }
     }
 
     Update(e->animator, GetGameTimeScale() * 0.5f);
 }
 
-ArcherEntity* CreateArcher(Team team, const Vec3& position)
-{
+ArcherEntity* CreateArcher(Team team, const Vec3& position) {
     static EntityVtable vtable = {
         .update = UpdateArcher,
         .draw = DrawArcher,
@@ -124,7 +135,7 @@ ArcherEntity* CreateArcher(Team team, const Vec3& position)
     a->cooldown = RandomFloat(ARCHER_COOLDOWN_MIN, ARCHER_COOLDOWN_MAX);
 
     Init(a->animator, SKELETON_STICK);
-    Play(a->animator, ANIMATION_STICK_IDLE, 1.0f, true);
+    Play(a->animator, ANIMATION_ARCHER_IDLE, 1.0f, true);
     return a;
 }
 

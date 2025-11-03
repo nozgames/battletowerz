@@ -76,7 +76,7 @@ extern void EnumerateUnits(Team team, bool (*callback)(UnitEntity* unit, void* u
 extern void Damage(UnitEntity* u, DamageType damage_type, float amount);
 extern UnitEntity* FindClosestEnemy(UnitEntity* unit);
 extern UnitEntity* FindClosestUnit(const Vec2& position);
-extern void MoveTowards(UnitEntity* unit, const Vec2& target_position, float speed);
+extern void MoveTowards(UnitEntity* unit, const Vec2& target_position, float speed, const Vec2& avoid_velocity=VEC2_ZERO);
 
 // @team
 inline Vec2 GetTeamDirection(Team team) {
@@ -114,6 +114,8 @@ inline Team GetOppositeTeam(Team team) {
 
 extern void BindTeamColor(Team team);
 
+// @unit
+extern bool TryGetAvoidVelocity(UnitEntity* u, Vec2* out_velocity);
 
 // @stick
 extern void DrawStick(Entity* e, const Mat3& transform, bool shadow);

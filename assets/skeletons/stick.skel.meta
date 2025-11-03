@@ -1,13 +1,14 @@
 [skin]
 stick_body = 3
 stick_body_b = 2
+stick_leg_u_r = 14
 stick_neck = 4
 stick_arm_u_l = 6
 stick_arm_l_l = 8
 stick_hand_l = 10
-stick_leg_u_r = 14
 stick_leg_u_l = 12
 stick_leg_l_r = 15
+stick_bow = 19
 stick_leg_l_l = 13
 stick_head = 5
 stick_hip = 1

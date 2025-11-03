@@ -1,14 +1,10 @@
+- [ ] Blend animations when switching animatinos
+- [ ] Rag doll
+- [ ] Fix depth overlap issues
 - [ ] Gradient from top to bottom of units 
 - 
-- [ ] Game over UI
-  - [ ] Slow down time and then pause
-  - [ ] Letter box screen by adding black bars to top and bottom 
-  - [ ] Show "victory" text at top
-  - [ ] Show controls at the bottom
-  - [ ] Allow camera control
-  - [ ] Sound when game ends
+- [ ] Sound when game ends
 - [ ] WASD to control camera pan
-- [ ] Drag left button to place units (prevent overlap)
 - [ ] Drag right button to remove units (prevent overlap)
 - [ ] Unit separation logic based on size to prevent overlap
 - [ ] desaturate dead units over time
