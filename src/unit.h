@@ -34,13 +34,11 @@ struct UnitEntity : Entity {
     Team team;
     float health;
     float size;
+    Vec2 velocity;
 };
 
 struct ArcherEntity : UnitEntity {
     float cooldown;
-    Vec2 last_position;
-    float stuck_timer;
-    float lateral_offset;
 };
 
 struct KnightEntity : UnitEntity {
@@ -117,8 +115,11 @@ inline Team GetOppositeTeam(Team team) {
 
 extern void BindTeamColor(Team team);
 
-// @unit
+// @unit (legacy simple avoidance)
 extern float GetAvoidVelocity(UnitEntity* u, Vec2* out_velocity);
+
+// @unit (RVO-based avoidance)
+extern Vec2 ComputeRVOVelocityForUnit(UnitEntity* u, const Vec2& preferred_velocity, float max_speed);
 
 // @stick
 extern void DrawStick(Entity* e, const Mat3& transform, bool shadow);

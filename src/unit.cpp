@@ -2,6 +2,8 @@
 //  Battle TowerZ - Copyright(c) 2025 NoZ Games, LLC
 //
 
+#include "rvo.h"
+
 struct UnitCallbackArgs {
     Team team;
     void* user_data;
@@ -102,6 +104,7 @@ UnitEntity* CreateUnit(UnitType type, Team team, const EntityVtable& vtable, con
     u->state = UNIT_STATE_IDLE;
     u->team = team;
     u->unit_type = type;
+    u->velocity = VEC2_ZERO;
     return u;
 }
 
@@ -161,4 +164,58 @@ float GetAvoidVelocity(UnitEntity* u, Vec2* out_velocity) {
     *out_velocity = Normalize(args.velocity);
 
     return strength;
+}
+
+struct CollectRVOAgentsArgs {
+    UnitEntity* unit;
+    RVOAgent agents[64];
+    int count;
+};
+
+static bool CollectRVOAgent(UnitEntity* u, void* user_data) {
+    assert(u);
+    assert(user_data);
+    CollectRVOAgentsArgs* args = static_cast<CollectRVOAgentsArgs*>(user_data);
+
+    if (u == args->unit || u->health <= 0.0f)
+        return true;
+
+    // Only consider nearby units (within 5 units)
+    float distance_sq = DistanceSqr(XY(args->unit->position), XY(u->position));
+    if (distance_sq > 25.0f)
+        return true;
+
+    if (args->count >= 64)
+        return true;
+
+    // Add this unit as an obstacle
+    args->agents[args->count].position = XY(u->position);
+    args->agents[args->count].velocity = u->velocity;
+    args->agents[args->count].radius = u->size;
+    args->agents[args->count].max_speed = 1.0f;
+    args->count++;
+
+    return true;
+}
+
+Vec2 ComputeRVOVelocityForUnit(UnitEntity* u, const Vec2& preferred_velocity, float max_speed) {
+    // Collect nearby units as obstacles
+    CollectRVOAgentsArgs args = {
+        .unit = u,
+        .agents = {},
+        .count = 0
+    };
+    EnumerateUnits(u->team, CollectRVOAgent, &args);
+
+    // Set up the agent
+    RVOAgent agent = {
+        .position = XY(u->position),
+        .velocity = u->velocity,
+        .preferred_velocity = preferred_velocity,
+        .radius = u->size,
+        .max_speed = max_speed
+    };
+
+    // Compute collision-free velocity
+    return ComputeRVOVelocity(agent, args.agents, args.count, 1.5f);
 }

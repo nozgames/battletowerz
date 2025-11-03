@@ -21,6 +21,7 @@ set(SOURCE_FILES
     src/menu.cpp
     src/world.cpp
     src/editor.cpp
+    src/rvo.cpp
     src/projectiles/arrow.cpp
     src/projectiles/bullet.cpp
     src/units/stick.cpp
