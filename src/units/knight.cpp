@@ -88,8 +88,8 @@ void UpdateArrow(Entity* e)
         MoveTowards(u, XY(args.target->position), KNIGHT_SPEED);
         u->cooldown = KNIGHT_COOLDOWN;
 
-        if (u->state != UNIT_STATE_MOVING) {
-            u->state = UNIT_STATE_MOVING;
+        if (u->state != UNIT_STATE_MOVE) {
+            u->state = UNIT_STATE_MOVE;
             //Play(u->animator, ANIMATION_UNIT_KNIGHT_RUN, 1.0f, true);
         }
 

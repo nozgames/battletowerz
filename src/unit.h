@@ -4,6 +4,8 @@
 
 #pragma once
 
+struct UnitInfo;
+
 enum Team {
     TEAM_UNKNOWN=-1,
     TEAM_RED,
@@ -22,7 +24,7 @@ enum UnitType {
 
 enum UnitState {
     UNIT_STATE_IDLE,
-    UNIT_STATE_MOVING,
+    UNIT_STATE_MOVE,
     UNIT_STATE_ATTACKING,
     UNIT_STATE_DEAD,
     UNIT_STATE_COUNT
@@ -34,7 +36,12 @@ struct UnitEntity : Entity {
     Team team;
     float health;
     float size;
+    float acceleration; // How quickly unit reaches desired velocity
     Vec2 velocity;
+    Vec2 desired_velocity;
+    EntityHandle target;
+    const UnitInfo* info;
+    float target_switch_cooldown;
 };
 
 struct ArcherEntity : UnitEntity {
@@ -65,8 +72,15 @@ struct UnitInfo {
     UnitType type;
     const Name* name;
     float size;
+    float range;
+    float speed;
     UnitCreateFunc create_func;
     Mesh* icon_mesh;
+
+    Animation* idle_animation;
+    Animation* move_animation;
+    Animation* shuffle_animation;
+    Animation* attack_animation;
 };
 
 // @unit
@@ -78,6 +92,7 @@ extern void Damage(UnitEntity* u, DamageType damage_type, float amount);
 extern UnitEntity* FindClosestEnemy(UnitEntity* unit);
 extern UnitEntity* FindClosestUnit(const Vec2& position);
 extern void MoveTowards(UnitEntity* unit, const Vec2& target_position, float speed, const Vec2& avoid_velocity=VEC2_ZERO, float avoid_weight=1.0f);
+inline UnitEntity* GetUnit(const EntityHandle& handle) { return (UnitEntity*)GetEntity(handle); }
 
 // @team
 inline Vec2 GetTeamDirection(Team team) {
@@ -115,11 +130,11 @@ inline Team GetOppositeTeam(Team team) {
 
 extern void BindTeamColor(Team team);
 
-// @unit (legacy simple avoidance)
-extern float GetAvoidVelocity(UnitEntity* u, Vec2* out_velocity);
-
-// @unit (RVO-based avoidance)
+// @unit
+extern void SetState(UnitEntity* u, UnitState new_state);
 extern Vec2 ComputeRVOVelocityForUnit(UnitEntity* u, const Vec2& preferred_velocity, float max_speed);
+extern void ApplyImpulse(UnitEntity* u, const Vec2& impulse);
+extern void UpdateUnit(UnitEntity* u);
 
 // @stick
 extern void DrawStick(Entity* e, const Mat3& transform, bool shadow);

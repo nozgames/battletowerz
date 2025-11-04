@@ -6,7 +6,6 @@
 
 #include "rvo.h"
 
-static inline float Sqr(float x) { return x * x; }
 
 Vec2 ComputeRVOVelocity(
     const RVOAgent& agent,

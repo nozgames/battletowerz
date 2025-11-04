@@ -33,7 +33,24 @@ struct Entity {
     float depth;
     float rotation;
     Animator animator;
+    uint32_t generation;
 };
+
+struct EntityHandle {
+    uint32_t index;
+    uint32_t generation;
+
+    explicit operator bool () const;
+};
+
+// @entity_handle
+extern Entity* GetEntity(const EntityHandle& handle);
+extern EntityHandle GetHandle(Entity* entity);
+
+inline EntityHandle::operator bool() const{
+    return GetEntity(*this) != nullptr;
+}
+
 
 #include "unit.h"
 #include "projectile.h"
@@ -49,3 +66,4 @@ extern Entity* CreateEntity(EntityType type, const EntityVtable& vtable, const V
 extern void UpdateAnimator(Entity* entity);
 extern void DestroyAllEntities();
 inline Vec2 WorldToScreen(const Vec3& pos) { return XY(pos) + Vec2{0.0f, pos.z}; }
+
