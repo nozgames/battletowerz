@@ -8,16 +8,16 @@ constexpr float ARCHER_COOLDOWN_MIN = 1.4f;
 constexpr float ARCHER_COOLDOWN_MAX = 1.6f;
 constexpr float ARCHER_DAMAGE = 0.75f;
 constexpr float ARCHER_HEALTH = 5.0f;
-constexpr float ARCHER_SIZE = .5f;
+constexpr float ARCHER_SIZE = .2f;
 
 inline ArcherEntity* CastArcher(Entity* e) {
     assert(e && e->type == ENTITY_TYPE_UNIT);
     ArcherEntity* a = static_cast<ArcherEntity*>(e);
-    assert(a->unit_type == UNIT_TYPE_ARCHER);
+    //assert(a->unit_type == UNIT_TYPE_ARCHER);
     return a;
 }
 
-static void DrawArcherInternal(Entity* e, const Mat3& transform, bool shadow) {
+void DrawArcherInternal(Entity* e, const Mat3& transform, bool shadow) {
     DrawStick(e, transform, shadow);
     DrawMesh(MESH_STICK_BOW, transform, e->animator, BONE_STICK_ITEM_B);
 }
@@ -27,6 +27,8 @@ void DrawArcher(Entity* e, const Mat3& transform) {
     BindMaterial(g_game.material);
     BindTeamColor(static_cast<UnitEntity*>(e)->team);
     DrawArcherInternal(e, transform, false);
+
+    DrawGizmos(static_cast<UnitEntity*>(e), transform);
 }
 
 void DrawArcherShadow(Entity* e, const Mat3& transform) {
@@ -63,7 +65,7 @@ void UpdateArcher(Entity* e) {
     }
 
     // Handle attacking when in attacking state
-    if (a->state == UNIT_STATE_ATTACKING && a->target) {
+    if (a->state == UNIT_STATE_ATTACK && a->target) {
         a->cooldown -= GetGameFrameTime();
         if (a->cooldown <= 0.0f) {
             a->cooldown = RandomFloat(ARCHER_COOLDOWN_MIN, ARCHER_COOLDOWN_MAX);
@@ -99,7 +101,6 @@ ArcherEntity* CreateArcher(Team team, const Vec3& position) {
     ArcherEntity* a = static_cast<ArcherEntity*>(CreateUnit(UNIT_TYPE_ARCHER, team, vtable, position, 0.0f, {GetTeamDirection(team).x, 1.0f}));
     a->health = ARCHER_HEALTH;
     a->size = ARCHER_SIZE;
-    a->acceleration = 20.0f; // How quickly archer reaches desired velocity
     a->cooldown = RandomFloat(ARCHER_COOLDOWN_MIN, ARCHER_COOLDOWN_MAX);
 
     Init(a->animator, SKELETON_STICK);
@@ -115,6 +116,41 @@ void InitArcherUnit() {
         .range = ARCHER_RANGE,
         .speed = ARCHER_SPEED,
         .create_func = (UnitCreateFunc)CreateArcher,
+        .icon_mesh = MESH_COWBOY_ICON,
+        .idle_animation = ANIMATION_ARCHER_IDLE,
+        .move_animation = ANIMATION_STICK_RUN,
+        .shuffle_animation = ANIMATION_ARCHER_SHUFFLE,
+        .attack_animation = ANIMATION_ARCHER_ATTACK,
+        .reload_animation = ANIMATION_ARCHER_RELOAD,
+    });
+}
+
+ArcherEntity* CreateArcher2(Team team, const Vec3& position) {
+    static EntityVtable vtable = {
+        .update = UpdateArcher,
+        .draw = DrawArcher,
+        .draw_shadow = DrawArcherShadow,
+        .death = KillArcher
+    };
+
+    ArcherEntity* a = static_cast<ArcherEntity*>(CreateUnit(UNIT_TYPE_COWBOY, team, vtable, position, 0.0f, {GetTeamDirection(team).x, 1.0f}));
+    a->health = ARCHER_HEALTH;
+    a->size = ARCHER_SIZE;
+    a->cooldown = RandomFloat(ARCHER_COOLDOWN_MIN, ARCHER_COOLDOWN_MAX);
+
+    Init(a->animator, SKELETON_STICK);
+    Play(a->animator, ANIMATION_ARCHER_IDLE, 1.0f, true);
+    return a;
+}
+
+void InitCowboyUnit() {
+    InitUnitInfo({
+        .type = UNIT_TYPE_COWBOY,
+        .name = GetName("Cowboy"),
+        .size = ARCHER_SIZE,
+        .range = 1.0f,
+        .speed = ARCHER_SPEED,
+        .create_func = (UnitCreateFunc)CreateArcher2,
         .icon_mesh = MESH_COWBOY_ICON,
         .idle_animation = ANIMATION_ARCHER_IDLE,
         .move_animation = ANIMATION_STICK_RUN,

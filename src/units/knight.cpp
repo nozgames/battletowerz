@@ -95,7 +95,7 @@ void UpdateArrow(Entity* e)
 
     } else if (u->cooldown <= 0.0f) {
         u->cooldown = KNIGHT_COOLDOWN;
-        u->state = UNIT_STATE_ATTACKING;
+        u->state = UNIT_STATE_ATTACK;
         Damage(args.target, DAMAGE_TYPE_PHYSICAL, KNIGHT_DAMAGE);
         Play(VFX_ARROW_HIT, WorldToScreen(args.target->position));
         //Play(u->animator, ANIMATION_UNIT_KNIGHT_ATTACK, 1.0f, false);

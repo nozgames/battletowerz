@@ -1,4 +1,4 @@
-- [ ] Blend animations when switching animatinos
+- [ ] attack state
 - [ ] Rag doll
 - [ ] Fix depth overlap issues
 - [ ] Gradient from top to bottom of units 

@@ -126,30 +126,3 @@ void KillCowboy(Entity* e, DamageType damage_type) {
 }
 
 
-CowboyEntity* CreateCowboy(Team team, const Vec3& position) {
-    static EntityVtable vtable = {
-        .update = UpdateCowboy,
-        .draw = DrawCowboy,
-        .draw_shadow = DrawCowboyShadow,
-        .death = KillCowboy
-    };
-
-    CowboyEntity* a = static_cast<CowboyEntity*>(CreateUnit(UNIT_TYPE_COWBOY, team, vtable, position, 0.0f, {GetTeamDirection(team).x, 1.0f}));
-    a->health = COWBOY_HEALTH;
-    a->size = COWBOY_SIZE;
-    a->cooldown = RandomFloat(COWBOY_COOLDOWN_MIN, COWBOY_COOLDOWN_MAX);
-
-    // Init(a->animator, SKELETON_COWBOY);
-    // Play(a->animator, ANIMATION_COWBOY_IDLE, 1.0f, true);
-    return a;
-}
-
-void InitCowboyUnit() {
-    InitUnitInfo({
-        .type = UNIT_TYPE_COWBOY,
-        .name = GetName("Cowboy"),
-        .size = COWBOY_SIZE,
-        .create_func = (UnitCreateFunc)CreateCowboy,
-        .icon_mesh = MESH_COWBOY_ICON
-    });
-}

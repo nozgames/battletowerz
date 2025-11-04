@@ -25,7 +25,8 @@ enum UnitType {
 enum UnitState {
     UNIT_STATE_IDLE,
     UNIT_STATE_MOVE,
-    UNIT_STATE_ATTACKING,
+    UNIT_STATE_RELOAD,
+    UNIT_STATE_ATTACK,
     UNIT_STATE_DEAD,
     UNIT_STATE_COUNT
 };
@@ -36,7 +37,7 @@ struct UnitEntity : Entity {
     Team team;
     float health;
     float size;
-    float acceleration; // How quickly unit reaches desired velocity
+    float state_time;
     Vec2 velocity;
     Vec2 desired_velocity;
     EntityHandle target;
@@ -81,11 +82,12 @@ struct UnitInfo {
     Animation* move_animation;
     Animation* shuffle_animation;
     Animation* attack_animation;
+    Animation* reload_animation;
 };
 
 // @unit
 extern void InitUnitInfo(const UnitInfo& unit_info);
-
+extern void DrawGizmos(UnitEntity* u, const Mat3& transform);
 extern UnitEntity* CreateUnit(UnitType type, Team team, const EntityVtable& vtable, const Vec3& position = VEC3_ZERO, float rotation=0.0f, const Vec2& scale=VEC2_ONE);
 extern void EnumerateUnits(Team team, bool (*callback)(UnitEntity* unit, void* user_data), void* user_data);
 extern void Damage(UnitEntity* u, DamageType damage_type, float amount);

@@ -4,6 +4,10 @@
 
 #include "rvo.h"
 
+constexpr float UNIT_MIN_SPEED = 1.0f;
+constexpr float UNIT_SHUFFLE_SPEED = 0.1f;
+constexpr float UNIT_SHUFFLE_SPEED_SQR = UNIT_SHUFFLE_SPEED * UNIT_SHUFFLE_SPEED;
+
 struct UnitCallbackArgs {
     Team team;
     void* user_data;
@@ -163,41 +167,44 @@ Vec2 ComputeRVOVelocityForUnit(UnitEntity* u, const Vec2& preferred_velocity, fl
 }
 
 void ApplyImpulse(UnitEntity* u, const Vec2& impulse) {
-    // Directly add to velocity (for knockback, explosions, etc.)
     u->velocity.x += impulse.x;
     u->velocity.y += impulse.y;
 }
 
 static void UpdateVelocity(UnitEntity* u) {
-    float dt = GetGameFrameTime();
-    constexpr float FRICTION = 8.0f;
-
-    Vec2 velocity_error = u->desired_velocity - u->velocity;
-    u->velocity += velocity_error * u->acceleration * dt;
-    u->velocity *= expf(-FRICTION * dt);
-    u->position += ToVec3(u->velocity * dt);
-}
-
-static void UpdateMoveState(UnitEntity* u) {
     UnitEntity* target = GetUnit(u->target);
     if (target && DistanceSqr(XY(target->position), XY(u->position)) > u->info->range * u->info->range) {
         Vec2 desired_velocity = Normalize(XY(target->position) - XY(u->position)) * u->info->speed;
         u->desired_velocity = ComputeRVOVelocityForUnit(u, desired_velocity, u->info->speed);
     } else {
-        u->desired_velocity = VEC2_ZERO;
+        u->desired_velocity = ComputeRVOVelocityForUnit(u, VEC2_ZERO, u->info->speed);
     }
 
+    float dt = GetGameFrameTime();
+    u->velocity = u->desired_velocity;
+    float speed = Clamp(Length(u->velocity), 0.0f, u->info->speed);
+    //if (speed > 0.001f) {
+        speed = Max(UNIT_MIN_SPEED, speed);
+    //}
+    // if (speed < UNIT_MIN_SPEED) {
+    //     u->velocity = VEC2_ZERO;
+    // } else {
+        u->velocity = Normalize(u->velocity) * speed;
+//    }
+
+    u->position += ToVec3(u->velocity * dt);
+}
+
+static void UpdateMoveState(UnitEntity* u) {
     UpdateVelocity(u);
 
     // Determine which animation to play based on desired velocity speed
-    float speed_sqr = LengthSqr(u->desired_velocity);
-    constexpr float SHUFFLE_THRESHOLD = 0.5f;
-    constexpr float SHUFFLE_THRESHOLD_SQR = SHUFFLE_THRESHOLD * SHUFFLE_THRESHOLD;
+    float speed_sqr = LengthSqr(u->velocity);
 
     Animation* target_animation = nullptr;
-    if (speed_sqr > SHUFFLE_THRESHOLD_SQR) {
+    if (speed_sqr > UNIT_SHUFFLE_SPEED_SQR) {
         target_animation = u->info->move_animation;
-    } else if (speed_sqr > F32_EPSILON) {
+    } else if (speed_sqr >= UNIT_MIN_SPEED * UNIT_MIN_SPEED) {
         target_animation = u->info->shuffle_animation;
     } else {
         SetState(u, UNIT_STATE_IDLE);
@@ -223,18 +230,22 @@ static void UpdateIdleState(UnitEntity* u) {
         if (target_dist_sqr > desired_target_dist_sqr) {
             SetState(u, UNIT_STATE_MOVE);
             return;
+        } else {
+            SetState(u, UNIT_STATE_RELOAD);
+            return;
         }
     }
 
     // todo: attack
 }
 
+#if 0
 static void UpdateAttackingState(UnitEntity* u) {
     const UnitInfo* info = GetUnitInfo(u->unit_type);
 
     // Apply subtle RVO adjustments to maintain spacing
     Vec2 preferred_velocity = VEC2_ZERO;  // Prefer to stay in place
-    u->desired_velocity = ComputeRVOVelocityForUnit(u, preferred_velocity, u->acceleration * 0.3f);
+    u->desired_velocity = ComputeRVOVelocityForUnit(u, preferred_velocity, 0);
 
     // Apply physics
     UpdateVelocity(u);
@@ -258,6 +269,30 @@ static void UpdateAttackingState(UnitEntity* u) {
         Play(u->animator, info->idle_animation, 1.0f, true);
     }
 }
+#endif
+
+static void UpdateReloadState(UnitEntity* u) {
+    if (IsPlaying(u->animator))
+        return;
+
+    if (u->target) {
+        SetState(u, UNIT_STATE_ATTACK);
+        return;
+    }
+
+    SetState(u, UNIT_STATE_IDLE);
+}
+
+static void UpdateAttackState(UnitEntity* u) {
+    if (IsPlaying(u->animator))
+        return;
+
+    if (u->target) {
+        SetState(u, UNIT_STATE_RELOAD);
+    } else {
+        SetState(u, UNIT_STATE_IDLE);
+    }
+}
 
 static void SetIdleState(UnitEntity* u) {
     if (u->animator.animation != u->info->idle_animation)
@@ -268,13 +303,26 @@ static void SetMoveState(UnitEntity* e) {
     UpdateMoveState(e);
 }
 
+static void SetReloadState(UnitEntity* u) {
+    Play(u->animator, u->info->reload_animation, 1.0f, false);
+}
+
+static void SetAttackState(UnitEntity* u) {
+    Play(u->animator, u->info->attack_animation, 1.0f, false);
+}
+
 void SetState(UnitEntity* u, UnitState new_state) {
     u->state = new_state;
+    u->state_time = 0.0f;
 
     if (new_state == UNIT_STATE_IDLE)
         SetIdleState(u);
     else if (new_state == UNIT_STATE_MOVE)
         SetMoveState(u);
+    else if (new_state == UNIT_STATE_RELOAD)
+        SetReloadState(u);
+    else if (new_state == UNIT_STATE_ATTACK)
+        SetAttackState(u);
 }
 
 struct FindClosestEnemyArgs {
@@ -322,6 +370,25 @@ void UpdateUnit(UnitEntity* u) {
         UpdateIdleState(u);
     else if (u->state == UNIT_STATE_MOVE)
         UpdateMoveState(u);
-    else if (u->state == UNIT_STATE_ATTACKING)
-        UpdateAttackingState(u);
+    else if (u->state == UNIT_STATE_ATTACK)
+        UpdateAttackState(u);
+    else if (u->state == UNIT_STATE_RELOAD)
+        UpdateReloadState(u);
+}
+
+void DrawGizmos(UnitEntity* u, const Mat3& transform) {
+    BindColor(COLOR_WHITE);
+    BindDepth(GetApplicationTraits()->renderer.max_depth * 0.9f);
+    BindMaterial(g_game.material);
+    Mesh* state_mesh = nullptr;
+    if (u->state == UNIT_STATE_ATTACK) {
+        state_mesh = MESH_ICON_STATE_ATTACK;
+    } else if (u->state == UNIT_STATE_RELOAD) {
+        state_mesh = MESH_ICON_STATE_RELOAD;
+    } else if (u->state == UNIT_STATE_MOVE) {
+        state_mesh = MESH_ICON_STATE_MOVE;
+    }
+
+    if (state_mesh)
+        DrawMesh(state_mesh, transform * Translate(Vec2{0,1.1f}) * Scale(0.35f));
 }
