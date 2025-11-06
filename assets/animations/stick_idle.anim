@@ -21,6 +21,9 @@ b "hat"
 b "item_b"
 b "foot_f"
 b "foot_b"
+b "item_b2"
+b "item_b3"
+b "item_f"
 f
 h 3b 1 p -0.001799 0.007634
 h 3b 6 r 40.540581

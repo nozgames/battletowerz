@@ -21,6 +21,7 @@ Mesh* MESH_STICK_ARM_L_R = nullptr;
 Mesh* MESH_STICK_ARM_L_L = nullptr;
 Mesh* MESH_PROJECTILE_ARROW = nullptr;
 Mesh* MESH_ICON_STATE_RELOAD = nullptr;
+Mesh* MESH_ICON_STATE_MOVE = nullptr;
 Mesh* MESH_ICON_FIGHT = nullptr;
 Mesh* MESH_COWBOY_SPUR_B = nullptr;
 Mesh* MESH_COWBOY_ICON = nullptr;
@@ -28,7 +29,6 @@ Mesh* MESH_BULLET_CASING = nullptr;
 Mesh* MESH_BULLET = nullptr;
 Mesh* MESH_ICON_STATE_ATTACK = nullptr;
 Mesh* MESH_STICK_HAND_R = nullptr;
-Mesh* MESH_ICON_STATE_MOVE = nullptr;
 Mesh* MESH_WIZARD_HAT = nullptr;
 Mesh* MESH_WEAPON_BOW = nullptr;
 Mesh* MESH_TOWER_PLAYER_TEMP = nullptr;
@@ -57,6 +57,7 @@ Animation* ANIMATION_STICK_IDLE = nullptr;
 Animation* ANIMATION_ARCHER_SHUFFLE = nullptr;
 Animation* ANIMATION_ARCHER_RELOAD = nullptr;
 Animation* ANIMATION_ARCHER_IDLE = nullptr;
+Animation* ANIMATION_STICK_DEAD = nullptr;
 
 // @Sound
 Sound* SOUND_REVOLVER_FIRE_A = nullptr;
@@ -99,6 +100,9 @@ const Name* NAME_HAT = nullptr;
 const Name* NAME_ITEM_B = nullptr;
 const Name* NAME_FOOT_F = nullptr;
 const Name* NAME_FOOT_B = nullptr;
+const Name* NAME_ITEM_B2 = nullptr;
+const Name* NAME_ITEM_B3 = nullptr;
+const Name* NAME_ITEM_F = nullptr;
 
 // @path
 const Name* PATH_MESH_STICK_HAND_L = nullptr;
@@ -114,6 +118,7 @@ const Name* PATH_MESH_STICK_ARM_L_R = nullptr;
 const Name* PATH_MESH_STICK_ARM_L_L = nullptr;
 const Name* PATH_MESH_PROJECTILE_ARROW = nullptr;
 const Name* PATH_MESH_ICON_STATE_RELOAD = nullptr;
+const Name* PATH_MESH_ICON_STATE_MOVE = nullptr;
 const Name* PATH_ANIMATION_ARCHER_ATTACK = nullptr;
 const Name* PATH_MESH_ICON_FIGHT = nullptr;
 const Name* PATH_MESH_COWBOY_SPUR_B = nullptr;
@@ -140,7 +145,7 @@ const Name* PATH_TEXTURE_PALETTE = nullptr;
 const Name* PATH_SOUND_REVOLVER_FIRE_A = nullptr;
 const Name* PATH_SKELETON_STICK = nullptr;
 const Name* PATH_SHADER_VIGNETTE = nullptr;
-const Name* PATH_MESH_ICON_STATE_MOVE = nullptr;
+const Name* PATH_ANIMATION_STICK_DEAD = nullptr;
 const Name* PATH_MESH_WIZARD_HAT = nullptr;
 const Name* PATH_MESH_WEAPON_BOW = nullptr;
 const Name* PATH_MESH_TOWER_PLAYER_TEMP = nullptr;
@@ -181,6 +186,9 @@ bool LoadAssets(Allocator* allocator)
     NAME_ITEM_B = GetName("item_b");
     NAME_FOOT_F = GetName("foot_f");
     NAME_FOOT_B = GetName("foot_b");
+    NAME_ITEM_B2 = GetName("item_b2");
+    NAME_ITEM_B3 = GetName("item_b3");
+    NAME_ITEM_F = GetName("item_f");
 
     // @path
     PATH_MESH_STICK_HAND_L = GetName("stick_hand_l");
@@ -196,6 +204,7 @@ bool LoadAssets(Allocator* allocator)
     PATH_MESH_STICK_ARM_L_L = GetName("stick_arm_l_l");
     PATH_MESH_PROJECTILE_ARROW = GetName("projectile_arrow");
     PATH_MESH_ICON_STATE_RELOAD = GetName("icon_state_reload");
+    PATH_MESH_ICON_STATE_MOVE = GetName("icon_state_move");
     PATH_ANIMATION_ARCHER_ATTACK = GetName("archer_attack");
     PATH_MESH_ICON_FIGHT = GetName("icon_fight");
     PATH_MESH_COWBOY_SPUR_B = GetName("cowboy_spur_b");
@@ -222,7 +231,7 @@ bool LoadAssets(Allocator* allocator)
     PATH_SOUND_REVOLVER_FIRE_A = GetName("revolver_fire_a");
     PATH_SKELETON_STICK = GetName("stick");
     PATH_SHADER_VIGNETTE = GetName("vignette");
-    PATH_MESH_ICON_STATE_MOVE = GetName("icon_state_move");
+    PATH_ANIMATION_STICK_DEAD = GetName("stick_dead");
     PATH_MESH_WIZARD_HAT = GetName("wizard_hat");
     PATH_MESH_WEAPON_BOW = GetName("weapon_bow");
     PATH_MESH_TOWER_PLAYER_TEMP = GetName("tower_player_temp");
@@ -251,6 +260,7 @@ bool LoadAssets(Allocator* allocator)
     NOZ_LOAD_MESH(allocator, PATH_MESH_STICK_ARM_L_L, MESH_STICK_ARM_L_L);
     NOZ_LOAD_MESH(allocator, PATH_MESH_PROJECTILE_ARROW, MESH_PROJECTILE_ARROW);
     NOZ_LOAD_MESH(allocator, PATH_MESH_ICON_STATE_RELOAD, MESH_ICON_STATE_RELOAD);
+    NOZ_LOAD_MESH(allocator, PATH_MESH_ICON_STATE_MOVE, MESH_ICON_STATE_MOVE);
     NOZ_LOAD_MESH(allocator, PATH_MESH_ICON_FIGHT, MESH_ICON_FIGHT);
     NOZ_LOAD_MESH(allocator, PATH_MESH_COWBOY_SPUR_B, MESH_COWBOY_SPUR_B);
     NOZ_LOAD_MESH(allocator, PATH_MESH_COWBOY_ICON, MESH_COWBOY_ICON);
@@ -258,7 +268,6 @@ bool LoadAssets(Allocator* allocator)
     NOZ_LOAD_MESH(allocator, PATH_MESH_BULLET, MESH_BULLET);
     NOZ_LOAD_MESH(allocator, PATH_MESH_ICON_STATE_ATTACK, MESH_ICON_STATE_ATTACK);
     NOZ_LOAD_MESH(allocator, PATH_MESH_STICK_HAND_R, MESH_STICK_HAND_R);
-    NOZ_LOAD_MESH(allocator, PATH_MESH_ICON_STATE_MOVE, MESH_ICON_STATE_MOVE);
     NOZ_LOAD_MESH(allocator, PATH_MESH_WIZARD_HAT, MESH_WIZARD_HAT);
     NOZ_LOAD_MESH(allocator, PATH_MESH_WEAPON_BOW, MESH_WEAPON_BOW);
     NOZ_LOAD_MESH(allocator, PATH_MESH_TOWER_PLAYER_TEMP, MESH_TOWER_PLAYER_TEMP);
@@ -287,6 +296,7 @@ bool LoadAssets(Allocator* allocator)
         MESH_STICK_ARM_L_L,
         MESH_PROJECTILE_ARROW,
         MESH_ICON_STATE_RELOAD,
+        MESH_ICON_STATE_MOVE,
         MESH_ICON_FIGHT,
         MESH_COWBOY_SPUR_B,
         MESH_COWBOY_ICON,
@@ -294,7 +304,6 @@ bool LoadAssets(Allocator* allocator)
         MESH_BULLET,
         MESH_ICON_STATE_ATTACK,
         MESH_STICK_HAND_R,
-        MESH_ICON_STATE_MOVE,
         MESH_WIZARD_HAT,
         MESH_WEAPON_BOW,
         MESH_TOWER_PLAYER_TEMP,
@@ -342,6 +351,7 @@ bool LoadAssets(Allocator* allocator)
     NOZ_LOAD_ANIMATION(allocator, PATH_ANIMATION_ARCHER_SHUFFLE, ANIMATION_ARCHER_SHUFFLE);
     NOZ_LOAD_ANIMATION(allocator, PATH_ANIMATION_ARCHER_RELOAD, ANIMATION_ARCHER_RELOAD);
     NOZ_LOAD_ANIMATION(allocator, PATH_ANIMATION_ARCHER_IDLE, ANIMATION_ARCHER_IDLE);
+    NOZ_LOAD_ANIMATION(allocator, PATH_ANIMATION_STICK_DEAD, ANIMATION_STICK_DEAD);
 
     static Animation* _ANIMATION[] = {
         ANIMATION_ARCHER_ATTACK,
@@ -350,6 +360,7 @@ bool LoadAssets(Allocator* allocator)
         ANIMATION_ARCHER_SHUFFLE,
         ANIMATION_ARCHER_RELOAD,
         ANIMATION_ARCHER_IDLE,
+        ANIMATION_STICK_DEAD,
         nullptr
     };
 
@@ -427,6 +438,7 @@ void UnloadAssets()
     Free(MESH_STICK_ARM_L_L);
     Free(MESH_PROJECTILE_ARROW);
     Free(MESH_ICON_STATE_RELOAD);
+    Free(MESH_ICON_STATE_MOVE);
     Free(MESH_ICON_FIGHT);
     Free(MESH_COWBOY_SPUR_B);
     Free(MESH_COWBOY_ICON);
@@ -434,7 +446,6 @@ void UnloadAssets()
     Free(MESH_BULLET);
     Free(MESH_ICON_STATE_ATTACK);
     Free(MESH_STICK_HAND_R);
-    Free(MESH_ICON_STATE_MOVE);
     Free(MESH_WIZARD_HAT);
     Free(MESH_WEAPON_BOW);
     Free(MESH_TOWER_PLAYER_TEMP);
@@ -463,6 +474,7 @@ void UnloadAssets()
     Free(ANIMATION_ARCHER_SHUFFLE);
     Free(ANIMATION_ARCHER_RELOAD);
     Free(ANIMATION_ARCHER_IDLE);
+    Free(ANIMATION_STICK_DEAD);
 
     // @Sound
     Free(SOUND_REVOLVER_FIRE_A);
@@ -501,6 +513,7 @@ void HotloadAsset(const Name* incoming_name, AssetType incoming_type)
     NOZ_RELOAD_MESH(PATH_MESH_STICK_ARM_L_L, MESH_STICK_ARM_L_L);
     NOZ_RELOAD_MESH(PATH_MESH_PROJECTILE_ARROW, MESH_PROJECTILE_ARROW);
     NOZ_RELOAD_MESH(PATH_MESH_ICON_STATE_RELOAD, MESH_ICON_STATE_RELOAD);
+    NOZ_RELOAD_MESH(PATH_MESH_ICON_STATE_MOVE, MESH_ICON_STATE_MOVE);
     NOZ_RELOAD_MESH(PATH_MESH_ICON_FIGHT, MESH_ICON_FIGHT);
     NOZ_RELOAD_MESH(PATH_MESH_COWBOY_SPUR_B, MESH_COWBOY_SPUR_B);
     NOZ_RELOAD_MESH(PATH_MESH_COWBOY_ICON, MESH_COWBOY_ICON);
@@ -508,7 +521,6 @@ void HotloadAsset(const Name* incoming_name, AssetType incoming_type)
     NOZ_RELOAD_MESH(PATH_MESH_BULLET, MESH_BULLET);
     NOZ_RELOAD_MESH(PATH_MESH_ICON_STATE_ATTACK, MESH_ICON_STATE_ATTACK);
     NOZ_RELOAD_MESH(PATH_MESH_STICK_HAND_R, MESH_STICK_HAND_R);
-    NOZ_RELOAD_MESH(PATH_MESH_ICON_STATE_MOVE, MESH_ICON_STATE_MOVE);
     NOZ_RELOAD_MESH(PATH_MESH_WIZARD_HAT, MESH_WIZARD_HAT);
     NOZ_RELOAD_MESH(PATH_MESH_WEAPON_BOW, MESH_WEAPON_BOW);
     NOZ_RELOAD_MESH(PATH_MESH_TOWER_PLAYER_TEMP, MESH_TOWER_PLAYER_TEMP);
@@ -537,6 +549,7 @@ void HotloadAsset(const Name* incoming_name, AssetType incoming_type)
     NOZ_RELOAD_ANIMATION(PATH_ANIMATION_ARCHER_SHUFFLE, ANIMATION_ARCHER_SHUFFLE);
     NOZ_RELOAD_ANIMATION(PATH_ANIMATION_ARCHER_RELOAD, ANIMATION_ARCHER_RELOAD);
     NOZ_RELOAD_ANIMATION(PATH_ANIMATION_ARCHER_IDLE, ANIMATION_ARCHER_IDLE);
+    NOZ_RELOAD_ANIMATION(PATH_ANIMATION_STICK_DEAD, ANIMATION_STICK_DEAD);
 
     // @Sound
     NOZ_RELOAD_SOUND(PATH_SOUND_REVOLVER_FIRE_A, SOUND_REVOLVER_FIRE_A);

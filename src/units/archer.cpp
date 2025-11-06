@@ -19,8 +19,13 @@ inline ArcherEntity* CastArcher(Entity* e) {
 }
 
 void DrawArcherInternal(Entity* e, const Mat3& transform, bool shadow) {
+    ArcherEntity* a = CastArcher(e);
     DrawStick(e, transform, shadow);
     DrawMesh(MESH_STICK_BOW, transform, e->animator, BONE_STICK_ITEM_B);
+
+    if (a->state == UNIT_STATE_RELOAD) {
+        DrawMesh(MESH_PROJECTILE_ARROW, transform, e->animator, BONE_STICK_ITEM_F);
+    }
 }
 
 void DrawArcher(Entity* e, const Mat3& transform) {
@@ -28,6 +33,7 @@ void DrawArcher(Entity* e, const Mat3& transform) {
     BindMaterial(g_game.material);
     BindTeamColor(static_cast<UnitEntity*>(e)->team);
     DrawArcherInternal(e, transform, false);
+
 
     //DrawGizmos(static_cast<UnitEntity*>(e), transform);
 }
@@ -37,9 +43,9 @@ void DrawArcherShadow(Entity* e, const Mat3& transform) {
     DrawArcherInternal(a, transform, true);
 }
 
-static void UpdateArcherDead(Entity* e) {
-    ArcherEntity* a = CastArcher(e);
-    Update(a->animator, GetGameTimeScale() * 0.5f);
+static void UpdateArcherDead(Entity*) {
+    ///ArcherEntity* a = CastArcher(e);
+    //Update(a->animator, GetGameTimeScale() * 0.5f);
 }
 
 static void KillArcher(Entity* e, DamageType damage_type) {
@@ -88,7 +94,6 @@ void UpdateArcher(Entity* e) {
     UpdateUnit(a);
 
     // Update animator
-    Update(e->animator, GetGameTimeScale());
 }
 
 ArcherEntity* CreateArcher(Team team, const Vec3& position) {

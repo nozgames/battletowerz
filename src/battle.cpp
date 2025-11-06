@@ -31,6 +31,9 @@ bool UpdateEntity(u32 index, void* item, void* user_data) {
     (void)user_data;
 
     Entity* e = static_cast<Entity*>(item);
+
+    // Update ragdoll physics if active
+
     if (e->vtable.update)
         e->vtable.update(e);
 
@@ -124,9 +127,51 @@ static void CheckForWinner() {
     g_battle.winning_team = winner;
 }
 
+// Ragdoll test function - picks a random alive unit and enables ragdoll
+struct CollectAliveUnitsData {
+    UnitEntity* units[256];
+    int count;
+};
+
+static bool CollectAliveUnit(u32 index, void* item, void* user_data) {
+    (void)index;
+    Entity* e = static_cast<Entity*>(item);
+    CollectAliveUnitsData* data = static_cast<CollectAliveUnitsData*>(user_data);
+
+    // Check if this is a unit entity with health > 0
+    if (e->type >= ENTITY_TYPE_UNIT) {
+        UnitEntity* unit = static_cast<UnitEntity*>(e);
+        if (unit->health > 0.0f && data->count < 256) {
+            data->units[data->count++] = unit;
+        }
+    }
+
+    return true;
+}
+
+static void TestRagdollOnRandomUnit() {
+    CollectAliveUnitsData data = {};
+    Enumerate(g_game.entity_allocator, CollectAliveUnit, &data);
+
+    if (data.count > 0) {
+        int random_index = static_cast<int>(RandomFloat(0.0f, static_cast<float>(data.count)));
+        random_index = Min(random_index, data.count - 1);
+
+        UnitEntity* unit = data.units[random_index];
+        unit->health = 0.0f;
+        SetState(unit, UNIT_STATE_DEAD);
+        EnableRagdoll(unit);
+    }
+}
+
 void UpdateBattle() {
     if (!IsGameState(GAME_STATE_BATTLE))
         return;
+
+    // Test ragdoll on space key press
+    if (g_battle.state == BATTLE_STATE_SIMULATE && WasButtonPressed(g_battle.input, KEY_SPACE)) {
+        TestRagdollOnRandomUnit();
+    }
 
     if (g_battle.state == BATTLE_STATE_SIMULATE)
         CheckForWinner();
@@ -167,6 +212,7 @@ void InitBattle() {
     EnableButton(g_battle.input, MOUSE_RIGHT);
     EnableButton(g_battle.input, KEY_ESCAPE);
     EnableButton(g_battle.input, KEY_TAB);
+    EnableButton(g_battle.input, KEY_SPACE);
     PushInputSet(g_battle.input);
 
     SetGameTimeScale(1.0f);

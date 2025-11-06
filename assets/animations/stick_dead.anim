@@ -1,0 +1,39 @@
+s "stick"
+b "root"
+b "hip"
+b "spine"
+b "chest"
+b "neck"
+b "head"
+b "arm_upper_f"
+b "arm_upper_b"
+b "arm_lower_f"
+b "arm_lower_b"
+b "hand_f"
+b "hand_b"
+b "leg_upper_f"
+b "leg_lower_f"
+b "leg_upper_b"
+b "leg_lower_b"
+b "eye_f"
+b "eye_b"
+b "hat"
+b "item_b"
+b "foot_f"
+b "foot_b"
+b "item_b2"
+b "item_b3"
+b "item_f"
+f
+h 1b 1 p 0.003002 -0.219318 r -89.702339
+h 1b 2 r 1.140252
+h 1b 5 p -0.079934 0.188428
+h 1b 6 p 0.143855 2.946365 r 76.356850
+h 1b 7 r 91.443871
+h 1b 8 p -0.130259 -0.032164 r 7.498296
+h 1b 10 p -0.152870 0.012612 r 4.782547
+h 1b 11 p 0.324984 0.016198 r -92.040466
+h 1b 12 r 33.670303
+h 1b 13 p 1.128823 1.610215 r -2.412638
+h 1b 14 r 140.298462
+h 1b 19 p 0.018460 0.394649 r -1.751993

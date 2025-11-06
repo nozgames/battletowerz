@@ -148,6 +148,9 @@ extern void UpdateUnit(UnitEntity* u);
 
 // @stick
 extern void DrawStick(Entity* e, const Mat3& transform, bool shadow);
+extern void EnableRagdoll(Entity* entity);
+extern void DisableRagdoll(Entity* entity);
+extern void UpdateStickRagdoll(Entity* entity, float dt);
 
 // @archer
 extern ArcherEntity* CreateArcher(Team team, const Vec3& position);

@@ -21,6 +21,7 @@ extern Mesh* MESH_STICK_ARM_L_R;
 extern Mesh* MESH_STICK_ARM_L_L;
 extern Mesh* MESH_PROJECTILE_ARROW;
 extern Mesh* MESH_ICON_STATE_RELOAD;
+extern Mesh* MESH_ICON_STATE_MOVE;
 extern Mesh* MESH_ICON_FIGHT;
 extern Mesh* MESH_COWBOY_SPUR_B;
 extern Mesh* MESH_COWBOY_ICON;
@@ -28,7 +29,6 @@ extern Mesh* MESH_BULLET_CASING;
 extern Mesh* MESH_BULLET;
 extern Mesh* MESH_ICON_STATE_ATTACK;
 extern Mesh* MESH_STICK_HAND_R;
-extern Mesh* MESH_ICON_STATE_MOVE;
 extern Mesh* MESH_WIZARD_HAT;
 extern Mesh* MESH_WEAPON_BOW;
 extern Mesh* MESH_TOWER_PLAYER_TEMP;
@@ -57,6 +57,7 @@ extern Animation* ANIMATION_STICK_IDLE;
 extern Animation* ANIMATION_ARCHER_SHUFFLE;
 extern Animation* ANIMATION_ARCHER_RELOAD;
 extern Animation* ANIMATION_ARCHER_IDLE;
+extern Animation* ANIMATION_STICK_DEAD;
 
 // @Sound
 extern Sound* SOUND_REVOLVER_FIRE_A;
@@ -99,6 +100,9 @@ extern const Name* NAME_HAT;
 extern const Name* NAME_ITEM_B;
 extern const Name* NAME_FOOT_F;
 extern const Name* NAME_FOOT_B;
+extern const Name* NAME_ITEM_B2;
+extern const Name* NAME_ITEM_B3;
+extern const Name* NAME_ITEM_F;
 
 
 // @BONE_STICK
@@ -124,6 +128,10 @@ constexpr int BONE_STICK_HAT = 18;
 constexpr int BONE_STICK_ITEM_B = 19;
 constexpr int BONE_STICK_FOOT_F = 20;
 constexpr int BONE_STICK_FOOT_B = 21;
+constexpr int BONE_STICK_ITEM_B2 = 22;
+constexpr int BONE_STICK_ITEM_B3 = 23;
+constexpr int BONE_STICK_ITEM_F = 24;
+constexpr int BONE_STICK_COUNT = 25;
 
 
 extern bool LoadAssets(Allocator* allocator);

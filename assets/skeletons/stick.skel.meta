@@ -15,6 +15,7 @@ stick_hip = 1
 stick_arm_u_r = 7
 stick_arm_l_r = 9
 stick_hand_r = 11
+projectile_arrow = 24
 
 [editor]
 sort_order = 0

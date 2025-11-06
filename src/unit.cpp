@@ -229,6 +229,10 @@ static void UpdateIdleState(UnitEntity* u) {
     // todo: attack
 }
 
+static void UpdateDeadState(UnitEntity* u) {
+    UpdateStickRagdoll(u, GetGameFrameTime());
+}
+
 static void UpdateReloadState(UnitEntity* u) {
     if (IsPlaying(u->animator))
         return;
@@ -274,6 +278,12 @@ static void SetAttackState(UnitEntity* u) {
     Play(u->animator, u->info->attack_animation, 1.0f, false);
 }
 
+static void SetDeadState(UnitEntity* u) {
+    assert(u);
+    u->health = 0.0f;
+    EnableRagdoll(u);
+}
+
 void SetState(UnitEntity* u, UnitState new_state) {
     u->state = new_state;
     u->state_time = 0.0f;
@@ -286,6 +296,8 @@ void SetState(UnitEntity* u, UnitState new_state) {
         SetReloadState(u);
     else if (new_state == UNIT_STATE_ATTACK)
         SetAttackState(u);
+    else if (new_state == UNIT_STATE_DEAD)
+        SetDeadState(u);
 }
 
 static void UpdateTarget(UnitEntity* u) {
@@ -311,6 +323,11 @@ void UpdateUnit(UnitEntity* u) {
         UpdateAttackState(u);
     else if (u->state == UNIT_STATE_RELOAD)
         UpdateReloadState(u);
+    else if (u->state == UNIT_STATE_DEAD)
+        UpdateDeadState(u);
+
+    if (u->state != UNIT_STATE_DEAD)
+        Update(u->animator, GetGameTimeScale());
 }
 
 void DrawGizmos(UnitEntity* u, const Mat3& transform) {
