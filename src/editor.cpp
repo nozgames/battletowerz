@@ -7,7 +7,7 @@ constexpr float EDITOR_UI_BOTTOM_HEIGHT = 120.0f + UI_LETTERBOX_BORDER_WIDTH;
 struct EditorUnit {
     const UnitInfo* unit_info;
     Team team;
-    Vec2 position;
+    Vec3 position;
     UnitEntity* entity;
 };
 
@@ -55,7 +55,7 @@ static void BeginBattle() {
         const EditorUnit& editor_unit = g_editor.units[i];
         g_game.battle_setup.units[g_game.battle_setup.unit_count++] = {
             .unit_info = editor_unit.unit_info,
-            .position = XY(editor_unit.entity->position),
+            .position = editor_unit.entity->position,
             .team = editor_unit.team,
         };
     }
@@ -119,7 +119,7 @@ void UpdateEditorUI() {
     });
 }
 
-static void AddUnit(const UnitInfo* unit_info, Team team, const Vec2& position) {
+static void AddUnit(const UnitInfo* unit_info, Team team, const Vec3& position) {
     if (!unit_info)
         return;
 
@@ -131,13 +131,15 @@ static void AddUnit(const UnitInfo* unit_info, Team team, const Vec2& position) 
     };
 }
 
-static bool TryPlaceUnit(const Vec2& position, float size) {
+static bool TryPlaceUnit(const Vec3& position, float size) {
     UnitEntity* u = FindClosestUnit(position);
     if (!u)
         return true;
 
-    float distance = Distance(XY(u->position), position);
-    return distance - size - u->size > 0.0f;
+    float distance_sqr = DistanceSqr(u, position);
+    float min_distance = size + u->size;
+    float min_distance_sqr = Sqr(min_distance);
+    return distance_sqr >= min_distance_sqr;
 }
 
 static int GetEditorUnitIndex(EditorUnit* editor_unit) {
@@ -184,8 +186,8 @@ void UpdateEditor() {
 
     g_editor.hovered_unit = GetEditorUnit(FindClosestUnit(g_game.mouse_world_position));
     if (g_editor.hovered_unit) {
-        float distance = Distance(XY(g_editor.hovered_unit->entity->position), g_game.mouse_world_position);
-        if (distance > g_editor.hovered_unit->entity->size)
+        float distance_sqr = DistanceSqr(g_editor.hovered_unit->entity, g_game.mouse_world_position);
+        if (distance_sqr > g_editor.hovered_unit->entity->size)
             g_editor.hovered_unit = nullptr;
     }
 

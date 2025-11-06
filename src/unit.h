@@ -38,8 +38,8 @@ struct UnitEntity : Entity {
     float health;
     float size;
     float state_time;
-    Vec2 velocity;
-    Vec2 desired_velocity;
+    Vec3 velocity;
+    Vec3 desired_velocity;
     EntityHandle target;
     const UnitInfo* info;
     float target_switch_cooldown;
@@ -67,15 +67,18 @@ union FatUnitEntity {
     TowerEntity tower;
 };
 
-typedef UnitEntity* (*UnitCreateFunc)(Team team, const Vec2& position);
+typedef UnitEntity* (*UnitCreateFunc)(Team team, const Vec3& position);
+typedef void (*UnitAttackFunc)(UnitEntity* u, UnitEntity* target);
 
 struct UnitInfo {
     UnitType type;
     const Name* name;
     float size;
+    float height;
     float range;
     float speed;
     UnitCreateFunc create_func;
+    UnitAttackFunc attack_func;
     Mesh* icon_mesh;
 
     Animation* idle_animation;
@@ -92,9 +95,14 @@ extern UnitEntity* CreateUnit(UnitType type, Team team, const EntityVtable& vtab
 extern void EnumerateUnits(Team team, bool (*callback)(UnitEntity* unit, void* user_data), void* user_data);
 extern void Damage(UnitEntity* u, DamageType damage_type, float amount);
 extern UnitEntity* FindClosestEnemy(UnitEntity* unit);
-extern UnitEntity* FindClosestUnit(const Vec2& position);
-extern void MoveTowards(UnitEntity* unit, const Vec2& target_position, float speed, const Vec2& avoid_velocity=VEC2_ZERO, float avoid_weight=1.0f);
+extern UnitEntity* FindClosestUnit(const Vec3& position);
 inline UnitEntity* GetUnit(const EntityHandle& handle) { return (UnitEntity*)GetEntity(handle); }
+inline float Distance(UnitEntity* u1, UnitEntity* u2) { return Distance(XZ(u1->position), XZ(u2->position)); }
+inline float Distance(UnitEntity* u, const Vec3& position) { return Distance(XZ(u->position), XZ(position)); }
+inline float DistanceSqr(UnitEntity* u1, UnitEntity* u2) { return DistanceSqr(XZ(u1->position), XZ(u2->position)); }
+inline float DistanceSqr(UnitEntity* u, const Vec3& position) { return DistanceSqr(XZ(u->position), XZ(position)); }
+inline Vec3 Direction(UnitEntity* u1, const Vec3& position) { return XZ(Normalize(XZ(position) - XZ(u1->position))); }
+inline Vec3 Direction(UnitEntity* u1, UnitEntity* u2) { return XZ(Normalize(XZ(u2->position) - XZ(u1->position))); }
 
 // @team
 inline Vec2 GetTeamDirection(Team team) {
@@ -134,8 +142,8 @@ extern void BindTeamColor(Team team);
 
 // @unit
 extern void SetState(UnitEntity* u, UnitState new_state);
-extern Vec2 ComputeRVOVelocityForUnit(UnitEntity* u, const Vec2& preferred_velocity, float max_speed);
-extern void ApplyImpulse(UnitEntity* u, const Vec2& impulse);
+extern Vec3 ComputeRVOVelocityForUnit(UnitEntity* u, const Vec3& preferred_velocity, float max_speed);
+extern void ApplyImpulse(UnitEntity* u, const Vec3& impulse);
 extern void UpdateUnit(UnitEntity* u);
 
 // @stick

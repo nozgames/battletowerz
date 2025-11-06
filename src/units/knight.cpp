@@ -42,28 +42,9 @@ struct FindKnightTargetArgs {
     float target_distance;
 };
 
-static bool FindKnightTarget(UnitEntity* u, void* user_data)
+void UpdateArrow(Entity*)
 {
-    assert(u);
-    assert(user_data);
-    FindKnightTargetArgs* args = static_cast<FindKnightTargetArgs*>(user_data);
-    float distance = Distance(XY(args->a->position), XY(u->position));
-    if (distance < args->target_distance) {
-        args->target = u;
-        args->target_distance = distance;
-    }
-    return true;
-}
-
-static void SetKnightIdleState(KnightEntity* u) {
-    if (u->state == UNIT_STATE_IDLE)
-        return;
-    u->state = UNIT_STATE_IDLE;
-    //Play(u->animator, ANIMATION_UNIT_KNIGHT_IDLE, 1.0f, true);
-}
-
-void UpdateArrow(Entity* e)
-{
+#if 0
     KnightEntity* u = CastKnight(e);
     Update(u->animator);
 
@@ -85,7 +66,7 @@ void UpdateArrow(Entity* e)
     }
 
     if (args.target_distance - args.target->size > KNIGHT_RANGE) {
-        MoveTowards(u, XY(args.target->position), KNIGHT_SPEED);
+        MoveTowards(u, args.target->position, KNIGHT_SPEED);
         u->cooldown = KNIGHT_COOLDOWN;
 
         if (u->state != UNIT_STATE_MOVE) {
@@ -102,6 +83,7 @@ void UpdateArrow(Entity* e)
     } else if (u->state != UNIT_STATE_IDLE && (IsLooping(u->animator) || !IsPlaying(u->animator))) {
         SetKnightIdleState(u);
     }
+#endif
 }
 
 KnightEntity* CreateKnight(Team team, const Vec3& position)

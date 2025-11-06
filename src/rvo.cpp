@@ -7,7 +7,7 @@
 #include "rvo.h"
 
 
-Vec2 ComputeRVOVelocity(
+Vec3 ComputeRVOVelocity(
     const RVOAgent& agent,
     const RVOAgent* obstacles,
     int obstacle_count,
@@ -16,25 +16,24 @@ Vec2 ComputeRVOVelocity(
     (void)time_horizon; // Unused in this simplified version
 
     // Start with preferred velocity
-    Vec2 result = agent.preferred_velocity;
+    Vec3 result = agent.preferred_velocity;
 
     // Clamp to max speed
     float speed_sq = LengthSqr(result);
-    if (speed_sq > Sqr(agent.max_speed)) {
+    if (speed_sq > Sqr(agent.max_speed))
         result = result * (agent.max_speed / sqrtf(speed_sq));
-    }
 
-    if (obstacle_count == 0) {
+    if (obstacle_count == 0)
         return result;
-    }
 
     // Add repulsion forces from nearby obstacles
-    Vec2 repulsion = VEC2_ZERO;
+    Vec3 repulsion = VEC3_ZERO;
 
     for (int i = 0; i < obstacle_count; i++) {
         const RVOAgent& obstacle = obstacles[i];
 
-        Vec2 to_obstacle = obstacle.position - agent.position;
+        Vec3 to_obstacle = obstacle.position - agent.position;
+        to_obstacle.y = 0.0f;
         float dist_sq = LengthSqr(to_obstacle);
 
         // Combined radius with extra margin
@@ -44,7 +43,7 @@ Vec2 ComputeRVOVelocity(
         // Only avoid if too close
         if (dist_sq < threshold_sq && dist_sq > 0.01f) {
             float dist = sqrtf(dist_sq);
-            Vec2 direction = to_obstacle / dist;
+            Vec3 direction = to_obstacle / dist;
 
             // Repulsion strength increases as distance decreases
             float strength = (combined_radius - dist) / combined_radius;

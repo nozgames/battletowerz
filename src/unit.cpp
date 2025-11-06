@@ -8,6 +8,25 @@ constexpr float UNIT_MIN_SPEED = 1.0f;
 constexpr float UNIT_SHUFFLE_SPEED = 0.1f;
 constexpr float UNIT_SHUFFLE_SPEED_SQR = UNIT_SHUFFLE_SPEED * UNIT_SHUFFLE_SPEED;
 
+struct CollectRVOAgentsArgs {
+    UnitEntity* unit;
+    RVOAgent agents[MAX_UNITS];
+    int count;
+};
+
+struct FindClosestArgs {
+    UnitEntity* unit;
+    Vec3 position;
+    UnitEntity* target;
+    float target_distance_sqr;
+};
+
+struct FindClosestEnemyArgs {
+    UnitEntity* unit;
+    UnitEntity* closest;
+    float closest_distance_sqr;
+};
+
 struct UnitCallbackArgs {
     Team team;
     void* user_data;
@@ -49,58 +68,43 @@ void Damage(UnitEntity* u, DamageType damage_type, float amount) {
     }
 }
 
-struct FindTargetArgs {
-    UnitEntity* unit;
-    Vec2 position;
-    UnitEntity* target;
-    float target_distance;
-};
-
-static bool EnumerateClosestEnemy(UnitEntity* u, void* user_data) {
+static bool EnumerateClosestUnit(UnitEntity* u, void* user_data) {
     assert(u);
     assert(user_data);
-    FindTargetArgs* args = static_cast<FindTargetArgs*>(user_data);
-    float distance = Distance(args->position, XY(u->position));
-    if (distance < args->target_distance) {
-        args->target = u;
-        args->target_distance = distance;
-    }
+
+    if (u->health <= 0.0f)
+        return true;
+
+    FindClosestArgs* args = static_cast<FindClosestArgs*>(user_data);
+    float distance_sqr = DistanceSqr(u, args->position);
+    if (distance_sqr >= args->target_distance_sqr)
+        return true;
+
+    args->target = u;
+    args->target_distance_sqr = distance_sqr;
     return true;
 }
 
 UnitEntity* FindClosestEnemy(UnitEntity* unit) {
-    FindTargetArgs args {
+    FindClosestArgs args {
         .unit = unit,
-        .position = XY(unit->position),
+        .position = unit->position,
         .target = nullptr,
-        .target_distance = F32_MAX
+        .target_distance_sqr = F32_MAX
     };
-    EnumerateUnits(GetOppositeTeam(unit->team), EnumerateClosestEnemy, &args);
+    EnumerateUnits(GetOppositeTeam(unit->team), EnumerateClosestUnit, &args);
     return args.target;
 }
 
-UnitEntity* FindClosestUnit(const Vec2& position) {
-    FindTargetArgs args {
+UnitEntity* FindClosestUnit(const Vec3& position) {
+    FindClosestArgs args {
         .unit = nullptr,
         .position = position,
         .target = nullptr,
-        .target_distance = F32_MAX
+        .target_distance_sqr = F32_MAX
     };
-    EnumerateUnits(TEAM_UNKNOWN, EnumerateClosestEnemy, &args);
+    EnumerateUnits(TEAM_UNKNOWN, EnumerateClosestUnit, &args);
     return args.target;
-}
-
-void MoveTowards(UnitEntity* unit, const Vec2& target_position, float speed, const Vec2& avoid_velocity, float avoid_weight) {
-    // Combine target direction with weighted avoidance velocity, then normalize
-    Vec2 target_direction = Normalize(target_position - XY(unit->position));
-    Vec2 combined_direction = target_direction + (avoid_velocity * avoid_weight);
-
-    // Normalize to maintain consistent speed
-    Vec2 normalized_direction = Normalize(combined_direction);
-
-    Vec2 move = normalized_direction * speed * GetGameFrameTime();
-    unit->position.x += move.x;
-    unit->position.y += move.y;
 }
 
 UnitEntity* CreateUnit(UnitType type, Team team, const EntityVtable& vtable, const Vec3& position, float rotation, const Vec2& scale) {
@@ -108,18 +112,12 @@ UnitEntity* CreateUnit(UnitType type, Team team, const EntityVtable& vtable, con
     u->state = UNIT_STATE_IDLE;
     u->team = team;
     u->unit_type = type;
-    u->velocity = VEC2_ZERO;
-    u->desired_velocity = VEC2_ZERO;
+    u->velocity = VEC3_ZERO;
+    u->desired_velocity = VEC3_ZERO;
     u->target = {};
     u->info = GetUnitInfo(type);
     return u;
 }
-
-struct CollectRVOAgentsArgs {
-    UnitEntity* unit;
-    RVOAgent agents[MAX_UNITS];
-    int count;
-};
 
 static bool CollectRVOAgent(UnitEntity* u, void* user_data) {
     assert(u);
@@ -130,7 +128,7 @@ static bool CollectRVOAgent(UnitEntity* u, void* user_data) {
         return true;
 
     // Only consider nearby units (within 5 units)
-    float distance_sq = DistanceSqr(XY(args->unit->position), XY(u->position));
+    float distance_sq = DistanceSqr(args->unit, u->position);
     if (distance_sq > 25.0f)
         return true;
 
@@ -138,7 +136,7 @@ static bool CollectRVOAgent(UnitEntity* u, void* user_data) {
         return true;
 
     // Add this unit as an obstacle
-    args->agents[args->count].position = XY(u->position);
+    args->agents[args->count].position = u->position;
     args->agents[args->count].velocity = u->velocity;
     args->agents[args->count].radius = u->size;
     args->agents[args->count].max_speed = 1.0f;
@@ -147,7 +145,7 @@ static bool CollectRVOAgent(UnitEntity* u, void* user_data) {
     return true;
 }
 
-Vec2 ComputeRVOVelocityForUnit(UnitEntity* u, const Vec2& preferred_velocity, float max_speed) {
+Vec3 ComputeRVOVelocityForUnit(UnitEntity* u, const Vec3& preferred_velocity, float max_speed) {
     CollectRVOAgentsArgs args = {
         .unit = u,
         .agents = {},
@@ -156,7 +154,7 @@ Vec2 ComputeRVOVelocityForUnit(UnitEntity* u, const Vec2& preferred_velocity, fl
     EnumerateUnits(u->team, CollectRVOAgent, &args);
 
     RVOAgent agent = {
-        .position = XY(u->position),
+        .position = u->position,
         .velocity = u->velocity,
         .preferred_velocity = preferred_velocity,
         .radius = u->size,
@@ -166,33 +164,25 @@ Vec2 ComputeRVOVelocityForUnit(UnitEntity* u, const Vec2& preferred_velocity, fl
     return ComputeRVOVelocity(agent, args.agents, args.count, 1.5f);
 }
 
-void ApplyImpulse(UnitEntity* u, const Vec2& impulse) {
-    u->velocity.x += impulse.x;
-    u->velocity.y += impulse.y;
+void ApplyImpulse(UnitEntity* u, const Vec3& impulse) {
+    u->velocity += impulse;
 }
 
 static void UpdateVelocity(UnitEntity* u) {
     UnitEntity* target = GetUnit(u->target);
-    if (target && DistanceSqr(XY(target->position), XY(u->position)) > u->info->range * u->info->range) {
-        Vec2 desired_velocity = Normalize(XY(target->position) - XY(u->position)) * u->info->speed;
+    if (target && DistanceSqr(target, u) > Sqr(u->info->range)) {
+        Vec3 desired_velocity = Direction(u, target) * u->info->speed;
         u->desired_velocity = ComputeRVOVelocityForUnit(u, desired_velocity, u->info->speed);
     } else {
-        u->desired_velocity = ComputeRVOVelocityForUnit(u, VEC2_ZERO, u->info->speed);
+        u->desired_velocity = ComputeRVOVelocityForUnit(u, VEC3_ZERO, u->info->speed);
     }
 
     float dt = GetGameFrameTime();
     u->velocity = u->desired_velocity;
     float speed = Clamp(Length(u->velocity), 0.0f, u->info->speed);
-    //if (speed > 0.001f) {
-        speed = Max(UNIT_MIN_SPEED, speed);
-    //}
-    // if (speed < UNIT_MIN_SPEED) {
-    //     u->velocity = VEC2_ZERO;
-    // } else {
-        u->velocity = Normalize(u->velocity) * speed;
-//    }
-
-    u->position += ToVec3(u->velocity * dt);
+    speed = Max(UNIT_MIN_SPEED, speed);
+    u->velocity = Normalize(u->velocity) * speed;
+    u->position += u->velocity * dt;
 }
 
 static void UpdateMoveState(UnitEntity* u) {
@@ -224,8 +214,8 @@ static void UpdateIdleState(UnitEntity* u) {
     }
 
     if (u->target) {
-        Entity* target = GetEntity(u->target);
-        float target_dist_sqr = DistanceSqr(XY(u->position), XY(target->position));
+        UnitEntity* target = GetUnit(u->target);
+        float target_dist_sqr = DistanceSqr(u, target);
         float desired_target_dist_sqr = u->info->range * u->info->range;
         if (target_dist_sqr > desired_target_dist_sqr) {
             SetState(u, UNIT_STATE_MOVE);
@@ -238,38 +228,6 @@ static void UpdateIdleState(UnitEntity* u) {
 
     // todo: attack
 }
-
-#if 0
-static void UpdateAttackingState(UnitEntity* u) {
-    const UnitInfo* info = GetUnitInfo(u->unit_type);
-
-    // Apply subtle RVO adjustments to maintain spacing
-    Vec2 preferred_velocity = VEC2_ZERO;  // Prefer to stay in place
-    u->desired_velocity = ComputeRVOVelocityForUnit(u, preferred_velocity, 0);
-
-    // Apply physics
-    UpdateVelocity(u);
-
-    // Check if target moved out of range
-    if (u->target) {
-        Entity* target = GetEntity(u->target);
-        float distance = Distance(XY(u->position), XY(target->position));
-        if (distance > info->range) {
-            SetState(u, UNIT_STATE_MOVE);
-            return;
-        }
-    } else {
-        // Lost target
-        SetState(u, UNIT_STATE_IDLE);
-        return;
-    }
-
-    // Play idle/attack animation (unit-specific code will handle actual attacking)
-    if (info->idle_animation && u->animator.animation != info->idle_animation) {
-        Play(u->animator, info->idle_animation, 1.0f, true);
-    }
-}
-#endif
 
 static void UpdateReloadState(UnitEntity* u) {
     if (IsPlaying(u->animator))
@@ -308,6 +266,11 @@ static void SetReloadState(UnitEntity* u) {
 }
 
 static void SetAttackState(UnitEntity* u) {
+    if (u->info->attack_func && u->target) {
+        UnitEntity* target = GetUnit(u->target);
+        assert(target);
+        u->info->attack_func(u, target);
+    }
     Play(u->animator, u->info->attack_animation, 1.0f, false);
 }
 
@@ -325,42 +288,16 @@ void SetState(UnitEntity* u, UnitState new_state) {
         SetAttackState(u);
 }
 
-struct FindClosestEnemyArgs {
-    UnitEntity* unit;
-    UnitEntity* closest;
-    float closest_distance_sq;
-};
-
-static bool EnumerateFindClosestEnemy(UnitEntity* u, void* user_data) {
-    assert(u);
-    assert(user_data);
-    FindClosestEnemyArgs* args = static_cast<FindClosestEnemyArgs*>(user_data);
-
-    if (u->health <= 0.0f)
-        return true;
-
-    float distance_sq = DistanceSqr(XY(args->unit->position), XY(u->position));
-    if (distance_sq < args->closest_distance_sq) {
-        args->closest = u;
-        args->closest_distance_sq = distance_sq;
-    }
-
-    return true;
-}
-
 static void UpdateTarget(UnitEntity* u) {
     UnitEntity* target = GetUnit(u->target);
     if (target && target->health > 0.0f)
         return;
 
-    FindClosestEnemyArgs args = {
-        .unit = u,
-        .closest = nullptr,
-        .closest_distance_sq = F32_MAX
-    };
+    target = FindClosestEnemy(u);
+    if (!target)
+        return;
 
-    EnumerateUnits(GetOppositeTeam(u->team), EnumerateFindClosestEnemy, &args);
-    u->target = GetHandle(args.closest);
+    u->target = GetHandle(target);
 }
 
 void UpdateUnit(UnitEntity* u) {

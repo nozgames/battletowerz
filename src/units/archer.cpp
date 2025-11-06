@@ -9,6 +9,7 @@ constexpr float ARCHER_COOLDOWN_MAX = 1.6f;
 constexpr float ARCHER_DAMAGE = 0.75f;
 constexpr float ARCHER_HEALTH = 5.0f;
 constexpr float ARCHER_SIZE = .2f;
+constexpr float ARCHER_HEIGHT = 0.8f;
 
 inline ArcherEntity* CastArcher(Entity* e) {
     assert(e && e->type == ENTITY_TYPE_UNIT);
@@ -98,7 +99,13 @@ ArcherEntity* CreateArcher(Team team, const Vec3& position) {
         .death = KillArcher
     };
 
-    ArcherEntity* a = static_cast<ArcherEntity*>(CreateUnit(UNIT_TYPE_ARCHER, team, vtable, position, 0.0f, {GetTeamDirection(team).x, 1.0f}));
+    ArcherEntity* a = static_cast<ArcherEntity*>(CreateUnit(
+        UNIT_TYPE_ARCHER,
+        team,
+        vtable,
+        position,
+        0.0f,
+        {GetTeamDirection(team).x, 1.0f}));
     a->health = ARCHER_HEALTH;
     a->size = ARCHER_SIZE;
     a->cooldown = RandomFloat(ARCHER_COOLDOWN_MIN, ARCHER_COOLDOWN_MAX);
@@ -108,14 +115,26 @@ ArcherEntity* CreateArcher(Team team, const Vec3& position) {
     return a;
 }
 
+static void FireArrow(UnitEntity* u, UnitEntity* target) {
+    ArcherEntity* a = static_cast<ArcherEntity*>(u);
+    Vec2 hand = TRS(WorldToScreen(a->position), 0.0f, a->scale) * a->animator.bones[BONE_STICK_HAND_B] * VEC2_ZERO;
+    CreateArrow(
+        a->team,
+        Vec3{hand.x, hand.y, 0.0f},
+        XZ(target->position),
+        4.0f);
+}
+
 void InitArcherUnit() {
     InitUnitInfo({
         .type = UNIT_TYPE_ARCHER,
         .name = GetName("Archer"),
         .size = ARCHER_SIZE,
+        .height = ARCHER_HEIGHT,
         .range = ARCHER_RANGE,
         .speed = ARCHER_SPEED,
         .create_func = (UnitCreateFunc)CreateArcher,
+        .attack_func = (UnitAttackFunc)FireArrow,
         .icon_mesh = MESH_COWBOY_ICON,
         .idle_animation = ANIMATION_ARCHER_IDLE,
         .move_animation = ANIMATION_STICK_RUN,

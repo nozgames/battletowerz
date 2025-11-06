@@ -65,5 +65,5 @@ union FatEntity {
 extern Entity* CreateEntity(EntityType type, const EntityVtable& vtable, const Vec3& position = VEC3_ZERO, float rotation=0.0f, const Vec2& scale=VEC2_ONE);
 extern void UpdateAnimator(Entity* entity);
 extern void DestroyAllEntities();
-inline Vec2 WorldToScreen(const Vec3& pos) { return XY(pos) + Vec2{0.0f, pos.z}; }
+inline Vec2 WorldToScreen(const Vec3& pos) { return XZ(pos) + Vec2{0.0f, pos.y}; }
 

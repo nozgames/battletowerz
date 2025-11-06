@@ -44,7 +44,7 @@ enum GameState {
 
 struct UnitSetup {
     const UnitInfo* unit_info;
-    Vec2 position;
+    Vec3 position;
     Team team;
 };
 
@@ -76,7 +76,7 @@ struct Game {
     Vec2 mouse_position;
     Vec2 pan_position;
     Vec2 pan_position_camera;
-    Vec2 mouse_world_position;
+    Vec3 mouse_world_position;
 
     BattleSetup battle_setup;
 
