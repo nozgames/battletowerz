@@ -23,9 +23,7 @@ struct ProjectileEntity : Entity
     float elapsed;
     float distance;
     float speed;
-    Vec2 start;
-    Vec2 target;
-    Vec3 apex;
+    Vec3 target;
     Vec3 last_position;
 };
 
@@ -33,9 +31,9 @@ struct ProjectileEntity : Entity
 extern ProjectileEntity* CreateProjectile(ProjectileType type, Team team, const EntityVtable& vtable, const Vec3& position, const Vec3& velocity, const Vec2& scale);
 
 // @arrow
-extern ProjectileEntity* CreateArrow(Team team, const Vec3& position, const Vec2& target, float speed);
+extern ProjectileEntity* CreateArrow(Team team, const Vec3& position, const Vec3& target, float speed);
 
 // @bullet
-extern ProjectileEntity* CreateBullet(Team team, const Vec3& position, const Vec2& target, float speed);
+extern ProjectileEntity* CreateBullet(Team team, const Vec3& position, const Vec3& target, float speed);
 
 

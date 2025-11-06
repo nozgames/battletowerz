@@ -15,7 +15,7 @@ static void RenderArrow(Entity* e, const Mat3& transform) {
     BindDepth(1.0f);
     BindMaterial(g_game.material);
     BindColor(COLOR_WHITE, GetTeamColorOffset(p->team));
-    DrawMesh(MESH_PROJECTILE_ARROW, transform * Scale(1.0f + (e->position.z / 10.0f)));
+    DrawMesh(MESH_PROJECTILE_ARROW, transform * Scale(1.0f + (e->position.y / 10.0f)));
     BindDepth(0.0f);
 }
 
@@ -27,7 +27,7 @@ static void UpdateArrow(Entity* e) {
         return;
 
     p->elapsed += dt;
-    p->velocity.z += GRAVITY * dt;
+    p->velocity.y += GRAVITY * dt;
     p->position += p->velocity * dt;
 
     float nt = p->elapsed / p->time;
@@ -40,27 +40,25 @@ static void UpdateArrow(Entity* e) {
     p->last_position = p->position;
 }
 
-static void CalculateTrajectoryWithGravity(ProjectileEntity* p, const Vec2& target, float speed) {
-    Vec2 to_target = target - XY(p->position);
+static void CalculateTrajectoryWithGravity(ProjectileEntity* p, const Vec3& target, float speed) {
+    Vec3 to_target = target - p->position;
     float distance = Length(to_target);
-    Vec2 direction = Normalize(to_target);
+    Vec3 direction = Normalize(to_target);
     float time = distance / speed;
-    float vz = -(GRAVITY * time * 0.5f);
-    p->velocity = Vec3{direction.x * speed, direction.y * speed, vz};
-    p->apex = Vec3{direction.x * speed * 0.5f, direction.y * speed * 0.5f, vz};
+    float vy = -(GRAVITY * time * 0.5f);
+    p->velocity = Vec3{direction.x * speed, vy, direction.z * speed};
     p->time = time;
     p->speed = speed;
     p->elapsed = 0.0f;
 }
 
-ProjectileEntity* CreateArrow(Team team, const Vec3& position, const Vec2& target, float speed) {
+ProjectileEntity* CreateArrow(Team team, const Vec3& position, const Vec3& target, float speed) {
     static EntityVtable vtable = {
         .update = UpdateArrow,
         .draw = RenderArrow
     };
 
     ProjectileEntity* e = CreateProjectile(PROJECTILE_TYPE_ARROW, team, vtable, position, VEC3_ZERO, VEC2_ONE);
-    e->start = XY(position);
     e->target = target;
     e->last_position = position;
     CalculateTrajectoryWithGravity(e, target, speed);

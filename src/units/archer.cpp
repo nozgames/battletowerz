@@ -29,7 +29,7 @@ void DrawArcher(Entity* e, const Mat3& transform) {
     BindTeamColor(static_cast<UnitEntity*>(e)->team);
     DrawArcherInternal(e, transform, false);
 
-    DrawGizmos(static_cast<UnitEntity*>(e), transform);
+    //DrawGizmos(static_cast<UnitEntity*>(e), transform);
 }
 
 void DrawArcherShadow(Entity* e, const Mat3& transform) {
@@ -117,11 +117,11 @@ ArcherEntity* CreateArcher(Team team, const Vec3& position) {
 
 static void FireArrow(UnitEntity* u, UnitEntity* target) {
     ArcherEntity* a = static_cast<ArcherEntity*>(u);
-    Vec2 hand = TRS(WorldToScreen(a->position), 0.0f, a->scale) * a->animator.bones[BONE_STICK_HAND_B] * VEC2_ZERO;
+    Vec2 hand = TransformPoint(TRS(VEC2_ZERO, 0.0f, a->scale) * a->animator.bones[BONE_STICK_HAND_B]);
     CreateArrow(
         a->team,
-        Vec3{hand.x, hand.y, 0.0f},
-        XZ(target->position),
+        a->position + Vec3{hand.x, hand.y, 0.0f},
+        target->position + Vec3{0.0f, target->info->height * 0.5f, 0.0f},
         4.0f);
 }
 

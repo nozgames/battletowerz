@@ -24,14 +24,13 @@ static void UpdateBullet(Entity* e) {
     p->last_position = p->position;
 }
 
-ProjectileEntity* CreateBullet(Team team, const Vec3& position, const Vec2& target, float speed) {
+ProjectileEntity* CreateBullet(Team team, const Vec3& position, const Vec3& target, float speed) {
     static EntityVtable vtable = {
         .update = UpdateBullet,
         .draw = DrawBullet
     };
 
     ProjectileEntity* e = CreateProjectile(PROJECTILE_TYPE_BULLET, team, vtable, position, VEC3_ZERO, VEC2_ONE);
-    e->start = XY(position);
     e->target = target;
     e->last_position = position;
     e->velocity = Normalize(Vec3{target.x - position.x, target.y - position.y, 0.0f}) * speed;
