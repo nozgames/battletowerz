@@ -2,6 +2,9 @@
 //  Battle TowerZ - Copyright(c) 2025 NoZ Games, LLC
 //
 
+constexpr float ARROW_HIT_DISTANCE = 0.1f;
+constexpr float ARROW_DAMAGE = 1.0f;
+
 inline ProjectileEntity* CastArrow(Entity* e) {
     assert(e && e->type == ENTITY_TYPE_PROJECTILE);
     ProjectileEntity* p = static_cast<ProjectileEntity*>(e);
@@ -30,8 +33,22 @@ static void UpdateArrow(Entity* e) {
     p->velocity.y += GRAVITY * dt;
     p->position += p->velocity * dt;
 
-    float nt = p->elapsed / p->time;
-    if (nt >= 1.0f) {
+    // float nt = p->elapsed / p->time;
+    // if (nt >= 1.0f) {
+    //     Free(p);
+    //     return;
+    // }
+
+    if (p->position.y <= 0.0f) {
+        Free(p);
+        return;
+    }
+
+    UnitEntity* target = FindClosestEnemy(p->team, p->position, F32_MAX);
+    if (target && p->position.y < target->info->height && DistanceSqr(target, p->position) <= Sqr(ARROW_HIT_DISTANCE + target->size)) {
+        Damage(target, DAMAGE_TYPE_PHYSICAL, ARROW_DAMAGE);
+        Play(SOUND_REVOLVER_FIRE_A, 1.0f, 1.0f);
+        Play(VFX_ARROW_HIT, WorldToScreen(p->position));
         Free(p);
         return;
     }

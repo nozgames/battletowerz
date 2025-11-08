@@ -15,7 +15,6 @@ struct CollectRVOAgentsArgs {
 };
 
 struct FindClosestArgs {
-    UnitEntity* unit;
     Vec3 position;
     UnitEntity* target;
     float target_distance_sqr;
@@ -85,20 +84,22 @@ static bool EnumerateClosestUnit(UnitEntity* u, void* user_data) {
     return true;
 }
 
-UnitEntity* FindClosestEnemy(UnitEntity* unit) {
+UnitEntity* FindClosestEnemy(UnitEntity* unit, float max_distance) {
+    return FindClosestEnemy(unit->team, unit->position, max_distance);
+}
+
+UnitEntity* FindClosestEnemy(Team team, const Vec3& position, float max_distance) {
     FindClosestArgs args {
-        .unit = unit,
-        .position = unit->position,
+        .position = position,
         .target = nullptr,
-        .target_distance_sqr = F32_MAX
+        .target_distance_sqr = max_distance < F32_MAX ? Sqr(max_distance) : F32_MAX
     };
-    EnumerateUnits(GetOppositeTeam(unit->team), EnumerateClosestUnit, &args);
+    EnumerateUnits(GetOppositeTeam(team), EnumerateClosestUnit, &args);
     return args.target;
 }
 
 UnitEntity* FindClosestUnit(const Vec3& position) {
     FindClosestArgs args {
-        .unit = nullptr,
         .position = position,
         .target = nullptr,
         .target_distance_sqr = F32_MAX
@@ -314,6 +315,10 @@ static void UpdateTarget(UnitEntity* u) {
 
 void UpdateUnit(UnitEntity* u) {
     UpdateTarget(u);
+
+    if (u->health <= 0.0f && u->state != UNIT_STATE_DEAD) {
+        SetState(u, UNIT_STATE_DEAD);
+    }
 
     if (u->state == UNIT_STATE_IDLE)
         UpdateIdleState(u);

@@ -94,7 +94,8 @@ extern void DrawGizmos(UnitEntity* u, const Mat3& transform);
 extern UnitEntity* CreateUnit(UnitType type, Team team, const EntityVtable& vtable, const Vec3& position = VEC3_ZERO, float rotation=0.0f, const Vec2& scale=VEC2_ONE);
 extern void EnumerateUnits(Team team, bool (*callback)(UnitEntity* unit, void* user_data), void* user_data);
 extern void Damage(UnitEntity* u, DamageType damage_type, float amount);
-extern UnitEntity* FindClosestEnemy(UnitEntity* unit);
+extern UnitEntity* FindClosestEnemy(UnitEntity* unit, float max_distance = F32_MAX);
+extern UnitEntity* FindClosestEnemy(Team team, const Vec3& position, float max_distance = F32_MAX);
 extern UnitEntity* FindClosestUnit(const Vec3& position);
 inline UnitEntity* GetUnit(const EntityHandle& handle) { return (UnitEntity*)GetEntity(handle); }
 inline float Distance(UnitEntity* u1, UnitEntity* u2) { return Distance(XZ(u1->position), XZ(u2->position)); }
